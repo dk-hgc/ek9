@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Geo-Check Klasse 9 – Was wisst ihr noch?</title>
+<style>
+  :root{
+    --navy:#1F3B57;
+    --teal:#2E7D6B;
+    --amber:#C97A2B;
+    --coral:#C05A5A;
+    --violet:#6B5B95;
+    --bg:#F4F7F6;
+    --card:#FFFFFF;
+    --ink:#1E2A32;
+    --muted:#5B6B72;
+    --good:#2E7D6B;
+    --bad:#C0503F;
+    --line:#E1E8E6;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(160deg,#F4F7F6 0%,#E8F0EE 100%);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px 14px 60px;
+  }
+  .wrap{width:100%;max-width:760px;}
+  header.top{
+    text-align:center;
+    margin-bottom:18px;
+  }
+  header.top h1{
+    font-size:1.6rem;
+    margin:6px 0 2px;
+    color:var(--navy);
+  }
+  header.top p{
+    margin:0;
+    color:var(--muted);
+    font-size:0.98rem;
+  }
+  .badge{
+    display:inline-block;
+    background:var(--navy);
+    color:#fff;
+    padding:4px 14px;
+    border-radius:999px;
+    font-size:0.78rem;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+
+  .progress-track{
+    display:flex;
+    gap:6px;
+    margin:18px 0 22px;
+  }
+  .progress-dot{
+    flex:1;
+    height:8px;
+    border-radius:6px;
+    background:#D7E2DF;
+    transition:background .3s;
+  }
+  .progress-dot.active{background:var(--teal);}
+  .progress-dot.done{background:var(--navy);}
+
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:0 6px 24px rgba(31,59,87,0.08);
+    padding:26px 24px 22px;
+    margin-bottom:18px;
+    border:1px solid var(--line);
+  }
+
+  /* Intro screen */
+  .intro-list{
+    text-align:left;
+    margin:18px 0;
+    padding:0;
+    list-style:none;
+  }
+  .intro-list li{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:9px 0;
+    border-bottom:1px solid var(--line);
+    font-size:0.98rem;
+  }
+  .intro-list li:last-child{border-bottom:none;}
+  .intro-icon{font-size:1.3rem;flex-shrink:0;}
+
+  .note-box{
+    background:#EAF1EE;
+    border-left:4px solid var(--teal);
+    padding:12px 16px;
+    border-radius:10px;
+    font-size:0.92rem;
+    color:var(--muted);
+    margin-top:16px;
+  }
+
+  /* Block header */
+  .block-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:6px;
+  }
+  .block-icon{
+    font-size:1.9rem;
+    width:52px;height:52px;
+    border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .block-title{
+    font-size:1.25rem;
+    font-weight:700;
+    color:var(--navy);
+    margin:0;
+  }
+  .block-sub{
+    margin:2px 0 0;
+    color:var(--muted);
+    font-size:0.88rem;
+  }
+
+  .question{
+    margin-top:20px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+  }
+  .question:first-of-type{border-top:none;margin-top:16px;padding-top:0;}
+  .q-text{
+    font-weight:600;
+    font-size:1.02rem;
+    margin-bottom:10px;
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+  }
+  .option{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:12px 14px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    cursor:pointer;
+    font-size:0.97rem;
+    transition:border-color .15s, background .15s;
+    background:#FCFDFD;
+  }
+  .option:active{background:#F0F4F3;}
+  .option.selected{
+    border-color:var(--teal);
+    background:#EAF4F1;
+  }
+  .option input{
+    width:19px;height:19px;
+    accent-color:var(--teal);
+    flex-shrink:0;
+  }
+  .option.correct{
+    border-color:var(--good);
+    background:#E7F4EE;
+  }
+  .option.incorrect{
+    border-color:var(--bad);
+    background:#FBEAE7;
+  }
+  .option .mark{
+    margin-left:auto;
+    font-weight:700;
+    font-size:1.05rem;
+  }
+  .option.correct .mark{color:var(--good);}
+  .option.incorrect .mark{color:var(--bad);}
+
+  .explain{
+    margin-top:9px;
+    font-size:0.9rem;
+    padding:10px 13px;
+    border-radius:10px;
+    display:none;
+    line-height:1.4;
+  }
+  .explain.show{display:block;}
+  .explain.ok{background:#E7F4EE;color:#1E5A44;}
+  .explain.no{background:#FBEAE7;color:#7A2E22;}
+
+  .bonus-tag{
+    display:inline-block;
+    background:var(--amber);
+    color:#fff;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    padding:2px 9px;
+    border-radius:999px;
+    margin-bottom:8px;
+  }
+
+  .btn-row{
+    display:flex;
+    gap:10px;
+    margin-top:22px;
+  }
+  button{
+    font-family:inherit;
+    font-size:1rem;
+    font-weight:600;
+    padding:14px 20px;
+    border-radius:12px;
+    border:none;
+    cursor:pointer;
+    transition:transform .1s, opacity .15s;
+  }
+  button:active{transform:scale(0.97);}
+  .btn-primary{
+    background:var(--navy);
+    color:#fff;
+    flex:1;
+  }
+  .btn-primary:disabled{opacity:0.4;cursor:not-allowed;}
+  .btn-secondary{
+    background:#E7ECEB;
+    color:var(--navy);
+  }
+  .btn-block{width:100%;}
+
+  .hint{
+    font-size:0.82rem;
+    color:var(--muted);
+    text-align:center;
+    margin-top:8px;
+  }
+
+  /* Summary */
+  .summary-grid{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin:18px 0;
+  }
+  .summary-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    border-radius:12px;
+    border:1px solid var(--line);
+  }
+  .summary-row .si{
+    width:38px;height:38px;
+    border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.2rem;
+    flex-shrink:0;
+  }
+  .summary-row .st{
+    flex:1;
+    font-weight:600;
+    font-size:0.95rem;
+  }
+  .summary-row .sc{
+    font-weight:700;
+    font-size:0.95rem;
+  }
+  .ampel{
+    width:14px;height:14px;
+    border-radius:50%;
+    flex-shrink:0;
+  }
+  .ampel.green{background:var(--good);}
+  .ampel.yellow{background:#D9A32B;}
+  .ampel.red{background:var(--bad);}
+
+  .score-hero{
+    text-align:center;
+    padding:22px 0 10px;
+  }
+  .score-hero .big{
+    font-size:3rem;
+    font-weight:800;
+    color:var(--navy);
+  }
+  .score-hero .sub{
+    color:var(--muted);
+    font-size:0.95rem;
+  }
+
+  .hidden{display:none !important;}
+
+  footer.foot{
+    margin-top:10px;
+    text-align:center;
+    font-size:0.78rem;
+    color:#93A0A5;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="badge">Geografie · Jahrgangsstufe 9</span>
+    <h1>🌍 Geo-Check: Was wisst ihr noch?</h1>
+    <p>Diagnose-Quiz zu Kl. 7/8 · nicht bewertet · Std. 2</p>
+  </header>
+
+  <div class="progress-track" id="progressTrack"></div>
+
+  <!-- INTRO -->
+  <section class="card" id="screen-intro">
+    <p style="font-size:1.02rem;">Bevor wir mit den neuen Themen ‚Ressourcen' und ‚Klimawandel' starten, schauen wir gemeinsam:
+    <strong>Was wisst ihr aus Klasse 7 und 8 eigentlich noch?</strong></p>
+    <ul class="intro-list">
+      <li><span class="intro-icon">🧭</span> 5 Themenblöcke mit je 3 Fragen (+ 1 Bonusfrage)</li>
+      <li><span class="intro-icon">⚡</span> Direktes Feedback nach jeder Antwort</li>
+      <li><span class="intro-icon">🚫</span> Keine Bewertung, keine Note – es geht nur um euren Lernstand</li>
+      <li><span class="intro-icon">📝</span> Am Ende: Übertragt eure Ergebnisse auf euren GoodNotes-Bogen</li>
+    </ul>
+    <div class="note-box">Tipp: Lest euch bei falschen Antworten die kurze Erklärung durch – das hilft schon beim Wiederholen!</div>
+    <div class="btn-row">
+      <button class="btn-primary btn-block" onclick="startQuiz()">Los geht's →</button>
+    </div>
+  </section>
+
+  <!-- BLOCK SCREEN (template rendered by JS) -->
+  <section class="card hidden" id="screen-block"></section>
+
+  <!-- SUMMARY -->
+  <section class="card hidden" id="screen-summary">
+    <div class="score-hero">
+      <div class="big" id="totalScoreText">0 / 15</div>
+      <div class="sub">richtige Antworten insgesamt (ohne Bonusfragen)</div>
+    </div>
+    <div class="summary-grid" id="summaryGrid"></div>
+    <div class="note-box" id="bonusNote"></div>
+    <div class="note-box">Übertragt jetzt eure Ampel-Farben je Themenblock auf euren Bogen <strong>‚Mein Geo-Standort'</strong> in GoodNotes und notiert, was ihr wiederholen möchtet.</div>
+    <div class="btn-row">
+      <button class="btn-secondary btn-block" onclick="restartQuiz()">🔁 Quiz neu starten</button>
+    </div>
+  </section>
+
+  <footer class="foot">Humboldt-Gymnasium Cottbus · Geografie Jg. 9 · Diagnose-Quiz Stunde 2 · funktioniert offline</footer>
+</div>
+
+<script>
+const BLOCKS = [
+  {
+    "id": "A",
+    "title": "Orientierung & Kartenarbeit",
+    "icon": "🧭",
+    "color": "#2E7D6B",
+    "sub": "Kl. 7 · Thema 1",
+    "questions": [
+      {
+        "q": "Welchen Bereich deckt das Gradnetz zwischen Äquator und Nordpol ab?",
+        "options": [
+          "0° bis 180° nördliche Breite",
+          "0° bis 360° nördliche Breite",
+          "0° bis 90° nördliche Breite",
+          "0° bis 45° nördliche Breite"
+        ],
+        "correct": 2,
+        "explain": "Die geografische Breite reicht vom Äquator (0°) bis zum Pol (90°) – Nordpol also 90° N."
+      },
+      {
+        "q": "Was bedeutet der Maßstab 1 : 100.000 auf einer Karte?",
+        "options": [
+          "1 cm auf der Karte entspricht 10 m in der Wirklichkeit",
+          "1 cm auf der Karte entspricht 1 km in der Wirklichkeit",
+          "1 cm auf der Karte entspricht 1.000 m in der Wirklichkeit",
+          "1 cm auf der Karte entspricht 100 km in der Wirklichkeit"
+        ],
+        "correct": 1,
+        "explain": "100.000 cm = 1.000 m = 1 km. Also entspricht 1 cm auf der Karte 1 km in der Wirklichkeit."
+      },
+      {
+        "q": "Wie findet man einen Ort im Atlas am schnellsten?",
+        "options": [
+          "Über die Höhenlinien",
+          "Über den Nordpfeil",
+          "Über die Windrose",
+          "Über das Register mit Planquadrat-Angabe (z. B. C4)"
+        ],
+        "correct": 3,
+        "explain": "Das alphabetische Register verweist mit Seitenzahl und Planquadrat (Gitternetzfeld) auf den gesuchten Ort."
+      }
+    ],
+    "bonus": {
+      "q": "Was ist ein Vorteil eines WebGIS gegenüber einer gedruckten Karte (Thema in Std. 3)?",
+      "options": [
+        "Man kann Kartenebenen (z. B. Klima, Bevölkerung) ein-/ausblenden und aktuelle Daten nutzen",
+        "Ein WebGIS kann nicht vergrößert werden",
+        "Ein WebGIS braucht keinen Maßstab",
+        "Ein WebGIS zeigt immer nur einen einzigen Ort"
+      ],
+      "correct": 0,
+      "explain": "WebGIS-Anwendungen erlauben es, verschiedene Datenebenen zu kombinieren und mit aktuellen, teils live aktualisierten Daten zu arbeiten – das lernt ihr in Std. 3 kennen."
+    }
+  },
+  {
+    "id": "B",
+    "title": "Naturgefahren & Plattentektonik",
+    "icon": "🌋",
+    "color": "#C05A5A",
+    "sub": "Kl. 7 · Thema 2",
+    "questions": [
+      {
+        "q": "Wer stellte die Theorie der Kontinentalverschiebung auf?",
+        "options": [
+          "Alexander von Humboldt",
+          "Alfred Wegener",
+          "Immanuel Kant",
+          "Charles Darwin"
+        ],
+        "correct": 1,
+        "explain": "Alfred Wegener entwickelte 1912 die Theorie der Kontinentaldrift – Ausgangspunkt der modernen Plattentektonik."
+      },
+      {
+        "q": "Wo treten die meisten Erdbeben und Vulkanausbrüche auf?",
+        "options": [
+          "In der Mitte der Kontinente",
+          "Nur in Wüstenregionen",
+          "An den Rändern der Kontinentalplatten (Plattengrenzen)",
+          "Gleichmäßig über die ganze Erde verteilt"
+        ],
+        "correct": 2,
+        "explain": "An Plattengrenzen (z. B. Pazifischer Feuerring) reiben, dehnen oder schieben sich Erdplatten – dort entstehen die meisten Beben und Vulkane."
+      },
+      {
+        "q": "Was ist eine typische Schutzmaßnahme gegen Hochwasser an Flüssen?",
+        "options": [
+          "Aufforstung von Wüsten",
+          "Deiche und Rückhaltebecken",
+          "Bewässerungskanäle für die Landwirtschaft",
+          "Kühltürme"
+        ],
+        "correct": 1,
+        "explain": "Deiche, Rückhaltebecken und renaturierte Auen helfen, Hochwasserspitzen abzufangen und Siedlungen zu schützen."
+      }
+    ],
+    "bonus": {
+      "q": "Welche Rolle spielt die Lausitz beim Thema ‚Ressourcen', das wir bald behandeln?",
+      "options": [
+        "Dort liegt Deutschlands höchster Berg",
+        "Dort werden seltene Erden abgebaut",
+        "Dort liegen aktive Vulkane",
+        "Dort wurde/wird im Tagebau Braunkohle abgebaut – ein Beispiel für Ressourcennutzung"
+      ],
+      "correct": 3,
+      "explain": "Der Braunkohletagebau in der Lausitz (z. B. Welzow-Süd) ist unser regionales Beispiel für Ressourcennutzung und -konflikte ab Std. 7."
+    }
+  },
+  {
+    "id": "C",
+    "title": "Bevölkerung & Migration",
+    "icon": "🏙️",
+    "color": "#6B5B95",
+    "sub": "Kl. 7 · Thema 3",
+    "questions": [
+      {
+        "q": "Was versteht man unter ‚Landflucht'?",
+        "options": [
+          "Abwanderung der Landbevölkerung in die Städte",
+          "Rückkehr von Städtern aufs Land",
+          "Umzug vom Stadtzentrum an den Stadtrand",
+          "Auswanderung ins Ausland"
+        ],
+        "correct": 0,
+        "explain": "Landflucht bezeichnet die Abwanderung von Menschen aus ländlichen Gebieten in Städte, oft wegen besserer Arbeits- und Bildungschancen."
+      },
+      {
+        "q": "Was sind ‚Pull-Faktoren' bei Migration?",
+        "options": [
+          "Gründe, die Menschen aus ihrer Heimat vertreiben",
+          "Gründe, die Menschen in ein Zielgebiet ziehen (z. B. Arbeitsplätze)",
+          "Transportmittel für die Migration",
+          "Gesetze zur Einwanderungsbeschränkung"
+        ],
+        "correct": 1,
+        "explain": "Pull-Faktoren ‚ziehen' Menschen an ein Ziel (z. B. Jobs, Sicherheit); Push-Faktoren ‚stoßen' sie aus der Heimat (z. B. Armut, Konflikte)."
+      },
+      {
+        "q": "Welche Aussage zur Weltbevölkerung stimmt?",
+        "options": [
+          "Die Weltbevölkerung wächst überall gleich schnell",
+          "Die Weltbevölkerung schrumpft seit dem Jahr 2000",
+          "Das Bevölkerungswachstum ist weltweit sehr unterschiedlich verteilt",
+          "Es gibt keine Unterschiede zwischen Industrie- und Entwicklungsländern"
+        ],
+        "correct": 2,
+        "explain": "Während die Bevölkerung in vielen Industrieländern stagniert oder altert, wächst sie in vielen Ländern des Globalen Südens weiterhin stark."
+      }
+    ],
+    "bonus": {
+      "q": "Was hat Bevölkerungsentwicklung mit dem Thema ‚Ressourcen' zu tun?",
+      "options": [
+        "Nur die Fläche eines Landes bestimmt den Ressourcenverbrauch",
+        "Mehr Menschen bedeuten in der Regel einen höheren Ressourcenverbrauch",
+        "Es besteht kein Zusammenhang",
+        "Bevölkerungswachstum senkt automatisch den Ressourcenverbrauch"
+      ],
+      "correct": 1,
+      "explain": "Wachsende Bevölkerungen benötigen mehr Energie, Rohstoffe und Fläche – ein zentraler Zusammenhang im Themenfeld Ressourcen."
+    }
+  },
+  {
+    "id": "D",
+    "title": "Klima- & Vegetationszonen",
+    "icon": "🌴",
+    "color": "#C97A2B",
+    "sub": "Kl. 8 · Thema 4",
+    "questions": [
+      {
+        "q": "Was zählt zu den ‚Geofaktoren' eines Raumes?",
+        "options": [
+          "Nur die Wirtschaftskraft",
+          "Nur die politische Grenze",
+          "Nur die Bevölkerungszahl",
+          "Klima, Boden, Wasser, Relief, Vegetation"
+        ],
+        "correct": 3,
+        "explain": "Geofaktoren sind die natürlichen Bausteine eines Raumes: Klima, Boden, Wasser, Relief und Vegetation, die sich gegenseitig beeinflussen."
+      },
+      {
+        "q": "In welcher Klimazone liegt der tropische Regenwald?",
+        "options": [
+          "In den immerfeuchten Tropen (nahe des Äquators)",
+          "In der subtropischen Trockenzone (Wüste)",
+          "In der gemäßigten Zone",
+          "In der Polarzone"
+        ],
+        "correct": 0,
+        "explain": "Die immerfeuchten Tropen am Äquator haben ganzjährig hohe Temperaturen und reichlich Niederschlag – ideale Bedingungen für Regenwald."
+      },
+      {
+        "q": "Was ist typisch für die Sahelzone?",
+        "options": [
+          "Ganzjährig gleichmäßiger, hoher Regen",
+          "Wechselfeuchtes Klima mit unregelmäßigen Regenzeiten und Dürregefahr",
+          "Vier ausgeprägte Jahreszeiten wie in Mitteleuropa",
+          "Eisige Temperaturen das ganze Jahr"
+        ],
+        "correct": 1,
+        "explain": "Die Sahelzone liegt in den wechselfeuchten Tropen: kurze, unsichere Regenzeit und lange Trockenzeit – dadurch hohes Dürrerisiko."
+      }
+    ],
+    "bonus": {
+      "q": "Warum lernt ihr Klimazonen schon jetzt, obwohl der Klimawandel erst im 2. Halbjahr Thema ist?",
+      "options": [
+        "Weil Klimazonen im 2. Halbjahr nicht mehr gebraucht werden",
+        "Weil es keinen Zusammenhang zum Klimawandel gibt",
+        "Um Klimaveränderungen später mit dem ursprünglichen Klima einer Region vergleichen zu können",
+        "Weil Klimazonen nur in Kl. 8 wichtig sind"
+      ],
+      "correct": 2,
+      "explain": "Nur wer die normalen Klimabedingungen einer Zone kennt, kann Veränderungen durch den Klimawandel überhaupt erkennen und einordnen."
+    }
+  },
+  {
+    "id": "E",
+    "title": "Armut & Reichtum",
+    "icon": "⚖️",
+    "color": "#1F3B57",
+    "sub": "Kl. 8 · Thema 5",
+    "questions": [
+      {
+        "q": "Was misst der Entwicklungsindikator ‚Human Development Index' (HDI)?",
+        "options": [
+          "Nur die Fläche eines Landes",
+          "Lebenserwartung, Bildung und Lebensstandard eines Landes zusammen",
+          "Nur die Einwohnerzahl",
+          "Nur das Bruttoinlandsprodukt"
+        ],
+        "correct": 1,
+        "explain": "Der HDI kombiniert drei Dimensionen: Gesundheit/Lebenserwartung, Bildung und materiellen Lebensstandard – nicht nur wirtschaftliche Kennzahlen."
+      },
+      {
+        "q": "Was ist das Ziel des ‚Fairen Handels'?",
+        "options": [
+          "Nur den Handel zwischen Industrieländern zu fördern",
+          "Zölle auf alle importierten Waren zu erheben",
+          "Waren so billig wie möglich einzukaufen",
+          "Produzent:innen in Entwicklungsländern faire, stabile Preise zu sichern"
+        ],
+        "correct": 3,
+        "explain": "Fairer Handel garantiert Erzeuger:innen Mindestpreise und bessere Arbeitsbedingungen, unabhängig von Weltmarktschwankungen."
+      },
+      {
+        "q": "Welche Aussage beschreibt ‚Armut' heute am treffendsten?",
+        "options": [
+          "Armut wird nicht nur am Einkommen gemessen, sondern z. B. auch am Zugang zu Bildung und Gesundheit",
+          "Armut ist weltweit einheitlich definiert",
+          "Armut bedeutet ausschließlich fehlendes Geld",
+          "Armut betrifft nur Länder in Afrika"
+        ],
+        "correct": 0,
+        "explain": "Moderne Armutskonzepte sind mehrdimensional: Einkommen, Bildung, Gesundheit und Teilhabe spielen alle eine Rolle."
+      }
+    ],
+    "bonus": {
+      "q": "Wie hängen Entwicklungsunterschiede mit dem Klimawandel zusammen (Thema im 2. Halbjahr)?",
+      "options": [
+        "Reiche und arme Länder sind exakt gleich betroffen",
+        "Ärmere Länder sind oft besonders stark von Klimafolgen betroffen, obwohl sie ihn kaum verursacht haben",
+        "Nur reiche Länder spüren den Klimawandel",
+        "Entwicklungsindikatoren haben nichts mit dem Klima zu tun"
+      ],
+      "correct": 1,
+      "explain": "Diese ‚ungleiche Betroffenheit' ist ein zentrales Gerechtigkeitsproblem des Klimawandels – dazu mehr in Std. 28."
+    }
+  }
+];
+
+let current = -1; // -1 = intro, 0..4 = block index, 5 = summary
+let results = BLOCKS.map(()=>({answered:0, correct:0, bonusCorrect:null}));
+let answersLocked = BLOCKS.map(()=>false);
+let selections = BLOCKS.map(b => new Array(b.questions.length).fill(null));
+let bonusSelection = BLOCKS.map(()=>null);
+let bonusLocked = BLOCKS.map(()=>false);
+
+const track = document.getElementById('progressTrack');
+function renderTrack(){
+  track.innerHTML = '';
+  for(let i=0;i<BLOCKS.length;i++){
+    const d = document.createElement('div');
+    d.className = 'progress-dot' + (i===current?' active':'') + (i<current?' done':'');
+    track.appendChild(d);
+  }
+}
+renderTrack();
+
+function startQuiz(){
+  document.getElementById('screen-intro').classList.add('hidden');
+  current = 0;
+  renderBlock();
+}
+
+function renderBlock(){
+  renderTrack();
+  const b = BLOCKS[current];
+  const el = document.getElementById('screen-block');
+  el.classList.remove('hidden');
+  document.getElementById('screen-summary').classList.add('hidden');
+
+  let html = `
+    <div class="block-head">
+      <div class="block-icon" style="background:${b.color}22;">${b.icon}</div>
+      <div>
+        <p class="block-title">${b.title}</p>
+        <p class="block-sub">${b.sub} · Block ${current+1} von ${BLOCKS.length}</p>
+      </div>
+    </div>
+  `;
+
+  b.questions.forEach((qq, qi) => {
+    html += `<div class="question">
+      <p class="q-text">${qi+1}. ${qq.q}</p>
+      <div class="options" id="opts-${current}-${qi}">
+        ${qq.options.map((opt, oi) => `
+          <label class="option" id="opt-${current}-${qi}-${oi}" onclick="selectOption(${current},${qi},${oi})">
+            <input type="radio" name="q-${current}-${qi}" ${selections[current][qi]===oi?'checked':''}>
+            <span>${opt}</span>
+            <span class="mark"></span>
+          </label>
+        `).join('')}
+      </div>
+      <div class="explain" id="explain-${current}-${qi}"></div>
+    </div>`;
+  });
+
+  // bonus
+  html += `<div class="question">
+    <span class="bonus-tag">Bonus</span>
+    <p class="q-text">${b.bonus.q}</p>
+    <div class="options" id="opts-bonus-${current}">
+      ${b.bonus.options.map((opt, oi) => `
+        <label class="option" id="opt-bonus-${current}-${oi}" onclick="selectBonus(${current},${oi})">
+          <input type="radio" name="q-bonus-${current}">
+          <span>${opt}</span>
+          <span class="mark"></span>
+        </label>
+      `).join('')}
+    </div>
+    <div class="explain" id="explain-bonus-${current}"></div>
+  </div>`;
+
+  html += `<div class="btn-row">
+      ${current>0 ? `<button class="btn-secondary" onclick="prevBlock()">← Zurück</button>` : ''}
+      <button class="btn-primary" id="checkBtn" onclick="checkBlock()" ${answersLocked[current] ? 'disabled':''}>Block auswerten</button>
+    </div>
+    <div class="btn-row hidden" id="nextRow">
+      <button class="btn-primary btn-block" onclick="nextBlock()">${current===BLOCKS.length-1 ? 'Zum Ergebnis →' : 'Weiter →'}</button>
+    </div>
+    <p class="hint">Wählt zu jeder Frage eine Antwort und tippt dann auf ‚Block auswerten'.</p>
+  `;
+
+  el.innerHTML = html;
+
+  if(answersLocked[current]) lockDisplay(current);
+}
+
+function selectOption(bi, qi, oi){
+  if(answersLocked[bi]) return;
+  selections[bi][qi] = oi;
+  document.querySelectorAll(`#opts-${bi}-${qi} .option`).forEach(o=>o.classList.remove('selected'));
+  document.getElementById(`opt-${bi}-${qi}-${oi}`).classList.add('selected');
+}
+function selectBonus(bi, oi){
+  if(bonusLocked[bi]) return;
+  bonusSelection[bi] = oi;
+  document.querySelectorAll(`#opts-bonus-${bi} .option`).forEach(o=>o.classList.remove('selected'));
+  document.getElementById(`opt-bonus-${bi}-${oi}`).classList.add('selected');
+}
+
+function checkBlock(){
+  const bi = current;
+  const b = BLOCKS[bi];
+  if(selections[bi].includes(null)){
+    alert('Bitte beantwortet zunächst alle drei Fragen dieses Blocks.');
+    return;
+  }
+  let correctCount = 0;
+  b.questions.forEach((qq, qi) => {
+    const chosen = selections[bi][qi];
+    const isRight = chosen === qq.correct;
+    if(isRight) correctCount++;
+    qq.options.forEach((opt, oi) => {
+      const optEl = document.getElementById(`opt-${bi}-${qi}-${oi}`);
+      optEl.querySelector('input').disabled = true;
+      if(oi === qq.correct){
+        optEl.classList.add('correct');
+        optEl.querySelector('.mark').textContent = '✓';
+      } else if(oi === chosen && !isRight){
+        optEl.classList.add('incorrect');
+        optEl.querySelector('.mark').textContent = '✗';
+      }
+    });
+    const exEl = document.getElementById(`explain-${bi}-${qi}`);
+    exEl.textContent = (isRight ? '✓ Richtig. ' : '✗ Nicht ganz. ') + qq.explain;
+    exEl.classList.add('show', isRight ? 'ok' : 'no');
+  });
+
+  results[bi].answered = 3;
+  results[bi].correct = correctCount;
+  answersLocked[bi] = true;
+
+  // bonus check if answered
+  if(bonusSelection[bi] !== null){
+    checkBonus(bi);
+  }
+
+  document.getElementById('checkBtn').disabled = true;
+  document.getElementById('nextRow').classList.remove('hidden');
+}
+
+function checkBonus(bi){
+  const b = BLOCKS[bi];
+  const chosen = bonusSelection[bi];
+  const isRight = chosen === b.bonus.correct;
+  b.bonus.options.forEach((opt, oi) => {
+    const optEl = document.getElementById(`opt-bonus-${bi}-${oi}`);
+    optEl.querySelector('input').disabled = true;
+    if(oi === b.bonus.correct){
+      optEl.classList.add('correct');
+      optEl.querySelector('.mark').textContent = '✓';
+    } else if(oi === chosen && !isRight){
+      optEl.classList.add('incorrect');
+      optEl.querySelector('.mark').textContent = '✗';
+    }
+  });
+  const exEl = document.getElementById(`explain-bonus-${bi}`);
+  exEl.textContent = (isRight ? '✓ Richtig. ' : '✗ Nicht ganz. ') + b.bonus.explain;
+  exEl.classList.add('show', isRight ? 'ok' : 'no');
+  bonusLocked[bi] = true;
+  results[bi].bonusCorrect = isRight;
+}
+
+function lockDisplay(bi){
+  // Re-render locked state visuals after navigating back to an already-checked block
+  const b = BLOCKS[bi];
+  b.questions.forEach((qq, qi) => {
+    const chosen = selections[bi][qi];
+    qq.options.forEach((opt, oi) => {
+      const optEl = document.getElementById(`opt-${bi}-${qi}-${oi}`);
+      optEl.querySelector('input').disabled = true;
+      if(oi === qq.correct){
+        optEl.classList.add('correct');
+        optEl.querySelector('.mark').textContent = '✓';
+      } else if(oi === chosen && chosen !== qq.correct){
+        optEl.classList.add('incorrect');
+        optEl.querySelector('.mark').textContent = '✗';
+      }
+    });
+    const exEl = document.getElementById(`explain-${bi}-${qi}`);
+    const isRight = chosen === qq.correct;
+    exEl.textContent = (isRight ? '✓ Richtig. ' : '✗ Nicht ganz. ') + qq.explain;
+    exEl.classList.add('show', isRight ? 'ok' : 'no');
+  });
+  if(bonusLocked[bi]){
+    const chosen = bonusSelection[bi];
+    const isRight = chosen === b.bonus.correct;
+    b.bonus.options.forEach((opt, oi) => {
+      const optEl = document.getElementById(`opt-bonus-${bi}-${oi}`);
+      optEl.querySelector('input').disabled = true;
+      if(oi === b.bonus.correct){
+        optEl.classList.add('correct');
+        optEl.querySelector('.mark').textContent = '✓';
+      } else if(oi === chosen && !isRight){
+        optEl.classList.add('incorrect');
+        optEl.querySelector('.mark').textContent = '✗';
+      }
+    });
+    const exEl = document.getElementById(`explain-bonus-${bi}`);
+    exEl.textContent = (isRight ? '✓ Richtig. ' : '✗ Nicht ganz. ') + b.bonus.explain;
+    exEl.classList.add('show', isRight ? 'ok' : 'no');
+  }
+  document.getElementById('checkBtn').disabled = true;
+  document.getElementById('nextRow').classList.remove('hidden');
+}
+
+function prevBlock(){
+  current--;
+  renderBlock();
+}
+function nextBlock(){
+  if(current === BLOCKS.length - 1){
+    showSummary();
+  } else {
+    current++;
+    renderBlock();
+  }
+}
+
+function showSummary(){
+  document.getElementById('screen-block').classList.add('hidden');
+  const sumEl = document.getElementById('screen-summary');
+  sumEl.classList.remove('hidden');
+  track.innerHTML = '';
+  for(let i=0;i<BLOCKS.length;i++){
+    const d = document.createElement('div');
+    d.className = 'progress-dot done';
+    track.appendChild(d);
+  }
+
+  let total = 0;
+  let bonusRight = 0, bonusAnswered = 0;
+  const grid = document.getElementById('summaryGrid');
+  grid.innerHTML = '';
+  BLOCKS.forEach((b, i) => {
+    total += results[i].correct;
+    if(results[i].bonusCorrect !== null){
+      bonusAnswered++;
+      if(results[i].bonusCorrect) bonusRight++;
+    }
+    const score = results[i].correct;
+    let cls = 'red';
+    if(score === 3) cls = 'green';
+    else if(score === 2) cls = 'yellow';
+    const row = document.createElement('div');
+    row.className = 'summary-row';
+    row.innerHTML = `
+      <div class="si" style="background:${b.color}22;">${b.icon}</div>
+      <div class="st">${b.title}</div>
+      <div class="ampel ${cls}"></div>
+      <div class="sc">${score} / 3</div>
+    `;
+    grid.appendChild(row);
+  });
+
+  document.getElementById('totalScoreText').textContent = `${total} / 15`;
+  const bonusNote = document.getElementById('bonusNote');
+  if(bonusAnswered > 0){
+    bonusNote.textContent = `Bonusfragen: ${bonusRight} von ${bonusAnswered} beantworteten Bonusfragen richtig – diese zeigen, wie gut ihr Kl. 7/8-Wissen schon mit den neuen Themen verknüpfen könnt.`;
+  } else {
+    bonusNote.textContent = `Tipp: Wer Zeit übrig hat, kann in den Blöcken auch die Bonusfragen (🟠) beantworten – sie verknüpfen euer altes Wissen direkt mit den neuen Themen.`;
+  }
+}
+
+function restartQuiz(){
+  current = -1;
+  results = BLOCKS.map(()=>({answered:0, correct:0, bonusCorrect:null}));
+  answersLocked = BLOCKS.map(()=>false);
+  selections = BLOCKS.map(b => new Array(b.questions.length).fill(null));
+  bonusSelection = BLOCKS.map(()=>null);
+  bonusLocked = BLOCKS.map(()=>false);
+  document.getElementById('screen-summary').classList.add('hidden');
+  document.getElementById('screen-block').classList.add('hidden');
+  document.getElementById('screen-intro').classList.remove('hidden');
+  track.innerHTML = '';
+}
+</script>
+</body>
+</html>
