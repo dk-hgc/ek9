@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Geografie 9 – Was steckt in deinem iPad?</title>
+<style>
+  :root{
+    --deep:#14352A; --green:#2F6B57; --green-l:#4E9B80;
+    --accent:#E0662E; --accent-l:#F08A56;
+    --ink:#17211D; --muted:#5C6B64; --line:#DCE4E0;
+    --surface:#FFFFFF; --bg:#F3F6F4;
+    --good:#2E7D53; --bad:#B23A28;
+    --r:16px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.5;
+    padding:0 0 40px; -webkit-text-size-adjust:100%;
+  }
+  header{
+    background:var(--deep); color:#fff; padding:22px 20px 20px;
+  }
+  .wrap{max-width:860px;margin:0 auto}
+  header h1{margin:0 0 4px;font-size:clamp(20px,4.4vw,28px);line-height:1.2}
+  header p{margin:0;opacity:.82;font-size:14px}
+
+  nav{display:flex;gap:8px;max-width:860px;margin:0 auto;padding:14px 20px 0;flex-wrap:wrap}
+  nav button{
+    flex:1 1 150px;border:0;border-radius:999px;padding:13px 14px;font-size:15px;
+    font-weight:600;background:#E3EAE6;color:var(--muted);cursor:pointer;font-family:inherit;
+    min-height:46px;transition:background .15s,color .15s;
+  }
+  nav button[aria-selected="true"]{background:var(--green);color:#fff}
+
+  main{max-width:860px;margin:0 auto;padding:18px 20px}
+  section[hidden]{display:none}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+    padding:20px;margin-bottom:16px;
+  }
+  h2{font-size:20px;margin:0 0 6px}
+  h3{font-size:16px;margin:0 0 8px}
+  .lead{color:var(--muted);margin:0 0 16px;font-size:15px}
+
+  /* Schätzen */
+  .guess-val{
+    font-size:clamp(44px,12vw,72px);font-weight:800;color:var(--green);
+    text-align:center;line-height:1;margin:10px 0 2px;font-variant-numeric:tabular-nums;
+  }
+  .guess-cap{text-align:center;color:var(--muted);font-size:14px;margin-bottom:14px}
+  input[type=range]{width:100%;height:38px;accent-color:var(--green)}
+  .scale{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:-6px}
+
+  button.action{
+    display:block;width:100%;margin-top:16px;border:0;border-radius:12px;
+    background:var(--accent);color:#fff;font-size:16px;font-weight:700;padding:15px;
+    cursor:pointer;font-family:inherit;min-height:52px;
+  }
+  button.action:active{background:var(--accent-l)}
+  button.ghost{
+    background:transparent;color:var(--green);border:2px solid var(--green);
+  }
+
+  .reveal{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
+  .bignum{font-size:40px;font-weight:800;color:var(--accent);line-height:1.1}
+  .factgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:14px}
+  .fact{background:#F0F5F2;border-radius:12px;padding:14px}
+  .fact .n{font-size:26px;font-weight:800;color:var(--green);line-height:1.15}
+  .fact .t{font-size:13px;color:var(--muted);margin-top:3px}
+
+  /* Quiz */
+  .qhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;gap:10px}
+  .qcount{font-size:13px;color:var(--muted);white-space:nowrap}
+  .bar{height:6px;background:#E3EAE6;border-radius:99px;overflow:hidden;margin:10px 0 18px}
+  .bar i{display:block;height:100%;background:var(--green);width:0;transition:width .3s}
+  .qtext{font-size:19px;font-weight:700;margin:0 0 14px}
+  .opts{display:grid;gap:10px}
+  .opt{
+    text-align:left;border:2px solid var(--line);background:#fff;border-radius:12px;
+    padding:14px 16px;font-size:16px;cursor:pointer;font-family:inherit;color:var(--ink);
+    min-height:52px;transition:border-color .15s,background .15s;
+  }
+  .opt:active{background:#F3F6F4}
+  .opt.correct{border-color:var(--good);background:#E9F4EE}
+  .opt.wrong{border-color:var(--bad);background:#FBEDEA}
+  .opt[disabled]{cursor:default}
+  .fb{margin-top:14px;padding:14px;border-radius:12px;background:#F0F5F2;font-size:15px}
+  .fb b{color:var(--deep)}
+  .score{font-size:34px;font-weight:800;color:var(--green)}
+
+  /* Jahresübersicht */
+  .topic{border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden;background:#fff}
+  .topic > button{
+    width:100%;text-align:left;border:0;background:#fff;padding:16px;font-family:inherit;
+    font-size:16px;font-weight:700;color:var(--ink);cursor:pointer;display:flex;
+    align-items:center;gap:12px;min-height:56px;
+  }
+  .dot{width:34px;height:34px;border-radius:50%;flex:0 0 34px;display:grid;place-items:center;
+       color:#fff;font-size:13px;font-weight:800}
+  .topic .body{padding:0 16px 16px 62px;color:var(--muted);font-size:15px}
+  .topic .body[hidden]{display:none}
+  .topic .body ul{margin:8px 0 0;padding-left:18px}
+  .topic .body li{margin-bottom:5px}
+  .chev{margin-left:auto;color:var(--muted);font-size:13px;font-weight:600}
+
+  .qbox{background:var(--deep);color:#fff;border-radius:var(--r);padding:22px;margin-bottom:16px}
+  .qbox h2{color:#fff}
+  .qbox p{margin:0;opacity:.85}
+  .qbox .lf{font-size:18px;font-weight:700;margin:12px 0 0;opacity:1}
+
+  footer{max-width:860px;margin:0 auto;padding:8px 20px;color:var(--muted);font-size:12px}
+  @media (prefers-color-scheme: dark){
+    :root{--surface:#1B231F;--bg:#121814;--ink:#EAF0EC;--muted:#9DAFA6;--line:#2C3833}
+    .fact,.fb{background:#232D28}
+    .opt{background:#1B231F}
+    .opt:active{background:#232D28}
+    .topic>button{background:#1B231F;color:var(--ink)}
+    .topic{background:#1B231F}
+    nav button{background:#232D28}
+    .bar{background:#2C3833}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Was steckt in deinem iPad?</h1>
+    <p>Geografie · Jahrgangsstufe 9 · Erste Stunde</p>
+  </div>
+</header>
+
+<nav role="tablist">
+  <button role="tab" id="t1" aria-selected="true" aria-controls="s1">1 · Schätzen</button>
+  <button role="tab" id="t2" aria-selected="false" aria-controls="s2">2 · Woher kommt das?</button>
+  <button role="tab" id="t3" aria-selected="false" aria-controls="s3">3 · Unser Schuljahr</button>
+</nav>
+
+<main>
+
+<!-- ============ 1 SCHÄTZEN ============ -->
+<section id="s1" role="tabpanel" aria-labelledby="t1">
+  <div class="card">
+    <h2>Wie viele verschiedene Stoffe stecken in einem Smartphone?</h2>
+    <p class="lead">Schiebe den Regler auf deine Schätzung. Erst danach auflösen – ehrlich bleiben!</p>
+    <div class="guess-val" id="gv">30</div>
+    <div class="guess-cap">verschiedene Stoffe</div>
+    <input type="range" id="slider" min="1" max="120" value="30" step="1" aria-label="Schätzung">
+    <div class="scale"><span>1</span><span>60</span><span>120</span></div>
+    <button class="action" id="revealBtn">Auflösen</button>
+
+    <div class="reveal" id="rev" hidden>
+      <div class="bignum">über 60</div>
+      <p style="margin:4px 0 0">verschiedene Stoffe – darunter mehr als 50 Metalle. Und das bei rund 110 Gramm Gewicht.</p>
+      <div class="factgrid">
+        <div class="fact"><div class="n">17 mg</div><div class="t">Gold pro Smartphone – für 1 Gramm braucht man etwa 59 Geräte</div></div>
+        <div class="fact"><div class="n">3</div><div class="t">Metalle machen den Hauptteil aus: Eisen, Aluminium, Kupfer</div></div>
+        <div class="fact"><div class="n">10+</div><div class="t">kritische Metalle in winzigen Mengen: Kobalt, Tantal, Indium, seltene Erden …</div></div>
+      </div>
+      <p style="margin-top:16px"><b>Denk weiter:</b> Diese Stoffe kommen nicht aus dem Laden. Sie kommen aus der Erde – irgendwo auf der Welt. Wo genau?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 QUIZ ============ -->
+<section id="s2" role="tabpanel" aria-labelledby="t2" hidden>
+  <div class="card">
+    <div class="qhead">
+      <h2 style="margin:0">Woher kommen die Rohstoffe?</h2>
+      <span class="qcount" id="qcount">1 / 6</span>
+    </div>
+    <div class="bar"><i id="barfill"></i></div>
+    <div id="quizArea">
+      <p class="qtext" id="qtext"></p>
+      <div class="opts" id="opts"></div>
+      <div class="fb" id="fb" hidden></div>
+      <button class="action" id="nextBtn" hidden>Weiter</button>
+    </div>
+    <div id="result" hidden style="text-align:center;padding:10px 0">
+      <div class="score" id="scoreTxt"></div>
+      <p class="lead" id="resultMsg" style="margin-top:8px"></p>
+      <button class="action ghost" id="againBtn">Noch einmal</button>
+    </div>
+  </div>
+  <footer>Förderzahlen: U.S. Geological Survey, Mineral Commodity Summaries 2026 (Angaben für das Jahr 2025).</footer>
+</section>
+
+<!-- ============ 3 JAHRESÜBERSICHT ============ -->
+<section id="s3" role="tabpanel" aria-labelledby="t3" hidden>
+  <div class="qbox">
+    <h2>Zwei Fragen begleiten uns durch das Schuljahr</h2>
+    <p class="lf">1 · Wie gehen wir mit den Rohstoffen der Erde um?</p>
+    <p class="lf">2 · Wie verändert sich das Klima – und was heißt das für uns?</p>
+  </div>
+
+  <div class="card">
+    <h3>Was wir wann machen</h3>
+    <p class="lead">Tippe auf ein Thema, um zu sehen, was dahintersteckt.</p>
+    <div id="topics"></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Tabs ---------- */
+  var tabs = [["t1","s1"],["t2","s2"],["t3","s3"]];
+  tabs.forEach(function(pair){
+    document.getElementById(pair[0]).addEventListener("click", function(){
+      tabs.forEach(function(p){
+        var isMe = p[0] === pair[0];
+        document.getElementById(p[0]).setAttribute("aria-selected", isMe ? "true":"false");
+        document.getElementById(p[1]).hidden = !isMe;
+      });
+      window.scrollTo(0,0);
+    });
+  });
+
+  /* ---------- 1 Schätzen ---------- */
+  var slider = document.getElementById("slider");
+  var gv = document.getElementById("gv");
+  slider.addEventListener("input", function(){ gv.textContent = slider.value; });
+  document.getElementById("revealBtn").addEventListener("click", function(){
+    document.getElementById("rev").hidden = false;
+    this.hidden = true;
+  });
+
+  /* ---------- 2 Quiz ---------- */
+  var Q = [
+    { f:"Kobalt", t:"Kobalt steckt im Akku. Welches Land fördert mit Abstand am meisten?",
+      o:["Demokratische Republik Kongo","Australien","Chile"], c:0,
+      e:"Die DR Kongo förderte 2025 rund 230.000 Tonnen Kobalt – etwa 73 Prozent der Weltförderung. Ein Großteil stammt aus industriellem Bergbau, ein kleinerer Teil aus Kleinbergbau unter teils sehr harten Bedingungen." },
+    { f:"Seltene Erden", t:"Seltene Erden stecken in Displays, Lautsprechern und Motoren. Wer fördert am meisten?",
+      o:["Vereinigte Staaten","China","Russland"], c:1,
+      e:"China förderte 2025 rund 270.000 Tonnen und damit etwa zwei Drittel der Weltproduktion. Diese Konzentration macht Abhängigkeiten sichtbar: 2025 verschärfte China die Exportkontrollen für seltene Erden." },
+    { f:"Lithium", t:"Lithium ist der Kern jedes Akkus. Welches Land war 2025 der größte Förderer?",
+      o:["Australien","Bolivien","Deutschland"], c:0,
+      e:"Australien führte 2025 mit rund 92.000 Tonnen, vor China (62.000) und Chile (56.000). Bolivien hat große Vorkommen, fördert aber bisher wenig – Vorkommen und Förderung sind nicht dasselbe." },
+    { f:"Braunkohle", t:"Und ein Rohstoff direkt vor unserer Haustür: Was wird in der Lausitz abgebaut?",
+      o:["Steinkohle","Braunkohle","Erdgas"], c:1,
+      e:"Braunkohle. Welzow-Süd ist der letzte aktive Braunkohletagebau Brandenburgs. Der Tagebau Jänschwalde wurde 2023 stillgelegt. Damit ist das Thema Rohstoffe für uns keine ferne Geschichte." },
+    { f:"Verteilung", t:"Was gilt für die Verteilung von Rohstoffen auf der Erde?",
+      o:["Sie sind ziemlich gleichmäßig verteilt","Sie sind sehr ungleich verteilt","Jedes Land hat ungefähr die gleichen"], c:1,
+      e:"Rohstoffe sind extrem ungleich verteilt – geologisch bedingt. Genau daraus entstehen Abhängigkeiten, Handel und immer wieder auch Konflikte." },
+    { f:"Recycling", t:"Warum wird so wenig aus alten Handys zurückgewonnen?",
+      o:["Die Metalle sind wertlos","Die Mengen pro Gerät sind winzig und schwer zu trennen","Recycling ist verboten"], c:1,
+      e:"Die Metalle sind wertvoll, aber pro Gerät stecken oft nur Milligramm drin – fest verbaut und vermischt. Trennen kostet Energie und Geld. Deshalb landen viele Altgeräte in Schubladen statt im Kreislauf." }
+  ];
+
+  var qi = 0, score = 0, answered = false;
+  var qtext=document.getElementById("qtext"), opts=document.getElementById("opts"),
+      fb=document.getElementById("fb"), nextBtn=document.getElementById("nextBtn"),
+      qcount=document.getElementById("qcount"), barfill=document.getElementById("barfill"),
+      quizArea=document.getElementById("quizArea"), result=document.getElementById("result");
+
+  function render(){
+    var q = Q[qi];
+    qcount.textContent = (qi+1) + " / " + Q.length;
+    barfill.style.width = ((qi)/Q.length*100) + "%";
+    qtext.textContent = q.t;
+    opts.innerHTML = "";
+    fb.hidden = true; nextBtn.hidden = true; answered = false;
+    q.o.forEach(function(text, i){
+      var b = document.createElement("button");
+      b.className = "opt"; b.type = "button"; b.textContent = text;
+      b.addEventListener("click", function(){ choose(i, b); });
+      opts.appendChild(b);
+    });
+  }
+
+  function choose(i, btn){
+    if(answered) return;
+    answered = true;
+    var q = Q[qi];
+    var all = opts.querySelectorAll(".opt");
+    for(var k=0;k<all.length;k++){ all[k].disabled = true; }
+    all[q.c].classList.add("correct");
+    if(i === q.c){ score++; }
+    else { btn.classList.add("wrong"); }
+    fb.innerHTML = "<b>" + q.f + ":</b> " + q.e;
+    fb.hidden = false;
+    nextBtn.textContent = (qi === Q.length-1) ? "Ergebnis" : "Weiter";
+    nextBtn.hidden = false;
+    barfill.style.width = ((qi+1)/Q.length*100) + "%";
+  }
+
+  nextBtn.addEventListener("click", function(){
+    if(qi === Q.length-1){ finish(); }
+    else { qi++; render(); }
+  });
+
+  function finish(){
+    quizArea.hidden = true; result.hidden = false;
+    document.getElementById("scoreTxt").textContent = score + " von " + Q.length;
+    var m;
+    if(score === Q.length) m = "Alles richtig. Du hast ein gutes Gespür für globale Zusammenhänge.";
+    else if(score >= 4) m = "Solide. Die Details schauen wir uns in den nächsten Wochen genauer an.";
+    else m = "Kein Problem – genau dafür ist dieses Schuljahr da.";
+    document.getElementById("resultMsg").textContent = m;
+  }
+
+  document.getElementById("againBtn").addEventListener("click", function(){
+    qi = 0; score = 0; quizArea.hidden = false; result.hidden = true; render();
+  });
+
+  render();
+
+  /* ---------- 3 Jahresübersicht ---------- */
+  var T = [
+    { n:"1", col:"#2F6B57", h:"Umgang mit Ressourcen", s:"August bis Januar",
+      li:["Was sind Ressourcen – und wie lange reichen sie?",
+          "Braunkohle in der Lausitz: Entstehung, Abbau, Folgen",
+          "Wem gehört die Kohle? Podiumsdiskussion mit Rollen",
+          "Erneuerbare Energien: Was geht bei uns?",
+          "Rohstoffe im Smartphone und der Weg zum Kreislauf"] },
+    { n:"2", col:"#4E9B80", h:"Klimawandel, Klimaschutz, Klimapolitik", s:"Februar bis Juni",
+      li:["Wetter oder Klima – wo ist der Unterschied?",
+          "Treibhauseffekt: natürlich und von uns gemacht",
+          "Folgen weltweit und direkt in Brandenburg",
+          "Planspiel Klimakonferenz: verhandeln wie die Profis",
+          "Was können wir an unserer Schule ändern?"] },
+    { n:"M", col:"#E0662E", h:"Methoden, die du mitnimmst", s:"über das ganze Jahr verteilt",
+      li:["Karten lesen – vom Atlas bis zum digitalen Kartendienst",
+          "Diagramme auswerten und selbst erstellen",
+          "Wirkungsgefüge: Zusammenhänge sichtbar machen",
+          "Klimadiagramme lesen",
+          "Quellen im Netz prüfen: Was stimmt hier eigentlich?"] },
+    { n:"✓", col:"#14352A", h:"So wird bewertet", s:"transparent von Anfang an",
+      li:["Zwei schriftliche Lernerfolgskontrollen (je 45 Minuten)",
+          "Zwei eigene Produkte: ein Erklärvideo, Podcast oder eine Infografik",
+          "Mitarbeit: Diskussion, Planspiel, Gruppenarbeit",
+          "Die Kriterien bekommst du jedes Mal vorher – keine Überraschungen"] }
+  ];
+
+  var host = document.getElementById("topics");
+  T.forEach(function(t, idx){
+    var wrap = document.createElement("div"); wrap.className = "topic";
+    var btn = document.createElement("button"); btn.type = "button";
+    var dot = document.createElement("span"); dot.className = "dot";
+    dot.style.background = t.col; dot.textContent = t.n;
+    var lab = document.createElement("span");
+    lab.innerHTML = t.h + "<br><span style='font-weight:400;font-size:13px;color:var(--muted)'>" + t.s + "</span>";
+    var chev = document.createElement("span"); chev.className = "chev"; chev.textContent = "mehr";
+    btn.appendChild(dot); btn.appendChild(lab); btn.appendChild(chev);
+    var body = document.createElement("div"); body.className = "body"; body.hidden = true;
+    var ul = document.createElement("ul");
+    t.li.forEach(function(x){ var li = document.createElement("li"); li.textContent = x; ul.appendChild(li); });
+    body.appendChild(ul);
+    btn.addEventListener("click", function(){
+      body.hidden = !body.hidden;
+      chev.textContent = body.hidden ? "mehr" : "zu";
+    });
+    wrap.appendChild(btn); wrap.appendChild(body);
+    host.appendChild(wrap);
+  });
+
+})();
+</script>
+</body>
+</html>
