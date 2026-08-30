@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ressourcen-Check Lausitz &middot; Geografie Klasse 9</title>
+<style>
+:root{
+  --navy:#1F3B57; --teal:#2E7D6B; --amber:#C97A2B; --coral:#C05A5A;
+  --bg:#F4F7F6; --card:#FFFFFF; --line:#D9E2E0; --ink:#22303A; --muted:#5E7079;
+  --navy-t:#E7EDF2; --teal-t:#EAF4F1; --amber-t:#FBF0E4; --coral-t:#F8EAEA;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:17px;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 64px}
+
+/* Kopf */
+header.top{background:var(--navy);color:#fff;padding:22px 0 20px;margin-bottom:0}
+header.top .wrap{padding-bottom:0}
+.kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#9FC0D6;font-weight:700;margin:0 0 6px}
+header.top h1{margin:0 0 6px;font-size:29px;line-height:1.15;font-weight:800}
+header.top p{margin:0;color:#CFE0EC;font-size:16px;max-width:62ch}
+
+/* Navigation */
+nav.tabs{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);
+  padding:10px 0;margin-bottom:22px;box-shadow:0 2px 10px rgba(31,59,87,.06)}
+nav.tabs .wrap{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+nav.tabs button{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;color:var(--navy);
+  font:inherit;font-weight:700;font-size:15px;padding:11px 16px;border-radius:11px;cursor:pointer;min-height:46px}
+nav.tabs button[aria-selected="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+
+section.panel{display:none}
+section.panel.active{display:block}
+
+h2{font-size:23px;margin:6px 0 4px;color:var(--navy);font-weight:800}
+h3{font-size:18px;margin:22px 0 8px;color:var(--navy);font-weight:800}
+.lead{color:var(--muted);margin:0 0 18px;max-width:66ch}
+
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:0 0 18px}
+.box.tint-navy{background:var(--navy-t);border-color:#C9D8E4}
+.box.tint-teal{background:var(--teal-t);border-color:#C3DED6}
+.box.tint-amber{background:var(--amber-t);border-color:#EAD3B4}
+.box h3:first-child{margin-top:0}
+.box p:last-child{margin-bottom:0}
+
+.hint{font-size:15px;color:var(--muted)}
+.merk{border-left:5px solid var(--teal);background:#fff;border-radius:0 14px 14px 0;padding:14px 16px;margin:16px 0}
+.merk b{color:var(--teal)}
+
+/* Fortschritt */
+.score{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);
+  border-radius:14px;padding:12px 16px;margin-bottom:18px}
+.score .num{font-size:26px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.score .lbl{font-size:14px;color:var(--muted);font-weight:600}
+.bar{flex:1 1 160px;height:10px;background:var(--navy-t);border-radius:99px;overflow:hidden;min-width:120px}
+.bar > i{display:block;height:100%;width:0;background:var(--teal);border-radius:99px;transition:width .35s ease}
+
+/* Teil 1 Sortierer */
+.sorter{display:grid;grid-template-columns:1fr;gap:16px}
+.cardstage{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center}
+.cardstage .counter{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rescard{margin:12px auto 4px;max-width:430px;border:2px solid var(--navy);border-radius:16px;
+  background:var(--navy-t);padding:16px 18px}
+.rescard .ico{font-size:34px;line-height:1;margin-bottom:6px}
+.rescard .name{font-size:21px;font-weight:800;color:var(--navy)}
+.rescard .sub{font-size:15px;color:var(--muted);margin-top:4px}
+.choices{display:grid;grid-template-columns:1fr;gap:10px;margin-top:16px}
+@media(min-width:700px){.choices{grid-template-columns:repeat(3,1fr)}}
+.choice{border:2px solid var(--line);background:#fff;border-radius:14px;padding:14px 12px;font:inherit;
+  font-weight:700;color:var(--navy);cursor:pointer;min-height:64px;text-align:center;line-height:1.3}
+.choice small{display:block;font-weight:600;font-size:13px;color:var(--muted);margin-top:3px}
+.choice:hover{border-color:var(--navy)}
+.choice.right{background:var(--teal-t);border-color:var(--teal);color:var(--teal)}
+.choice.right small{color:var(--teal)}
+.choice.wrong{background:var(--coral-t);border-color:var(--coral);color:var(--coral)}
+.choice.wrong small{color:var(--coral)}
+.choice[disabled]{cursor:default}
+.fb{margin-top:14px;border-radius:12px;padding:12px 14px;font-size:15.5px;text-align:left;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--teal-t);border:1px solid #B7D8CE;color:#1E5A4C}
+.fb.no{background:var(--coral-t);border:1px solid #E8C4C4;color:#8E3B3B}
+.fb b{display:block;margin-bottom:2px}
+
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center}
+.btn{border:0;border-radius:12px;padding:13px 20px;font:inherit;font-weight:700;cursor:pointer;min-height:48px}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* Ergebnisliste */
+.tally{margin-top:16px}
+.tally h4{margin:0 0 8px;font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.tallygrid{display:grid;grid-template-columns:1fr;gap:8px}
+@media(min-width:700px){.tallygrid{grid-template-columns:repeat(3,1fr)}}
+.tcol{border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px 12px}
+.tcol .th{font-weight:800;font-size:14px;margin-bottom:6px}
+.tcol.c0 .th{color:var(--teal)} .tcol.c1 .th{color:var(--amber)} .tcol.c2 .th{color:var(--coral)}
+.tcol ul{margin:0;padding-left:18px;font-size:14.5px;color:var(--ink)}
+.tcol li{margin-bottom:2px}
+
+/* Teil 2 Reserve/Ressource */
+.pyr{display:block;width:100%;height:auto;max-width:640px;margin:0 auto}
+.szenario{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:14px 0 6px}
+.szenario button{border:1.5px solid var(--line);background:#fff;color:var(--navy);font:inherit;font-weight:700;
+  font-size:15px;padding:11px 15px;border-radius:11px;cursor:pointer;min-height:46px}
+.szenario button[aria-pressed="true"]{background:var(--amber);border-color:var(--amber);color:#fff}
+.szenariotext{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+  font-size:15.5px;margin-top:10px;min-height:74px}
+
+.fall{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.fall .q{font-weight:700;margin:0 0 12px}
+.fall .q span.nr{display:inline-block;background:var(--navy);color:#fff;border-radius:8px;
+  width:26px;height:26px;line-height:26px;text-align:center;font-size:14px;margin-right:8px;vertical-align:2px}
+.fallchoices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fallchoices .choice{min-height:56px;font-size:16px}
+
+/* Quiz */
+.quiz .fall .fallchoices{grid-template-columns:1fr}
+@media(min-width:700px){.quiz .fall .fallchoices{grid-template-columns:1fr 1fr}}
+.quiz .choice{text-align:left;padding:13px 14px;min-height:54px;font-weight:600}
+
+/* Links */
+a.link{color:var(--navy);font-weight:700}
+.linkcard{display:block;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 16px;
+  margin-bottom:10px;text-decoration:none;color:var(--ink)}
+.linkcard:hover{border-color:var(--navy)}
+.linkcard .lt{font-weight:800;color:var(--navy);font-size:17px}
+.linkcard .ld{font-size:15px;color:var(--muted);margin-top:2px}
+.linkcard .lu{font-size:13.5px;color:var(--teal);margin-top:6px;word-break:break-all;font-weight:700}
+
+ol.steps{padding-left:22px;margin:10px 0 0}
+ol.steps li{margin-bottom:7px}
+
+footer.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">Stunde 4 &middot; Umgang mit Ressourcen</p>
+    <h1>Ressourcen-Check Lausitz</h1>
+    <p>Sortiere Ressourcen aus deiner Region, unterscheide Reserve und Ressource und teste dich im Quiz. Alles funktioniert auch ohne Internet.</p>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap" role="tablist">
+    <button role="tab" id="t1" aria-selected="true" data-p="p1">1 &middot; Sortierer</button>
+    <button role="tab" id="t2" aria-selected="false" data-p="p2">2 &middot; Reserve oder Ressource?</button>
+    <button role="tab" id="t3" aria-selected="false" data-p="p3">3 &middot; Quiz</button>
+    <button role="tab" id="t4" aria-selected="false" data-p="p4">4 &middot; Weiterarbeiten</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ================= TEIL 1 ================= -->
+<section class="panel active" id="p1" role="tabpanel" aria-labelledby="t1">
+  <h2>Teil 1 &middot; Der Ressourcen-Sortierer</h2>
+  <p class="lead">Zwölf Ressourcen aus der Lausitz. Entscheide bei jeder Karte, in welche Gruppe sie gehört. Nach jeder Antwort bekommst du sofort eine Erklärung.</p>
+
+  <div class="box tint-navy">
+    <h3>Die drei Gruppen</h3>
+    <p style="margin:0 0 6px"><b style="color:var(--teal)">Unerschöpflich</b> &ndash; steht praktisch unbegrenzt zur Verfügung, egal wie viel wir nutzen.</p>
+    <p style="margin:0 0 6px"><b style="color:var(--amber)">Erneuerbar, aber übernutzbar</b> &ndash; wächst nach oder erneuert sich, aber nur langsam. Wer zu viel entnimmt, zerstört den Vorrat.</p>
+    <p style="margin:0"><b style="color:var(--coral)">Nicht erneuerbar</b> &ndash; entstand in geologischen Zeiträumen. Was gefördert ist, ist weg.</p>
+  </div>
+
+  <div class="score">
+    <span class="num" id="s1num">0/12</span>
+    <span class="lbl">richtig sortiert</span>
+    <span class="bar"><i id="s1bar"></i></span>
+  </div>
+
+  <div class="sorter">
+    <div class="cardstage">
+      <div class="counter" id="c1counter">Karte 1 von 12</div>
+      <div class="rescard">
+        <div class="ico" id="c1ico">&#9935;</div>
+        <div class="name" id="c1name">&nbsp;</div>
+        <div class="sub" id="c1sub">&nbsp;</div>
+      </div>
+      <div class="choices" id="c1choices"></div>
+      <div class="fb" id="c1fb"></div>
+      <div class="btnrow">
+        <button class="btn primary" id="c1next" disabled>Nächste Karte</button>
+        <button class="btn ghost" id="c1reset">Von vorn</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tally">
+    <h4>Deine Sortierung</h4>
+    <div class="tallygrid">
+      <div class="tcol c0"><div class="th">Unerschöpflich</div><ul id="tl0"></ul></div>
+      <div class="tcol c1"><div class="th">Erneuerbar, aber übernutzbar</div><ul id="tl1"></ul></div>
+      <div class="tcol c2"><div class="th">Nicht erneuerbar</div><ul id="tl2"></ul></div>
+    </div>
+  </div>
+
+  <div class="merk">
+    <b>Merke</b> „Erneuerbar“ heißt nicht „unbegrenzt“. Holz, Fisch, Boden und Wasser erneuern sich nur, wenn wir ihnen Zeit dafür lassen. Genau darum geht es beim Begriff <b>Nachhaltigkeit</b>.
+  </div>
+</section>
+
+<!-- ================= TEIL 2 ================= -->
+<section class="panel" id="p2" role="tabpanel" aria-labelledby="t2">
+  <h2>Teil 2 &middot; Reserve oder Ressource?</h2>
+  <p class="lead">In der Rohstoffwirtschaft bedeuten die beiden Wörter nicht dasselbe. Der Unterschied entscheidet darüber, was tatsächlich gefördert wird &ndash; auch bei uns in der Lausitz.</p>
+
+  <div class="box">
+    <h3>So ist es eingeteilt</h3>
+    <svg class="pyr" viewBox="0 0 600 300" role="img" aria-label="Schema: Gesamtpotenzial teilt sich in Reserven und Ressourcen">
+      <rect x="20" y="16" width="560" height="40" rx="10" fill="#1F3B57"/>
+      <text x="300" y="42" text-anchor="middle" fill="#fff" font-size="19" font-weight="700" font-family="Helvetica,Arial,sans-serif">Gesamtpotenzial &ndash; alles, was im Boden steckt</text>
+
+      <rect x="20" y="76" width="215" height="150" rx="12" fill="#EAF4F1" stroke="#2E7D6B" stroke-width="2.5"/>
+      <text x="127" y="106" text-anchor="middle" fill="#2E7D6B" font-size="20" font-weight="700" font-family="Helvetica,Arial,sans-serif">Reserven</text>
+      <text x="127" y="134" text-anchor="middle" fill="#22303A" font-size="14.5" font-family="Helvetica,Arial,sans-serif">nachgewiesen</text>
+      <text x="127" y="156" text-anchor="middle" fill="#22303A" font-size="14.5" font-family="Helvetica,Arial,sans-serif">+ mit heutiger Technik</text>
+      <text x="127" y="178" text-anchor="middle" fill="#22303A" font-size="14.5" font-family="Helvetica,Arial,sans-serif">wirtschaftlich gewinnbar</text>
+      <text x="127" y="206" text-anchor="middle" fill="#2E7D6B" font-size="14" font-weight="700" font-family="Helvetica,Arial,sans-serif">&#8594; wird gefördert</text>
+
+      <rect x="255" y="76" width="325" height="150" rx="12" fill="#FBF0E4" stroke="#C97A2B" stroke-width="2.5"/>
+      <text x="417" y="106" text-anchor="middle" fill="#C97A2B" font-size="20" font-weight="700" font-family="Helvetica,Arial,sans-serif">Ressourcen</text>
+      <text x="417" y="134" text-anchor="middle" fill="#22303A" font-size="14.5" font-family="Helvetica,Arial,sans-serif">nachgewiesen, aber heute nicht</text>
+      <text x="417" y="156" text-anchor="middle" fill="#22303A" font-size="14.5" font-family="Helvetica,Arial,sans-serif">wirtschaftlich gewinnbar &ndash; oder</text>
+      <text x="417" y="178" text-anchor="middle" fill="#22303A" font-size="14.5" font-family="Helvetica,Arial,sans-serif">geologisch erst vermutet</text>
+      <text x="417" y="206" text-anchor="middle" fill="#C97A2B" font-size="14" font-weight="700" font-family="Helvetica,Arial,sans-serif">&#8594; bleibt (vorerst) liegen</text>
+
+      <line x1="245" y1="70" x2="245" y2="240" stroke="#C05A5A" stroke-width="3" stroke-dasharray="7 6"/>
+      <text x="300" y="262" text-anchor="middle" fill="#C05A5A" font-size="15" font-weight="700" font-family="Helvetica,Arial,sans-serif">Diese Grenze ist beweglich.</text>
+      <text x="300" y="284" text-anchor="middle" fill="#5E7079" font-size="14" font-family="Helvetica,Arial,sans-serif">Preis, Technik und politische Entscheidungen verschieben sie.</text>
+    </svg>
+
+    <div class="szenario" id="szBtns">
+      <button data-s="0" aria-pressed="true">Ausgangslage</button>
+      <button data-s="1" aria-pressed="false">Der Preis steigt</button>
+      <button data-s="2" aria-pressed="false">Neue Technik</button>
+      <button data-s="3" aria-pressed="false">Politischer Ausstieg</button>
+    </div>
+    <div class="szenariotext" id="szText"></div>
+  </div>
+
+  <div class="box tint-amber">
+    <h3>Fallbeispiel Welzow-Süd</h3>
+    <p>Welzow-Süd ist der letzte aktive Braunkohletagebau Brandenburgs. Im Frühjahr 2026 kündigte die LEAG an, die Förderung schon <b>2030</b> zu beenden &ndash; drei Jahre früher als geplant. Begründung: Die Kohle rechnet sich wirtschaftlich nicht mehr, weil sehr viel Strom aus Wind und Sonne dazugekommen ist.</p>
+    <p style="margin-bottom:0">Die Folge: Rund <b>83 Millionen Tonnen</b> Braunkohle bleiben im Boden liegen. Die Kohle ist physisch weiter da &ndash; aber sie ist keine Reserve mehr.</p>
+  </div>
+
+  <div class="score">
+    <span class="num" id="s2num">0/6</span>
+    <span class="lbl">Fälle richtig eingeordnet</span>
+    <span class="bar"><i id="s2bar"></i></span>
+  </div>
+
+  <div id="fallList"></div>
+
+  <div class="merk">
+    <b>Merke</b> Reserven sind der Teil des Vorrats, der sich <b>heute</b> lohnt. Steigt der Preis oder verbessert sich die Technik, werden aus Ressourcen Reserven &ndash; fällt der Preis oder steigt jemand politisch aus, geht es andersherum.
+  </div>
+</section>
+
+<!-- ================= TEIL 3 ================= -->
+<section class="panel quiz" id="p3" role="tabpanel" aria-labelledby="t3">
+  <h2>Teil 3 &middot; Quiz</h2>
+  <p class="lead">Acht Fragen zum Ressourcenbegriff. Eine Antwort pro Frage, danach siehst du die Erklärung.</p>
+
+  <div class="score">
+    <span class="num" id="s3num">0/8</span>
+    <span class="lbl">Punkte</span>
+    <span class="bar"><i id="s3bar"></i></span>
+  </div>
+
+  <div id="quizList"></div>
+
+  <div class="btnrow" style="justify-content:flex-start">
+    <button class="btn ghost" id="q3reset">Quiz zurücksetzen</button>
+  </div>
+</section>
+
+<!-- ================= TEIL 4 ================= -->
+<section class="panel" id="p4" role="tabpanel" aria-labelledby="t4">
+  <h2>Teil 4 &middot; Weiterarbeiten</h2>
+  <p class="lead">Für die Hausaufgabe und den Ausblick auf die nächste Stunde.</p>
+
+  <div class="box tint-teal">
+    <h3>Dein Auftrag bis zur nächsten Stunde</h3>
+    <ol class="steps">
+      <li>Wähle <b>eine</b> Ressource aus dem Sortierer, die es in deiner Umgebung gibt.</li>
+      <li>Notiere in Stichpunkten: Wofür wird sie genutzt? Wer nutzt sie?</li>
+      <li>Beantworte in drei bis fünf Sätzen: Was passiert, wenn wir sie in 20 Jahren doppelt so stark nutzen wie heute?</li>
+      <li>Bringe deine Notizen zur nächsten Stunde mit &ndash; dort geht es um <b>Reichweite</b>: Wie lange reicht ein Vorrat eigentlich?</li>
+    </ol>
+  </div>
+
+  <h3>Nachschlagen und vertiefen</h3>
+
+  <a class="linkcard" href="https://www.bgr.bund.de/DE/Themen/Energie/energie_node.html" target="_blank" rel="noopener">
+    <div class="lt">BGR &ndash; Energierohstoffe</div>
+    <div class="ld">Die Bundesanstalt für Geowissenschaften und Rohstoffe ist die amtliche Stelle für Reserven- und Ressourcenzahlen in Deutschland.</div>
+    <div class="lu">bgr.bund.de/DE/Themen/Energie/energie_node.html</div>
+  </a>
+
+  <a class="linkcard" href="https://www.umweltbundesamt.de/themen/abfall-ressourcen/ressourcennutzung-ihre-folgen" target="_blank" rel="noopener">
+    <div class="lt">Umweltbundesamt &ndash; Ressourcennutzung und ihre Folgen</div>
+    <div class="ld">Zahlen und Grafiken dazu, wie viele Rohstoffe in Deutschland verbraucht werden.</div>
+    <div class="lu">umweltbundesamt.de/themen/abfall-ressourcen/ressourcennutzung-ihre-folgen</div>
+  </a>
+
+  <a class="linkcard" href="https://cottbuser-ostsee.de/" target="_blank" rel="noopener">
+    <div class="lt">Cottbuser Ostsee</div>
+    <div class="ld">Aus dem Tagebau Cottbus-Nord wurde ein 1.900 Hektar großer See. Seit Ende 2024 ist der Zielwasserstand von +62,5 m NHN erreicht.</div>
+    <div class="lu">cottbuser-ostsee.de</div>
+  </a>
+
+  <a class="linkcard" href="https://bb-viewer.geobasis-bb.de/" target="_blank" rel="noopener">
+    <div class="lt">BrandenburgViewer</div>
+    <div class="ld">Das WebGIS aus Stunde 3 &ndash; schau dir Welzow-Süd, den Cottbuser Ostsee oder die Windparks im Luftbild an.</div>
+    <div class="lu">bb-viewer.geobasis-bb.de</div>
+  </a>
+
+  <div class="box" style="margin-top:18px">
+    <h3>Zahlen aus der Lausitz und aus Brandenburg</h3>
+    <p style="margin:0 0 8px"><b>4.126</b> Windenergieanlagen mit rund <b>9.500 Megawatt</b> Leistung standen Ende 2025 in Brandenburg.</p>
+    <p style="margin:0 0 8px"><b>2030</b> soll die Förderung im Tagebau Welzow-Süd enden, rund <b>83 Millionen Tonnen</b> Braunkohle bleiben liegen.</p>
+    <p style="margin:0"><b>1.900 Hektar</b> ist der Cottbuser Ostsee groß &ndash; entstanden aus einem Tagebau, gefüllt mit Wasser aus der Spree.</p>
+  </div>
+
+  <footer class="foot">
+    Geografie Klasse 9 &middot; Humboldt-Gymnasium Cottbus &middot; Stunde 4: Was sind Ressourcen?<br>
+    Stand der Sachangaben: August 2026. Das Schema zu Reserven und Ressourcen folgt der Einteilung der Bundesanstalt für Geowissenschaften und Rohstoffe (BGR).
+  </footer>
+</section>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Navigation ---------- */
+var tabs=[].slice.call(document.querySelectorAll('nav.tabs button'));
+tabs.forEach(function(b){
+  b.addEventListener('click',function(){
+    tabs.forEach(function(x){x.setAttribute('aria-selected','false');});
+    b.setAttribute('aria-selected','true');
+    [].forEach.call(document.querySelectorAll('section.panel'),function(p){p.classList.remove('active');});
+    document.getElementById(b.dataset.p).classList.add('active');
+    window.scrollTo(0,0);
+  });
+});
+
+function setBar(barId,numId,got,total){
+  document.getElementById(barId).style.width=(got/total*100)+'%';
+  document.getElementById(numId).textContent=got+'/'+total;
+}
+
+/* ---------- TEIL 1: Sortierer ---------- */
+var GRUPPEN=[
+  {k:'Unerschöpflich', s:'praktisch unbegrenzt'},
+  {k:'Erneuerbar, aber übernutzbar', s:'wächst nur langsam nach'},
+  {k:'Nicht erneuerbar', s:'was weg ist, ist weg'}
+];
+var KARTEN=[
+  {ico:'⛏️',name:'Braunkohle',sub:'Tagebau Welzow-Süd',g:2,
+   e:'Die Lausitzer Braunkohle entstand vor rund 15 bis 20 Millionen Jahren aus Sumpfwäldern. In menschlichen Zeiträumen wächst nichts davon nach.'},
+  {ico:'💨',name:'Wind',sub:'Windpark bei Forst',g:0,
+   e:'Wind entsteht durch Temperaturunterschiede in der Atmosphäre. Auch wenn tausend Anlagen laufen, ist morgen nicht weniger Wind da.'},
+  {ico:'☀️',name:'Sonnenenergie',sub:'Solarpark auf der Tagebaufläche',g:0,
+   e:'Die Einstrahlung der Sonne wird durch unsere Nutzung nicht kleiner. Nach menschlichen Maßstäben ist sie unerschöpflich.'},
+  {ico:'🌲',name:'Holz',sub:'Kiefernwald der Lausitz',g:1,
+   e:'Eine Kiefer braucht 60 bis 100 Jahre bis zur Ernte. Wird mehr eingeschlagen als nachwächst, schrumpft der Wald &ndash; erneuerbar ist Holz nur bei nachhaltiger Forstwirtschaft.'},
+  {ico:'🪨',name:'Kies und Sand',sub:'Kiesgrube bei Cottbus',g:2,
+   e:'Kies und Sand sind eiszeitliche Ablagerungen. Neue entstehen nur über Jahrtausende &ndash; für uns ist der Vorrat endlich.'},
+  {ico:'💧',name:'Wasser der Spree',sub:'Flusswasser',g:1,
+   e:'Wasser bewegt sich im Kreislauf und erneuert sich. Trotzdem ist es knapp: In trockenen Sommern führt die Spree so wenig Wasser, dass es für alle Nutzungen nicht reicht.'},
+  {ico:'🌱',name:'Ackerboden',sub:'Felder im Spreewaldrand',g:1,
+   e:'Für einen Zentimeter fruchtbaren Boden braucht die Natur rund 100 Jahre. Durch Erosion kann er in einem einzigen Starkregen verloren gehen.'},
+  {ico:'🐟',name:'Fische',sub:'Cottbuser Ostsee',g:1,
+   e:'Fischbestände wachsen nach, solange nicht mehr entnommen wird, als sich vermehrt. Bei Überfischung bricht der Bestand zusammen.'},
+  {ico:'🏺',name:'Ton und Lehm',sub:'Ziegelei in der Niederlausitz',g:2,
+   e:'Tone sind über sehr lange Zeiträume abgelagert worden. Eine abgebaute Tongrube füllt sich nicht wieder mit Ton.'},
+  {ico:'🔌',name:'Kupfer',sub:'im Stromkabel',g:2,
+   e:'Kupfererz entsteht in geologischen Prozessen und ist endlich. Wiederverwenden lässt es sich aber sehr gut &ndash; darum geht es in Stunde 15 zur Kreislaufwirtschaft.'},
+  {ico:'🌋',name:'Erdwärme',sub:'Wärme aus dem Untergrund',g:0,
+   e:'Die Wärme im Erdinneren stammt vor allem aus dem Zerfall radioaktiver Elemente und aus der Entstehungszeit der Erde. Sie steht über Jahrmillionen zur Verfügung.'},
+  {ico:'🌽',name:'Mais für Biogas',sub:'Biogasanlage im Spree-Neiße-Kreis',g:1,
+   e:'Mais wächst jedes Jahr nach &ndash; aber nur, wenn Boden, Wasser und Nährstoffe dafür da sind. Diese Grundlagen können übernutzt werden.'}
+];
+
+var order=[],idx=0,score1=0,answered=false,tallies=[[],[],[]];
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function buildChoices(){
+  var wrap=document.getElementById('c1choices');
+  wrap.innerHTML='';
+  GRUPPEN.forEach(function(g,gi){
+    var b=document.createElement('button');
+    b.className='choice';
+    b.innerHTML=g.k+'<small>'+g.s+'</small>';
+    b.addEventListener('click',function(){pick(gi,b);});
+    wrap.appendChild(b);
+  });
+}
+function renderCard(){
+  var k=KARTEN[order[idx]];
+  document.getElementById('c1counter').textContent='Karte '+(idx+1)+' von '+KARTEN.length;
+  document.getElementById('c1ico').innerHTML=k.ico;
+  document.getElementById('c1name').textContent=k.name;
+  document.getElementById('c1sub').textContent=k.sub;
+  document.getElementById('c1fb').className='fb';
+  document.getElementById('c1fb').innerHTML='';
+  document.getElementById('c1next').disabled=true;
+  answered=false;
+  buildChoices();
+}
+function pick(gi,btn){
+  if(answered)return; answered=true;
+  var k=KARTEN[order[idx]];
+  var ok=(gi===k.g);
+  var btns=[].slice.call(document.querySelectorAll('#c1choices .choice'));
+  btns.forEach(function(b,bi){
+    b.disabled=true;
+    if(bi===k.g)b.classList.add('right');
+  });
+  if(!ok)btn.classList.add('wrong');
+  else score1++;
+  tallies[k.g].push(k.name);
+  var t=document.getElementById('tl'+k.g);
+  var li=document.createElement('li');li.textContent=k.name;t.appendChild(li);
+  var fb=document.getElementById('c1fb');
+  fb.className='fb show '+(ok?'ok':'no');
+  fb.innerHTML='<b>'+(ok?'Richtig.':('Nicht ganz &ndash; richtig ist: '+GRUPPEN[k.g].k+'.'))+'</b>'+k.e;
+  setBar('s1bar','s1num',score1,KARTEN.length);
+  var nx=document.getElementById('c1next');
+  nx.disabled=false;
+  nx.textContent=(idx===KARTEN.length-1)?'Ergebnis ansehen':'Nächste Karte';
+}
+document.getElementById('c1next').addEventListener('click',function(){
+  if(idx<KARTEN.length-1){idx++;renderCard();}
+  else{
+    var fb=document.getElementById('c1fb');
+    fb.className='fb show ok';
+    fb.innerHTML='<b>Geschafft!</b>Du hast '+score1+' von '+KARTEN.length+' Karten richtig sortiert. Deine vollständige Sortierung steht unten &ndash; übertrage sie in Aufgabe 1 auf dem Arbeitsblatt.';
+    this.disabled=true;
+    document.getElementById('c1choices').innerHTML='';
+  }
+});
+document.getElementById('c1reset').addEventListener('click',function(){startSorter();});
+function startSorter(){
+  order=shuffle(KARTEN.map(function(_,i){return i;}));
+  idx=0;score1=0;tallies=[[],[],[]];
+  ['tl0','tl1','tl2'].forEach(function(id){document.getElementById(id).innerHTML='';});
+  setBar('s1bar','s1num',0,KARTEN.length);
+  renderCard();
+}
+startSorter();
+
+/* ---------- TEIL 2: Szenarien ---------- */
+var SZ=[
+  'Die gestrichelte Linie trennt das, was sich heute lohnt, von dem, was liegen bleibt. Tippe auf die anderen Felder und beobachte, wohin sich die Grenze bewegt.',
+  'Steigt der Weltmarktpreis, lohnt sich auch die Förderung an schwierigen Stellen. Die Grenze wandert nach rechts: Aus Ressourcen werden Reserven, ohne dass ein Gramm zusätzlicher Rohstoff entstanden wäre.',
+  'Bessere Bohr-, Abbau- oder Aufbereitungstechnik senkt die Förderkosten. Auch dann wandert die Grenze nach rechts &ndash; Vorkommen, die früher unerreichbar waren, werden gewinnbar.',
+  'Beschließt ein Land den Ausstieg oder rechnet sich ein Rohstoff nicht mehr, wandert die Grenze nach links. Genau das passiert in Welzow-Süd: Die rund 83 Millionen Tonnen Kohle bleiben liegen und zählen künftig zu den Ressourcen.'
+];
+document.getElementById('szText').innerHTML=SZ[0];
+[].forEach.call(document.querySelectorAll('#szBtns button'),function(b){
+  b.addEventListener('click',function(){
+    [].forEach.call(document.querySelectorAll('#szBtns button'),function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+    document.getElementById('szText').innerHTML=SZ[+b.dataset.s];
+  });
+});
+
+/* ---------- TEIL 2: Fälle ---------- */
+var FAELLE=[
+  {q:'Die Braunkohle in Welzow-Süd, die bis 2030 noch gebaggert und im Kraftwerk verstromt wird.',a:0,
+   e:'Sie ist nachgewiesen und wird wirtschaftlich gefördert &ndash; das ist die Definition einer Reserve.'},
+  {q:'Die rund 83 Millionen Tonnen Kohle, die nach dem vorgezogenen Ende in Welzow-Süd liegen bleiben.',a:1,
+   e:'Die Kohle ist nachgewiesen, aber unter den heutigen Bedingungen nicht mehr wirtschaftlich gewinnbar. Damit zählt sie zu den Ressourcen.'},
+  {q:'Ein Kohleflöz, das Geologen aufgrund der Gesteinsschichten vermuten, aber noch nicht erbohrt haben.',a:1,
+   e:'Nur vermutete Vorkommen sind nie Reserven. Erst wenn sie nachgewiesen und wirtschaftlich gewinnbar sind, werden sie dazu.'},
+  {q:'Kupfererz in einer Mine in Chile, die derzeit Gewinn abwirft.',a:0,
+   e:'Nachgewiesen und wirtschaftlich abbaubar &ndash; eine klassische Reserve.'},
+  {q:'Lithium im Tiefenwasser des Oberrheingrabens, für das die Fördertechnik gerade erst erprobt wird.',a:1,
+   e:'Das Vorkommen ist bekannt, aber die Technik ist noch nicht großtechnisch einsetzbar. Solange das so bleibt, ist es eine Ressource.'},
+  {q:'Erdgas in 5.000 Metern Tiefe, dessen Förderung mehr kostet, als der Verkauf einbringt.',a:1,
+   e:'Nicht die Menge entscheidet, sondern die Wirtschaftlichkeit. Steigt der Gaspreis stark, kann daraus eine Reserve werden.'}
+];
+(function(){
+  var host=document.getElementById('fallList'),got=0,done=[];
+  FAELLE.forEach(function(f,i){
+    var d=document.createElement('div');d.className='fall';
+    d.innerHTML='<p class="q"><span class="nr">'+(i+1)+'</span>'+f.q+'</p>';
+    var cc=document.createElement('div');cc.className='fallchoices';
+    ['Reserve','Ressource'].forEach(function(lab,li){
+      var b=document.createElement('button');b.className='choice';b.textContent=lab;
+      b.addEventListener('click',function(){
+        if(done[i])return; done[i]=true;
+        var all=[].slice.call(cc.querySelectorAll('.choice'));
+        all.forEach(function(x,xi){x.disabled=true;if(xi===f.a)x.classList.add('right');});
+        if(li!==f.a)b.classList.add('wrong'); else got++;
+        var fb=d.querySelector('.fb');
+        fb.className='fb show '+(li===f.a?'ok':'no');
+        fb.innerHTML='<b>'+(li===f.a?'Richtig.':('Richtig ist: '+['Reserve','Ressource'][f.a]+'.'))+'</b>'+f.e;
+        setBar('s2bar','s2num',got,FAELLE.length);
+      });
+      cc.appendChild(b);
+    });
+    d.appendChild(cc);
+    var fb=document.createElement('div');fb.className='fb';d.appendChild(fb);
+    host.appendChild(d);
+  });
+})();
+
+/* ---------- TEIL 3: Quiz ---------- */
+var QUIZ=[
+  {q:'Was ist mit „natürlichen Ressourcen“ gemeint?',
+   o:['Alles, was Menschen aus der Natur nutzen können &ndash; Rohstoffe, Wasser, Boden, Luft, Energie und Fläche.',
+      'Ausschließlich Bodenschätze, die bergmännisch abgebaut werden.',
+      'Nur die Energieträger Kohle, Erdöl und Erdgas.',
+      'Geld und Maschinen, die ein Unternehmen für die Produktion braucht.'],a:0,
+   e:'Der Ressourcenbegriff ist weit: Er umfasst Stoffe, Energie, Wasser, Boden, Luft, Lebewesen und auch die Fläche selbst. Bodenschätze sind nur ein Teil davon.'},
+  {q:'Warum wird der Boden in der Geografie nicht einfach als „erneuerbar“ eingeordnet?',
+   o:['Weil Boden aus Gestein besteht und niemals verwittert.',
+      'Weil Bodenbildung extrem langsam abläuft &ndash; rund 100 Jahre für einen Zentimeter &ndash; Erosion aber sehr schnell gehen kann.',
+      'Weil Boden nur in Deutschland vorkommt.',
+      'Weil Boden künstlich in Fabriken hergestellt wird.'],a:1,
+   e:'Boden erneuert sich zwar, aber in menschlichen Zeiträumen kaum. Durch Erosion oder Versiegelung geht er dagegen sehr schnell verloren.'},
+  {q:'Ein Rohstoff ist ...',
+   o:['dasselbe wie eine Ressource.',
+      'ein fertiges Produkt aus der Fabrik.',
+      'ein noch unbearbeiteter Stoff aus der Natur, der weiterverarbeitet wird.',
+      'nur ein Stoff, der importiert werden muss.'],a:2,
+   e:'Rohstoffe sind der stoffliche Teil der Ressourcen. Ressourcen sind der weitere Begriff &ndash; auch Wind, Fläche oder Wasser gehören dazu, ohne Rohstoff zu sein.'},
+  {q:'Welche Aussage über Reserven trifft zu?',
+   o:['Reserven sind nachgewiesen und mit heutiger Technik wirtschaftlich gewinnbar.',
+      'Reserven sind alle Vorkommen, die es auf der Erde gibt.',
+      'Reserven sind nur vermutete Vorkommen.',
+      'Reserven bleiben für alle Zeiten gleich groß.'],a:0,
+   e:'Zwei Bedingungen müssen zusammenkommen: nachgewiesen und wirtschaftlich gewinnbar. Fällt eine davon weg, spricht man von Ressourcen.'},
+  {q:'Der Weltmarktpreis für einen Rohstoff steigt stark. Was passiert mit den Reserven?',
+   o:['Sie werden kleiner, weil mehr verbraucht wird.',
+      'Sie bleiben gleich, weil im Boden nicht mehr Rohstoff entsteht.',
+      'Sie können größer werden, weil sich nun auch die Förderung an schwierigen Stellen lohnt.',
+      'Sie verschwinden vollständig.'],a:2,
+   e:'Die Reserven sind keine feste geologische Größe, sondern eine wirtschaftliche. Steigt der Preis, rutschen Vorkommen aus den Ressourcen in die Reserven.'},
+  {q:'Warum bleiben in Welzow-Süd rund 83 Millionen Tonnen Braunkohle im Boden?',
+   o:['Weil die Kohle geologisch nicht mehr vorhanden ist.',
+      'Weil die Bagger technisch nicht tiefer graben können.',
+      'Weil die Förderung sich wirtschaftlich nicht mehr rechnet und die Förderung 2030 endet.',
+      'Weil die Kohle für spätere Generationen gesetzlich reserviert wurde.'],a:2,
+   e:'Die LEAG kündigte 2026 an, die Förderung auf 2030 vorzuziehen. Grund ist die Wirtschaftlichkeit: Sehr viel günstiger Strom aus Wind und Sonne hat den Bedarf an Braunkohlestrom verringert.'},
+  {q:'Welche der folgenden Ressourcen gilt als praktisch unerschöpflich?',
+   o:['Kiefernholz aus dem Lausitzer Wald','Grundwasser unter Cottbus','Die Sonneneinstrahlung','Kies aus der Kiesgrube'],a:2,
+   e:'Sonne, Wind und Erdwärme werden durch unsere Nutzung nicht weniger. Holz und Grundwasser erneuern sich zwar, lassen sich aber übernutzen.'},
+  {q:'Was folgt aus dem Unterschied zwischen erneuerbaren und übernutzbaren Ressourcen für unser Handeln?',
+   o:['Erneuerbare Ressourcen darf man beliebig stark nutzen.',
+      'Die Nutzung muss sich an der Erneuerungsrate orientieren &ndash; sonst schrumpft der Vorrat trotz „erneuerbar“.',
+      'Man sollte ausschließlich nicht erneuerbare Ressourcen verwenden.',
+      'Der Unterschied hat keine praktischen Folgen.'],a:1,
+   e:'Das ist der Kern der Nachhaltigkeit: Es darf höchstens so viel entnommen werden, wie im gleichen Zeitraum nachwächst oder sich neu bildet.'}
+];
+function buildQuiz(){
+  var host=document.getElementById('quizList');host.innerHTML='';
+  var got=0,done=[];
+  setBar('s3bar','s3num',0,QUIZ.length);
+  QUIZ.forEach(function(f,i){
+    var d=document.createElement('div');d.className='fall';
+    d.innerHTML='<p class="q"><span class="nr">'+(i+1)+'</span>'+f.q+'</p>';
+    var cc=document.createElement('div');cc.className='fallchoices';
+    f.o.forEach(function(lab,li){
+      var b=document.createElement('button');b.className='choice';b.innerHTML=lab;
+      b.addEventListener('click',function(){
+        if(done[i])return;done[i]=true;
+        var all=[].slice.call(cc.querySelectorAll('.choice'));
+        all.forEach(function(x,xi){x.disabled=true;if(xi===f.a)x.classList.add('right');});
+        if(li!==f.a)b.classList.add('wrong');else got++;
+        var fb=d.querySelector('.fb');
+        fb.className='fb show '+(li===f.a?'ok':'no');
+        fb.innerHTML='<b>'+(li===f.a?'Richtig.':'Noch nicht richtig.')+'</b>'+f.e;
+        setBar('s3bar','s3num',got,QUIZ.length);
+      });
+      cc.appendChild(b);
+    });
+    d.appendChild(cc);
+    var fb=document.createElement('div');fb.className='fb';d.appendChild(fb);
+    host.appendChild(d);
+  });
+}
+buildQuiz();
+document.getElementById('q3reset').addEventListener('click',buildQuiz);
+
+})();
+</script>
+</body>
+</html>
