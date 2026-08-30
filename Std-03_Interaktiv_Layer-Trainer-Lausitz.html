@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Layer-Trainer Lausitz – Von der Atlaskarte zum WebGIS</title>
+<style>
+  :root{
+    --navy:#1F3B57;
+    --teal:#2E7D6B;
+    --amber:#C97A2B;
+    --coral:#C05A5A;
+    --violet:#6B5B95;
+    --bg:#F4F7F6;
+    --card:#FFFFFF;
+    --ink:#1E2A32;
+    --muted:#5B6B72;
+    --good:#2E7D6B;
+    --bad:#C0503F;
+    --line:#E1E8E6;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(160deg,#F4F7F6 0%,#E8F0EE 100%);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:20px 14px 70px;
+  }
+  .wrap{width:100%;max-width:820px;}
+  header.top{text-align:center;margin-bottom:16px;}
+  header.top h1{font-size:1.55rem;margin:6px 0 2px;color:var(--navy);line-height:1.25;}
+  header.top p{margin:0;color:var(--muted);font-size:0.96rem;}
+  .badge{display:inline-block;background:var(--navy);color:#fff;padding:4px 14px;border-radius:999px;
+    font-size:0.76rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px;}
+
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:0 6px 24px rgba(31,59,87,0.08);
+    padding:24px 22px 20px;margin-bottom:18px;border:1px solid var(--line);}
+
+  /* ---- Navigation ---- */
+  .tabs{display:flex;gap:7px;margin:16px 0 20px;flex-wrap:wrap;}
+  .tab{flex:1 1 130px;padding:11px 8px;border-radius:12px;border:1.5px solid var(--line);
+    background:#FCFDFD;color:var(--muted);font-size:0.86rem;font-weight:600;text-align:center;
+    cursor:pointer;transition:.15s;line-height:1.3;}
+  .tab.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .tab .tnum{display:block;font-size:0.7rem;opacity:.75;font-weight:500;}
+
+  section.view{display:none;}
+  section.view.active{display:block;}
+
+  h2.sec{font-size:1.2rem;color:var(--navy);margin:0 0 4px;}
+  p.lead{margin:0 0 16px;color:var(--muted);font-size:0.94rem;line-height:1.5;}
+
+  .note-box{background:#EAF1EE;border-left:4px solid var(--teal);padding:12px 16px;border-radius:10px;
+    font-size:0.9rem;color:var(--muted);margin-top:14px;line-height:1.55;}
+  .warn-box{background:#FDF3E8;border-left:4px solid var(--amber);padding:12px 16px;border-radius:10px;
+    font-size:0.9rem;color:#6B4A22;margin-top:14px;line-height:1.55;}
+
+  /* ---- Karte + Layer ---- */
+  .maparea{display:flex;gap:16px;flex-wrap:wrap;}
+  .mapbox{flex:1 1 340px;min-width:280px;}
+  .layerbox{flex:0 1 240px;min-width:210px;}
+  svg#karte{width:100%;height:auto;display:block;border-radius:14px;border:1px solid var(--line);
+    background:#EAF0EE;}
+  .layer-title{font-size:0.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+    font-weight:700;margin:0 0 8px;}
+  .layer{display:flex;align-items:center;gap:9px;padding:9px 11px;border:1.5px solid var(--line);
+    border-radius:11px;margin-bottom:7px;cursor:pointer;background:#FCFDFD;font-size:0.9rem;
+    transition:.15s;user-select:none;}
+  .layer:active{background:#F0F4F3;}
+  .layer.on{border-color:var(--teal);background:#EAF4F1;}
+  .sw{width:16px;height:16px;border-radius:4px;flex-shrink:0;border:1px solid rgba(0,0,0,.15);}
+  .layer .chk{margin-left:auto;font-size:1rem;color:var(--teal);opacity:0;}
+  .layer.on .chk{opacity:1;}
+  .basis-row{display:flex;gap:7px;margin-bottom:12px;}
+  .basis-btn{flex:1;padding:9px 6px;border-radius:10px;border:1.5px solid var(--line);background:#FCFDFD;
+    font-size:0.84rem;font-weight:600;color:var(--muted);cursor:pointer;transition:.15s;}
+  .basis-btn.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .slider-row{margin:10px 0 4px;}
+  .slider-row label{font-size:0.82rem;color:var(--muted);display:block;margin-bottom:4px;}
+  input[type=range]{width:100%;accent-color:var(--teal);}
+
+  /* ---- Aufgaben ---- */
+  .task{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
+  .task-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .task-num{width:30px;height:30px;border-radius:9px;background:var(--navy);color:#fff;display:flex;
+    align-items:center;justify-content:center;font-size:0.86rem;font-weight:700;flex-shrink:0;}
+  .task-q{font-weight:600;font-size:1rem;line-height:1.4;}
+  .btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px;}
+  button.act{padding:11px 20px;border-radius:11px;border:none;background:var(--teal);color:#fff;
+    font-size:0.94rem;font-weight:600;cursor:pointer;transition:.15s;}
+  button.act:active{transform:scale(.97);}
+  button.act.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line);}
+  button.act:disabled{opacity:.45;cursor:default;}
+  .fb{margin-top:12px;padding:12px 15px;border-radius:11px;font-size:0.92rem;line-height:1.55;display:none;}
+  .fb.show{display:block;}
+  .fb.ok{background:#E7F4EE;border-left:4px solid var(--good);color:#1E4A3A;}
+  .fb.no{background:#FBEAE7;border-left:4px solid var(--bad);color:#6E2A20;}
+
+  /* ---- Quiz ---- */
+  .q-text{font-weight:600;font-size:1rem;margin-bottom:10px;line-height:1.45;}
+  .options{display:flex;flex-direction:column;gap:9px;}
+  .option{display:flex;align-items:center;gap:11px;padding:12px 14px;border:1.5px solid var(--line);
+    border-radius:12px;cursor:pointer;font-size:0.96rem;transition:.15s;background:#FCFDFD;line-height:1.4;}
+  .option:active{background:#F0F4F3;}
+  .option.correct{border-color:var(--good);background:#E7F4EE;}
+  .option.incorrect{border-color:var(--bad);background:#FBEAE7;}
+  .option .mark{margin-left:auto;font-weight:700;flex-shrink:0;}
+  .option.locked{cursor:default;}
+  .expl{margin-top:9px;padding:11px 14px;background:#F4F7F6;border-radius:10px;font-size:0.88rem;
+    color:var(--muted);line-height:1.55;display:none;}
+  .expl.show{display:block;}
+  .qcard{margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--line);}
+  .qcard:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .qtag{display:inline-block;font-size:0.72rem;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--muted);font-weight:700;margin-bottom:6px;}
+
+  /* ---- Sortierspiel Atlas/WebGIS ---- */
+  .sortcard{padding:14px 16px;border:1.5px solid var(--line);border-radius:13px;background:#FCFDFD;
+    margin-bottom:11px;}
+  .sortcard .st{font-size:0.96rem;line-height:1.45;margin-bottom:10px;}
+  .sortbtns{display:flex;gap:8px;}
+  .sortbtns button{flex:1;padding:10px 6px;border-radius:10px;border:1.5px solid var(--line);
+    background:#fff;font-size:0.88rem;font-weight:600;color:var(--navy);cursor:pointer;}
+  .sortbtns button.sel{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .sortcard.right{border-color:var(--good);background:#E7F4EE;}
+  .sortcard.wrong{border-color:var(--bad);background:#FBEAE7;}
+  .sortfb{margin-top:9px;font-size:0.87rem;color:var(--muted);line-height:1.5;display:none;}
+  .sortfb.show{display:block;}
+
+  /* ---- Score ---- */
+  .score{text-align:center;padding:18px;border-radius:14px;background:#EAF1EE;margin-top:16px;display:none;}
+  .score.show{display:block;}
+  .score .big{font-size:2rem;font-weight:700;color:var(--navy);}
+  .score .lbl{font-size:0.9rem;color:var(--muted);}
+
+  /* ---- Linkhub ---- */
+  a.linkcard{display:flex;align-items:flex-start;gap:13px;padding:15px 16px;border:1.5px solid var(--line);
+    border-radius:13px;margin-bottom:11px;text-decoration:none;color:var(--ink);background:#FCFDFD;
+    transition:.15s;}
+  a.linkcard:active{background:#F0F4F3;}
+  .lc-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    font-size:1.3rem;flex-shrink:0;}
+  .lc-t{font-weight:700;font-size:0.98rem;margin:0 0 2px;color:var(--navy);}
+  .lc-d{font-size:0.85rem;color:var(--muted);margin:0;line-height:1.45;}
+  .lc-u{font-size:0.76rem;color:var(--teal);margin:5px 0 0;word-break:break-all;}
+
+  ol.steps{padding-left:20px;margin:10px 0 0;}
+  ol.steps li{margin-bottom:9px;font-size:0.93rem;line-height:1.55;}
+
+  footer.foot{text-align:center;color:var(--muted);font-size:0.78rem;margin-top:8px;line-height:1.6;}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:0.78rem;color:var(--muted);}
+  .legend span{display:flex;align-items:center;gap:5px;}
+  .legend i{width:12px;height:12px;border-radius:3px;display:block;}
+  .scalebar{display:flex;align-items:center;gap:7px;margin-top:9px;font-size:0.78rem;color:var(--muted);}
+  .scalebar .bar{height:7px;width:70px;background:linear-gradient(90deg,var(--navy) 0 50%,#fff 50% 100%);
+    border:1px solid var(--navy);border-radius:2px;}
+  @media(max-width:560px){
+    .layerbox{flex:1 1 100%;}
+    header.top h1{font-size:1.3rem;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <span class="badge">Geografie 9 · Methode M1</span>
+    <h1>Von der Atlaskarte zum WebGIS</h1>
+    <p>Layer-Trainer Lausitz · Humboldt-Gymnasium Cottbus</p>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-view="v1"><span class="tnum">Teil 1</span>Layer-Trainer</div>
+    <div class="tab" data-view="v2"><span class="tnum">Teil 2</span>Maßstab &amp; Daten</div>
+    <div class="tab" data-view="v3"><span class="tnum">Teil 3</span>Atlas oder WebGIS?</div>
+    <div class="tab" data-view="v4"><span class="tnum">Teil 4</span>Echtes WebGIS</div>
+  </div>
+
+  <!-- ================= TEIL 1 ================= -->
+  <section class="view active" id="v1">
+    <div class="card">
+      <h2 class="sec">Das Layer-Prinzip</h2>
+      <p class="lead">Ein Geoinformationssystem (GIS) stapelt Karteninhalte in getrennten Ebenen –
+        englisch <b>layer</b>. Du entscheidest, welche Ebenen du siehst. Genau das kann eine gedruckte
+        Atlaskarte nicht: Dort sind alle Inhalte fest übereinandergedruckt.</p>
+
+      <div class="maparea">
+        <div class="mapbox">
+          <svg id="karte" viewBox="0 0 600 460" role="img"
+               aria-label="Schematische Übersichtskarte der Lausitz mit zuschaltbaren Kartenebenen">
+            <defs>
+              <pattern id="wald" width="14" height="14" patternUnits="userSpaceOnUse">
+                <rect width="14" height="14" fill="#8FB58A"/>
+                <circle cx="4" cy="4" r="2.4" fill="#6E9C6A"/>
+                <circle cx="11" cy="10" r="2.4" fill="#6E9C6A"/>
+              </pattern>
+              <pattern id="acker" width="20" height="20" patternUnits="userSpaceOnUse">
+                <rect width="20" height="20" fill="#C9C88F"/>
+                <rect y="0" width="20" height="9" fill="#BFBE80"/>
+              </pattern>
+              <pattern id="kippe" width="10" height="10" patternUnits="userSpaceOnUse">
+                <rect width="10" height="10" fill="#B98C57"/>
+                <path d="M0 10 L10 0" stroke="#9C7245" stroke-width="2.2"/>
+              </pattern>
+              <marker id="pfeil" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                <path d="M0,0 L7,3.5 L0,7 Z" fill="#2C6E8F"/>
+              </marker>
+            </defs>
+
+            <!-- BASIS: Topographie -->
+            <g id="g-topo">
+              <rect x="0" y="0" width="600" height="460" fill="#F6F4EC"/>
+              <path d="M0 300 Q 120 285 240 305 T 600 290" stroke="#DED9C6" stroke-width="1.4" fill="none"/>
+              <path d="M0 200 Q 150 188 300 208 T 600 195" stroke="#DED9C6" stroke-width="1.4" fill="none"/>
+              <path d="M0 100 Q 130 92 280 110 T 600 100" stroke="#DED9C6" stroke-width="1.4" fill="none"/>
+            </g>
+
+            <!-- BASIS: Luftbild -->
+            <g id="g-luft" style="display:none">
+              <rect x="0" y="0" width="600" height="460" fill="url(#acker)"/>
+              <path d="M40 20 L200 10 L250 90 L120 130 Z" fill="url(#wald)" opacity=".95"/>
+              <path d="M330 30 L560 25 L580 120 L400 140 L340 90 Z" fill="url(#wald)" opacity=".95"/>
+              <path d="M20 340 L180 320 L230 430 L60 445 Z" fill="url(#wald)" opacity=".95"/>
+              <path d="M430 300 L580 290 L590 400 L450 415 Z" fill="url(#wald)" opacity=".95"/>
+              <ellipse cx="300" cy="230" rx="120" ry="70" fill="#D8D3C0" opacity=".55"/>
+            </g>
+
+            <!-- EBENE: Wald / Schutzgebiet -->
+            <g id="g-wald" style="display:none" opacity=".8">
+              <path d="M60 40 L215 28 L250 105 L120 140 Z" fill="url(#wald)"/>
+              <path d="M40 350 L175 332 L215 425 L70 440 Z" fill="url(#wald)"/>
+              <path d="M355 45 L545 38 L565 115 L400 132 Z" fill="url(#wald)"/>
+              <path d="M95 60 L200 50 L228 100 L135 125 Z" fill="none" stroke="#2E7D6B"
+                    stroke-width="3" stroke-dasharray="8 5"/>
+            </g>
+
+            <!-- EBENE: Bergbau -->
+            <g id="g-berg" style="display:none">
+              <!-- Tagebau Welzow-Sued (aktiv) -->
+              <path d="M120 300 L235 292 L255 372 L145 385 Z" fill="url(#kippe)" opacity=".92"/>
+              <path d="M120 300 L235 292 L255 372 L145 385 Z" fill="none" stroke="#8A6136" stroke-width="2.5"/>
+              <!-- ehem. Tagebau Jaenschwalde -->
+              <path d="M415 120 L520 112 L535 186 L430 196 Z" fill="#C7B79E" opacity=".85"/>
+              <path d="M415 120 L520 112 L535 186 L430 196 Z" fill="none" stroke="#9C8E76"
+                    stroke-width="2.5" stroke-dasharray="7 4"/>
+              <!-- Kraftwerke -->
+              <g fill="#7A4B2A">
+                <rect x="452" y="206" width="10" height="26" rx="2"/>
+                <rect x="466" y="206" width="10" height="26" rx="2"/>
+                <rect x="226" y="414" width="10" height="24" rx="2"/>
+                <rect x="240" y="414" width="10" height="24" rx="2"/>
+              </g>
+            </g>
+
+            <!-- EBENE: Gewaesser -->
+            <g id="g-wasser" style="display:none">
+              <!-- Spree von Sued nach Nordwest -->
+              <path d="M255 448 Q 268 400 285 360 Q 300 320 296 282 Q 292 240 272 205
+                       Q 250 165 205 140 Q 150 112 92 100"
+                    stroke="#4E9CC4" stroke-width="5.5" fill="none" stroke-linecap="round"
+                    marker-end="url(#pfeil)"/>
+              <!-- Cottbuser Ostsee -->
+              <ellipse cx="382" cy="188" rx="48" ry="31" fill="#6FB6D8"/>
+              <ellipse cx="382" cy="188" rx="48" ry="31" fill="none" stroke="#3C86AC" stroke-width="2"/>
+              <!-- Talsperre Spremberg -->
+              <ellipse cx="278" cy="408" rx="27" ry="14" fill="#6FB6D8"/>
+              <ellipse cx="278" cy="408" rx="27" ry="14" fill="none" stroke="#3C86AC" stroke-width="1.8"/>
+            </g>
+
+            <!-- EBENE: Verkehr -->
+            <g id="g-verkehr" style="display:none">
+              <!-- Autobahn A15 (West-Ost, noerdlich) -->
+              <path d="M10 128 L590 108" stroke="#E0B35A" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path d="M10 128 L590 108" stroke="#B98A35" stroke-width="1.6" fill="none"/>
+              <!-- Bundesstrasse Nord-Sued -->
+              <path d="M300 20 L296 250 L282 440" stroke="#D9866A" stroke-width="5" fill="none"
+                    stroke-linecap="round"/>
+              <!-- Bahnlinie -->
+              <path d="M60 430 L300 250 L560 215" stroke="#4B5A63" stroke-width="3" fill="none"/>
+              <path d="M60 430 L300 250 L560 215" stroke="#fff" stroke-width="2.4" fill="none"
+                    stroke-dasharray="9 9"/>
+            </g>
+
+            <!-- EBENE: Siedlung -->
+            <g id="g-sied" style="display:none">
+              <rect x="262" y="212" width="76" height="62" rx="6" fill="#B9AFA6"/>
+              <rect x="262" y="212" width="76" height="62" rx="6" fill="none" stroke="#8C8078" stroke-width="1.6"/>
+              <rect x="258" y="366" width="38" height="28" rx="4" fill="#B9AFA6"/>
+              <rect x="418" y="212" width="28" height="22" rx="4" fill="#B9AFA6"/>
+              <rect x="92" y="296" width="26" height="20" rx="4" fill="#B9AFA6"/>
+              <rect x="548" y="136" width="30" height="24" rx="4" fill="#B9AFA6"/>
+              <rect x="96" y="86" width="30" height="24" rx="4" fill="#B9AFA6"/>
+              <!-- Schulstandort -->
+              <circle cx="278" cy="228" r="8" fill="#C05A5A"/>
+              <circle cx="278" cy="228" r="8" fill="none" stroke="#fff" stroke-width="2"/>
+            </g>
+
+            <!-- EBENE: Beschriftung -->
+            <g id="g-text" style="display:none" font-family="Helvetica,Arial,sans-serif" fill="#2A3840">
+              <text x="300" y="266" font-size="15" font-weight="700" text-anchor="middle">Cottbus</text>
+              <text x="291" y="231" font-size="9.5" font-weight="700" fill="#C05A5A">Schule</text>
+              <text x="382" y="185" font-size="12" font-weight="600" text-anchor="middle" fill="#12455F">Cottbuser</text>
+              <text x="382" y="199" font-size="12" font-weight="600" text-anchor="middle" fill="#12455F">Ostsee</text>
+              <text x="277" y="362" font-size="11" text-anchor="middle">Spremberg</text>
+              <text x="432" y="208" font-size="11" text-anchor="middle">Peitz</text>
+              <text x="105" y="292" font-size="11" text-anchor="middle">Welzow</text>
+              <text x="563" y="132" font-size="11" text-anchor="middle">Forst</text>
+              <text x="111" y="82" font-size="11" text-anchor="middle">Lübbenau</text>
+              <text x="192" y="334" font-size="11" font-weight="600" fill="#5E3A18" text-anchor="middle">Tagebau</text>
+              <text x="192" y="347" font-size="11" font-weight="600" fill="#5E3A18" text-anchor="middle">Welzow-Süd</text>
+              <text x="476" y="146" font-size="10" font-weight="600" fill="#5E5342" text-anchor="middle">ehem. Tagebau</text>
+              <text x="476" y="158" font-size="10" font-weight="600" fill="#5E5342" text-anchor="middle">Jänschwalde</text>
+              <text x="306" y="102" font-size="11" font-weight="700" fill="#8A6A20">A 15</text>
+              <text x="306" y="332" font-size="11" font-weight="600" fill="#1F6E93">Spree</text>
+              <text x="196" y="46" font-size="11" fill="#2E7D6B" font-weight="600">Spreewald</text>
+            </g>
+
+            <!-- Nordpfeil + Rahmen (immer sichtbar) -->
+            <g>
+              <path d="M566 40 L574 18 L582 40 L574 33 Z" fill="#1F3B57"/>
+              <text x="574" y="54" font-size="11" font-weight="700" fill="#1F3B57"
+                    text-anchor="middle" font-family="Helvetica,Arial,sans-serif">N</text>
+              <rect x="1" y="1" width="598" height="458" fill="none" stroke="#C9D4D1" stroke-width="2" rx="12"/>
+            </g>
+          </svg>
+
+          <div class="legend">
+            <span><i style="background:#6FB6D8"></i>Gewässer</span>
+            <span><i style="background:#B9AFA6"></i>Siedlung</span>
+            <span><i style="background:#E0B35A"></i>Autobahn</span>
+            <span><i style="background:#B98C57"></i>Tagebau aktiv</span>
+            <span><i style="background:#C7B79E"></i>Tagebau stillgelegt</span>
+            <span><i style="background:#8FB58A"></i>Wald</span>
+            <span><i style="background:#7A4B2A"></i>Kraftwerk</span>
+            <span><i style="background:#C05A5A"></i>unsere Schule</span>
+          </div>
+          <div class="scalebar"><span class="bar"></span><span>ca. 20 km (schematisch)</span></div>
+          <div class="warn-box" style="margin-top:12px;font-size:0.84rem;">
+            <b>Wichtig:</b> Diese Karte ist eine <b>schematische Übungskarte</b>. Lage und Form sind stark
+            vereinfacht und nicht maßstabsgetreu. Für echte Werte nutzt du das WebGIS in Teil 4.
+          </div>
+        </div>
+
+        <div class="layerbox">
+          <p class="layer-title">Basiskarte</p>
+          <div class="basis-row">
+            <button class="basis-btn on" id="b-topo">Topographie</button>
+            <button class="basis-btn" id="b-luft">Luftbild</button>
+          </div>
+
+          <p class="layer-title">Ebenen (Layer)</p>
+          <div class="layer" data-l="wald"><span class="sw" style="background:#8FB58A"></span>Wald &amp; Schutzgebiet<span class="chk">✓</span></div>
+          <div class="layer" data-l="berg"><span class="sw" style="background:#B98C57"></span>Bergbau<span class="chk">✓</span></div>
+          <div class="layer" data-l="wasser"><span class="sw" style="background:#6FB6D8"></span>Gewässer<span class="chk">✓</span></div>
+          <div class="layer" data-l="verkehr"><span class="sw" style="background:#E0B35A"></span>Verkehr<span class="chk">✓</span></div>
+          <div class="layer" data-l="sied"><span class="sw" style="background:#B9AFA6"></span>Siedlung<span class="chk">✓</span></div>
+          <div class="layer" data-l="text"><span class="sw" style="background:#2A3840"></span>Beschriftung<span class="chk">✓</span></div>
+
+          <div class="slider-row">
+            <label>Transparenz der Ebenen: <span id="opv">100 %</span></label>
+            <input type="range" id="opa" min="20" max="100" value="100">
+          </div>
+          <div class="btnrow">
+            <button class="act ghost" id="allon" style="flex:1;padding:9px;font-size:0.85rem;">Alle an</button>
+            <button class="act ghost" id="alloff" style="flex:1;padding:9px;font-size:0.85rem;">Alle aus</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-box">
+        <b>Probiere zuerst frei aus:</b> Schalte einzelne Ebenen an und aus. Wechsle die Basiskarte
+        zwischen Topographie und Luftbild. Ziehe den Transparenz-Regler nach links – so vergleichst du
+        zwei Ebenen übereinander. Genau diese drei Werkzeuge brauchst du gleich im echten WebGIS.
+      </div>
+    </div>
+
+    <div class="card" id="taskcard">
+      <h2 class="sec">Aufgaben zum Layer-Prinzip</h2>
+      <p class="lead">Bei jeder Aufgabe gilt: Schalte <b>nur</b> die Ebenen an, die du zur Beantwortung
+        wirklich brauchst – nicht mehr und nicht weniger. Dann auf „Prüfen“ tippen.</p>
+      <div id="tasks"></div>
+      <div class="score" id="score1">
+        <div class="big" id="score1n">0 / 4</div>
+        <div class="lbl">Aufgaben zum Layer-Prinzip gelöst</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TEIL 2 ================= -->
+  <section class="view" id="v2">
+    <div class="card">
+      <h2 class="sec">Maßstab, Vektor und Raster</h2>
+      <p class="lead">Wer mit Karten arbeitet, muss zwei Dinge sicher beherrschen: den Maßstab lesen und
+        wissen, in welcher Form die Daten gespeichert sind. Beantworte die Fragen – nach jeder Antwort
+        bekommst du eine Erklärung.</p>
+      <div id="quiz2"></div>
+      <div class="score" id="score2">
+        <div class="big" id="score2n">0 / 6</div>
+        <div class="lbl">richtige Antworten</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TEIL 3 ================= -->
+  <section class="view" id="v3">
+    <div class="card">
+      <h2 class="sec">Atlas oder WebGIS?</h2>
+      <p class="lead">Beide haben Stärken. Entscheide bei jeder Aussage, worauf sie <b>besser</b> zutrifft.
+        Tippe auf „Atlas“ oder „WebGIS“ und danach auf „Auswerten“.</p>
+      <div id="sort3"></div>
+      <div class="btnrow">
+        <button class="act" id="sortcheck">Auswerten</button>
+        <button class="act ghost" id="sortreset">Neu starten</button>
+      </div>
+      <div class="score" id="score3">
+        <div class="big" id="score3n">0 / 8</div>
+        <div class="lbl">richtig zugeordnet</div>
+      </div>
+      <div class="note-box">
+        <b>Merksatz:</b> Der Atlas gibt dir schnell den <b>Überblick</b> und funktioniert immer – ohne Akku,
+        ohne Netz. Das WebGIS gibt dir <b>aktuelle Daten</b>, frei kombinierbare Ebenen und Werkzeuge zum
+        Messen und Analysieren. Gute Geografinnen und Geografen nutzen beides.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TEIL 4 ================= -->
+  <section class="view" id="v4">
+    <div class="card">
+      <h2 class="sec">Jetzt im echten WebGIS</h2>
+      <p class="lead">Der BrandenburgViewer ist der amtliche Kartennavigator des Landes Brandenburg.
+        Er ist kostenlos, ohne Anmeldung nutzbar und läuft im Safari-Browser auf dem iPad.
+        <b>Dafür brauchst du WLAN.</b></p>
+
+      <a class="linkcard" href="https://bb-viewer.geobasis-bb.de/" target="_blank" rel="noopener">
+        <span class="lc-icon" style="background:#E5EEF4;">🗺️</span>
+        <span>
+          <span class="lc-t">BrandenburgViewer</span>
+          <p class="lc-d">Amtliche Karten, Luftbilder (Orthophotos), topographische Karten und historische
+            Karten für ganz Brandenburg. Mit Suche, Transparenzregler, Messwerkzeug und PDF-Export.</p>
+          <p class="lc-u">bb-viewer.geobasis-bb.de</p>
+        </span>
+      </a>
+
+      <a class="linkcard" href="https://viewer.brandenburg.de/aktualitaeten/" target="_blank" rel="noopener">
+        <span class="lc-icon" style="background:#FDF3E8;">🕓</span>
+        <span>
+          <span class="lc-t">Aktualitätenviewer</span>
+          <p class="lc-d">Zeigt dir, <b>wann</b> die Luftbilder und Karten aufgenommen wurden. Damit
+            beantwortest du die wichtigste Frage an jede Karte: Wie alt sind diese Daten eigentlich?</p>
+          <p class="lc-u">viewer.brandenburg.de/aktualitaeten</p>
+        </span>
+      </a>
+
+      <a class="linkcard" href="https://geoportal.brandenburg.de/" target="_blank" rel="noopener">
+        <span class="lc-icon" style="background:#EFEBF5;">🔎</span>
+        <span>
+          <span class="lc-t">Geoportal Brandenburg</span>
+          <p class="lc-d">Einstieg zu Themenkarten und Fachdaten des Landes – zum Weiterstöbern, wenn du
+            für ein eigenes Projekt Daten suchst.</p>
+          <p class="lc-u">geoportal.brandenburg.de</p>
+        </span>
+      </a>
+
+      <h2 class="sec" style="margin-top:24px;">Dein Arbeitsauftrag Schritt für Schritt</h2>
+      <ol class="steps">
+        <li>Öffne den <b>BrandenburgViewer</b> und suche über das Suchfeld <b>Cottbus</b>.</li>
+        <li>Zoome so weit hinein, dass du <b>unsere Schule</b> erkennst. Notiere den Maßstab, der unten
+          in der Karte angezeigt wird.</li>
+        <li>Wechsle die Basiskarte von der <b>topographischen Karte</b> zum <b>Luftbild</b>.
+          Was erkennst du im Luftbild, was in der Karte fehlt – und umgekehrt?</li>
+        <li>Stelle mit dem <b>Transparenzregler</b> das Luftbild halbdurchsichtig über die Karte.</li>
+        <li>Suche den <b>Cottbuser Ostsee</b>. Miss mit dem <b>Messwerkzeug</b> die größte Ausdehnung des
+          Sees von Ufer zu Ufer und notiere den Wert in Kilometern.</li>
+        <li>Prüfe im <b>Aktualitätenviewer</b>, aus welchem Jahr das Luftbild für Cottbus stammt.</li>
+        <li>Exportiere deinen Kartenausschnitt als <b>PDF</b> und lege ihn in GoodNotes ab.</li>
+      </ol>
+
+      <div class="warn-box">
+        <b>Kein WLAN?</b> Kein Problem – arbeite in Teil 1 bis 3 dieser Seite weiter. Der Layer-Trainer
+        funktioniert vollständig offline.
+      </div>
+      <div class="note-box">
+        <b>Quellenkritik gehört dazu:</b> Amtliche Geodaten wie im BrandenburgViewer werden von der
+        Landesvermessung geprüft. Bei frei zugänglichen Karten im Netz solltest du immer fragen:
+        Wer hat die Daten erhoben? Wann? Und mit welchem Interesse?
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    Geografie Jahrgangsstufe 9 · Humboldt-Gymnasium Cottbus · Methodenbaustein M1<br>
+    Übungskarte schematisch und stark vereinfacht · amtliche Daten: bb-viewer.geobasis-bb.de
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- Tabs ---------------- */
+  var tabs = document.querySelectorAll('.tab');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){x.classList.remove('active');});
+      document.querySelectorAll('section.view').forEach(function(v){v.classList.remove('active');});
+      t.classList.add('active');
+      document.getElementById(t.dataset.view).classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+
+  /* ---------------- Layer-Steuerung ---------------- */
+  var LAYERS = ['wald','berg','wasser','verkehr','sied','text'];
+  var state = {}; LAYERS.forEach(function(l){state[l]=false;});
+
+  function render(){
+    LAYERS.forEach(function(l){
+      var g = document.getElementById('g-'+l);
+      g.style.display = state[l] ? '' : 'none';
+    });
+    document.querySelectorAll('.layer').forEach(function(el){
+      el.classList.toggle('on', state[el.dataset.l]);
+    });
+  }
+  document.querySelectorAll('.layer').forEach(function(el){
+    el.addEventListener('click', function(){
+      state[el.dataset.l] = !state[el.dataset.l];
+      render();
+    });
+  });
+  document.getElementById('allon').addEventListener('click', function(){
+    LAYERS.forEach(function(l){state[l]=true;}); render();
+  });
+  document.getElementById('alloff').addEventListener('click', function(){
+    LAYERS.forEach(function(l){state[l]=false;}); render();
+  });
+
+  var bTopo = document.getElementById('b-topo'), bLuft = document.getElementById('b-luft');
+  bTopo.addEventListener('click', function(){
+    document.getElementById('g-topo').style.display='';
+    document.getElementById('g-luft').style.display='none';
+    bTopo.classList.add('on'); bLuft.classList.remove('on');
+  });
+  bLuft.addEventListener('click', function(){
+    document.getElementById('g-topo').style.display='none';
+    document.getElementById('g-luft').style.display='';
+    bLuft.classList.add('on'); bTopo.classList.remove('on');
+  });
+
+  var opa = document.getElementById('opa');
+  opa.addEventListener('input', function(){
+    var v = parseInt(opa.value,10);
+    document.getElementById('opv').textContent = v + ' %';
+    LAYERS.forEach(function(l){
+      document.getElementById('g-'+l).setAttribute('opacity', (v/100).toFixed(2));
+    });
+  });
+  render();
+
+  /* ---------------- Aufgaben Teil 1 ---------------- */
+  var TASKS = [
+    { q:'Ein Reporter fragt: „Wie weit ist es vom Cottbuser Ostsee bis in die Innenstadt von Cottbus?“ '+
+        'Welche Ebenen brauchst du mindestens, um den Weg auf der Karte zu zeigen?',
+      need:['wasser','sied'],
+      why:'Du brauchst das <b>Gewässer</b> (der See ist das Ziel) und die <b>Siedlung</b> (die Stadt ist der '+
+        'Startpunkt). Alles andere lenkt ab. Genau so arbeitet ein GIS: Man blendet nur ein, was zur Frage passt.' },
+    { q:'Du sollst zeigen, welche <b>Orte</b> in der Nachbarschaft des <b>Tagebaus Welzow-Süd</b> liegen '+
+        'und wie sie heißen. Welche Ebenen brauchst du?',
+      need:['berg','sied','text'],
+      why:'<b>Bergbau</b> zeigt den Tagebau, <b>Siedlung</b> die Orte, <b>Beschriftung</b> die Namen. '+
+        'Ohne Beschriftung siehst du zwar Flächen, kannst sie aber nicht benennen – ein häufiger Fehler.' },
+    { q:'Eine Bürgerinitiative will wissen, ob eine geplante <b>Umgehungsstraße</b> durch ein '+
+        '<b>Schutzgebiet</b> führen würde. Welche Ebenen brauchst du?',
+      need:['verkehr','wald'],
+      why:'<b>Verkehr</b> (bestehende Straßen) und <b>Wald &amp; Schutzgebiet</b> (die geschützte Fläche). '+
+        'Diese Verschneidung von zwei Ebenen ist eine typische GIS-Analyse: Überschneiden sich zwei Themen im Raum?' },
+    { q:'Du erstellst eine <b>reine Übersichtskarte des Gewässernetzes</b> – ganz ohne Zusatzinformation. '+
+        'Welche Ebene brauchst du?',
+      need:['wasser'],
+      why:'Nur <b>Gewässer</b>. Weniger ist oft mehr: Eine Karte mit zu vielen Ebenen wird unlesbar. '+
+        'Kartografen nennen das <b>Überladung</b>.' }
+  ];
+
+  var solved = new Array(TASKS.length).fill(false);
+  var box = document.getElementById('tasks');
+
+  TASKS.forEach(function(t, i){
+    var d = document.createElement('div');
+    d.className = 'task';
+    d.innerHTML =
+      '<div class="task-head"><div class="task-num">'+(i+1)+'</div><div class="task-q">'+t.q+'</div></div>'+
+      '<div class="btnrow"><button class="act" data-i="'+i+'">Prüfen</button></div>'+
+      '<div class="fb" id="fb'+i+'"></div>';
+    box.appendChild(d);
+  });
+
+  var NAMES = {wald:'Wald &amp; Schutzgebiet', berg:'Bergbau', wasser:'Gewässer',
+               verkehr:'Verkehr', sied:'Siedlung', text:'Beschriftung'};
+
+  box.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-i]');
+    if(!b) return;
+    var i = parseInt(b.dataset.i,10), t = TASKS[i];
+    var on = LAYERS.filter(function(l){return state[l];});
+    var need = t.need.slice().sort().join(',');
+    var have = on.slice().sort().join(',');
+    var fb = document.getElementById('fb'+i);
+    fb.classList.add('show');
+    if(need === have){
+      fb.className = 'fb ok show';
+      fb.innerHTML = '<b>Richtig.</b> '+t.why;
+      solved[i] = true;
+    } else {
+      fb.className = 'fb no show';
+      var soll = t.need.map(function(l){return NAMES[l];}).join(', ');
+      fb.innerHTML = '<b>Noch nicht.</b> Du hast '+
+        (on.length ? on.map(function(l){return NAMES[l];}).join(', ') : 'keine Ebene')+
+        ' angeschaltet. Gebraucht werden genau: <b>'+soll+'</b>. Stelle die Ebenen um und prüfe erneut.';
+    }
+    var n = solved.filter(Boolean).length;
+    var s = document.getElementById('score1');
+    s.classList.add('show');
+    document.getElementById('score1n').textContent = n + ' / ' + TASKS.length;
+  });
+
+  /* ---------------- Quiz Teil 2 ---------------- */
+  var QUIZ = [
+    { tag:'Maßstab',
+      q:'Welche Karte zeigt einen <b>kleineren Ausschnitt der Erde mit mehr Details</b>?',
+      o:['Karte im Maßstab 1 : 10 000','Karte im Maßstab 1 : 500 000',
+         'Beide zeigen gleich viel','Das hängt nur vom Papierformat ab'],
+      a:0,
+      e:'Bei 1 : 10 000 entspricht 1 cm auf der Karte 100 m in der Wirklichkeit, bei 1 : 500 000 sind es 5 km. '+
+        'Je kleiner die zweite Zahl, desto <b>größer der Maßstab</b> – und desto detailreicher, aber kleiner der Ausschnitt.' },
+    { tag:'Maßstab',
+      q:'Auf einer Karte 1 : 25 000 misst du zwischen zwei Orten 8 cm. Wie weit sind sie in Wirklichkeit auseinander?',
+      o:['200 m','2 km','20 km','200 km'],
+      a:1,
+      e:'8 cm × 25 000 = 200 000 cm = 2 000 m = <b>2 km</b>. Rechenweg: Kartenstrecke mal Maßstabszahl, '+
+        'dann von Zentimetern in Meter (÷ 100) und Kilometer (÷ 1 000) umrechnen.' },
+    { tag:'Datenarten',
+      q:'Ein <b>Luftbild</b> besteht aus vielen einzelnen Bildpunkten. Um welche Datenart handelt es sich?',
+      o:['Vektordaten','Rasterdaten','Sachdaten','Metadaten'],
+      a:1,
+      e:'Luftbilder und eingescannte Karten sind <b>Rasterdaten</b>: ein Gitter aus Pixeln. Beim starken '+
+        'Hineinzoomen werden sie unscharf. Vektordaten (Punkte, Linien, Flächen) bleiben dagegen scharf.' },
+    { tag:'Datenarten',
+      q:'Eine Straße ist im GIS als Linie mit den Angaben „Name: B 168, Länge: 41 km“ gespeichert. '+
+        'Wie heißen diese zusätzlichen Angaben?',
+      o:['Rasterdaten','Sachdaten (Attributdaten)','Maßstab','Legende'],
+      a:1,
+      e:'Ein GIS verbindet immer zwei Dinge: die <b>Geometrie</b> (wo liegt das Objekt?) und die '+
+        '<b>Sachdaten</b> oder Attributdaten (was ist darüber bekannt?). Deshalb kannst du im WebGIS ein '+
+        'Objekt antippen und Informationen dazu abrufen.' },
+    { tag:'GIS-Grundlagen',
+      q:'Was ist der entscheidende Unterschied zwischen einer gedruckten Atlaskarte und einem WebGIS?',
+      o:['Das WebGIS ist immer bunter',
+         'Im WebGIS lassen sich Ebenen frei kombinieren, ein- und ausblenden',
+         'Die Atlaskarte hat keinen Maßstab',
+         'Im WebGIS gibt es keine Legende'],
+      a:1,
+      e:'Im Atlas sind alle Inhalte fest übereinandergedruckt – die Auswahl hat der Verlag getroffen. '+
+        'Im GIS entscheidest <b>du</b>, welche Ebenen sichtbar sind, und kannst sie miteinander verschneiden.' },
+    { tag:'Quellenkritik',
+      q:'Warum ist die Frage „Von wann sind diese Daten?“ bei Karten der Lausitz besonders wichtig?',
+      o:['Weil Karten nach fünf Jahren ungültig werden',
+         'Weil sich die Bergbaulandschaft stark und schnell verändert',
+         'Weil alte Karten keinen Maßstab haben',
+         'Weil das Gradnetz sich verschiebt'],
+      a:1,
+      e:'Tagebaue, Kippen und neue Seen verändern die Lausitz innerhalb weniger Jahre grundlegend. '+
+        'Ein Luftbild von 2015 zeigt am Cottbuser Ostsee eine völlig andere Landschaft als eines von heute. '+
+        'Deshalb gehört zu jeder Karte die Frage nach dem <b>Aufnahmedatum</b>.' }
+  ];
+
+  var q2 = document.getElementById('quiz2'), right2 = 0, done2 = 0;
+  QUIZ.forEach(function(item, qi){
+    var c = document.createElement('div');
+    c.className = 'qcard';
+    var html = '<span class="qtag">'+item.tag+'</span><div class="q-text">'+(qi+1)+'. '+item.q+'</div><div class="options">';
+    item.o.forEach(function(op, oi){
+      html += '<div class="option" data-q="'+qi+'" data-o="'+oi+'">'+op+'<span class="mark"></span></div>';
+    });
+    html += '</div><div class="expl" id="ex'+qi+'">'+item.e+'</div>';
+    c.innerHTML = html;
+    q2.appendChild(c);
+  });
+
+  q2.addEventListener('click', function(e){
+    var op = e.target.closest('.option');
+    if(!op || op.classList.contains('locked')) return;
+    var qi = parseInt(op.dataset.q,10), oi = parseInt(op.dataset.o,10);
+    var opts = q2.querySelectorAll('.option[data-q="'+qi+'"]');
+    if(opts[0].classList.contains('locked')) return;
+    opts.forEach(function(o){
+      o.classList.add('locked');
+      var idx = parseInt(o.dataset.o,10);
+      if(idx === QUIZ[qi].a){
+        o.classList.add('correct');
+        o.querySelector('.mark').textContent = '✓';
+      } else if(idx === oi){
+        o.classList.add('incorrect');
+        o.querySelector('.mark').textContent = '✗';
+      }
+    });
+    document.getElementById('ex'+qi).classList.add('show');
+    done2++;
+    if(oi === QUIZ[qi].a) right2++;
+    var s = document.getElementById('score2');
+    s.classList.add('show');
+    document.getElementById('score2n').textContent = right2 + ' / ' + QUIZ.length;
+  });
+
+  /* ---------------- Sortierung Teil 3 ---------------- */
+  var SORT = [
+    { t:'Funktioniert im Bus, im Wald und bei Stromausfall – ganz ohne Netz und Akku.', a:'Atlas',
+      e:'Ein gedruckter Atlas braucht keine Technik. Deshalb ist er im Erdkundeunterricht und in der Prüfung weiterhin zugelassen.' },
+    { t:'Zeigt an, aus welchem Jahr das Luftbild stammt.', a:'WebGIS',
+      e:'Amtliche Geoportale liefern zu jedem Datensatz die Aufnahme- oder Aktualisierungsangabe mit (Metadaten).' },
+    { t:'Man kann stufenlos hinein- und herauszoomen.', a:'WebGIS',
+      e:'Der Maßstab ist frei wählbar. Im Atlas ist er je Karte fest vorgegeben.' },
+    { t:'Gibt auf einer Doppelseite schnell einen Überblick über einen ganzen Kontinent.', a:'Atlas',
+      e:'Große Papierfläche schlägt kleinen Bildschirm. Für den Überblick ist der Atlas oft schneller.' },
+    { t:'Entfernungen und Flächen lassen sich per Werkzeug direkt messen.', a:'WebGIS',
+      e:'Das Messwerkzeug rechnet automatisch um. Im Atlas misst du mit dem Lineal und rechnest über den Maßstab selbst um.' },
+    { t:'Die Auswahl der dargestellten Inhalte hat der Verlag festgelegt.', a:'Atlas',
+      e:'Der Kartenausschnitt und die Themen sind gedruckt und damit unveränderlich – das nennt man auch redaktionelle Auswahl.' },
+    { t:'Zwei Themen lassen sich übereinanderlegen, um Überschneidungen zu finden.', a:'WebGIS',
+      e:'Diese Verschneidung von Ebenen ist die eigentliche Stärke eines GIS – zum Beispiel Schutzgebiet und geplante Straße.' },
+    { t:'Der Inhalt ist redaktionell geprüft und für den Unterricht aufbereitet.', a:'Atlas',
+      e:'Schulatlanten sind didaktisch generalisiert. Im Netz musst du die Qualität der Quelle selbst prüfen.' }
+  ];
+
+  var s3 = document.getElementById('sort3');
+  var picks = new Array(SORT.length).fill(null);
+
+  function buildSort(){
+    s3.innerHTML = '';
+    picks = new Array(SORT.length).fill(null);
+    SORT.forEach(function(item, i){
+      var d = document.createElement('div');
+      d.className = 'sortcard';
+      d.id = 'sc'+i;
+      d.innerHTML = '<div class="st">'+(i+1)+'. '+item.t+'</div>'+
+        '<div class="sortbtns">'+
+        '<button data-i="'+i+'" data-v="Atlas">Atlas</button>'+
+        '<button data-i="'+i+'" data-v="WebGIS">WebGIS</button></div>'+
+        '<div class="sortfb" id="sf'+i+'">'+item.e+'</div>';
+      s3.appendChild(d);
+    });
+    document.getElementById('score3').classList.remove('show');
+  }
+  buildSort();
+
+  s3.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-i]');
+    if(!b) return;
+    var i = parseInt(b.dataset.i,10);
+    if(document.getElementById('sc'+i).classList.contains('right') ||
+       document.getElementById('sc'+i).classList.contains('wrong')) return;
+    picks[i] = b.dataset.v;
+    b.parentNode.querySelectorAll('button').forEach(function(x){x.classList.remove('sel');});
+    b.classList.add('sel');
+  });
+
+  document.getElementById('sortcheck').addEventListener('click', function(){
+    var n = 0;
+    SORT.forEach(function(item, i){
+      var c = document.getElementById('sc'+i);
+      c.classList.remove('right','wrong');
+      if(picks[i] === null) return;
+      if(picks[i] === item.a){ c.classList.add('right'); n++; }
+      else { c.classList.add('wrong'); }
+      document.getElementById('sf'+i).classList.add('show');
+    });
+    var s = document.getElementById('score3');
+    s.classList.add('show');
+    document.getElementById('score3n').textContent = n + ' / ' + SORT.length;
+  });
+
+  document.getElementById('sortreset').addEventListener('click', buildSort);
+})();
+</script>
+</body>
+</html>
