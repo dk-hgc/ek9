@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reichweiten-Rechner &middot; Geografie Klasse 9</title>
+<style>
+:root{
+  --navy:#1F3B57; --teal:#2E7D6B; --amber:#C97A2B; --coral:#C05A5A;
+  --bg:#F4F7F6; --card:#FFFFFF; --line:#D9E2E0; --ink:#22303A; --muted:#5E7079;
+  --navy-t:#E7EDF2; --teal-t:#EAF4F1; --amber-t:#FBF0E4; --coral-t:#F8EAEA;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:17px;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 64px}
+
+header.top{background:var(--navy);color:#fff;padding:22px 0 20px;margin-bottom:0}
+header.top .wrap{padding-bottom:0}
+.kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#9FC0D6;font-weight:700;margin:0 0 6px}
+header.top h1{margin:0 0 6px;font-size:29px;line-height:1.15;font-weight:800}
+header.top p{margin:0;color:#CFE0EC;font-size:16px;max-width:62ch}
+
+nav.tabs{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);
+  padding:10px 0;margin-bottom:22px;box-shadow:0 2px 10px rgba(31,59,87,.06)}
+nav.tabs .wrap{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+nav.tabs button{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;color:var(--navy);
+  font:inherit;font-weight:700;font-size:15px;padding:11px 16px;border-radius:11px;cursor:pointer;min-height:46px}
+nav.tabs button[aria-selected="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+
+section.panel{display:none}
+section.panel.active{display:block}
+
+h2{font-size:23px;margin:6px 0 4px;color:var(--navy);font-weight:800}
+h3{font-size:18px;margin:22px 0 8px;color:var(--navy);font-weight:800}
+.lead{color:var(--muted);margin:0 0 18px;max-width:66ch}
+
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:0 0 18px}
+.box.tint-navy{background:var(--navy-t);border-color:#C9D8E4}
+.box.tint-teal{background:var(--teal-t);border-color:#C3DED6}
+.box.tint-amber{background:var(--amber-t);border-color:#EAD3B4}
+.box.tint-coral{background:var(--coral-t);border-color:#E8C4C4}
+.box h3:first-child{margin-top:0}
+.box p:last-child{margin-bottom:0}
+
+.hint{font-size:15px;color:var(--muted)}
+.merk{border-left:5px solid var(--teal);background:#fff;border-radius:0 14px 14px 0;padding:14px 16px;margin:16px 0}
+.merk b{color:var(--teal)}
+
+.score{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);
+  border-radius:14px;padding:12px 16px;margin-bottom:18px}
+.score .num{font-size:26px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.score .lbl{font-size:14px;color:var(--muted);font-weight:600}
+.bar{flex:1 1 160px;height:10px;background:var(--navy-t);border-radius:99px;overflow:hidden;min-width:120px}
+.bar > i{display:block;height:100%;width:0;background:var(--teal);border-radius:99px;transition:width .35s ease}
+
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:13px 20px;font:inherit;font-weight:700;cursor:pointer;min-height:48px}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:default}
+
+.fb{margin-top:14px;border-radius:12px;padding:12px 14px;font-size:15.5px;text-align:left;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--teal-t);border:1px solid #B7D8CE;color:#1E5A4C}
+.fb.no{background:var(--coral-t);border:1px solid #E8C4C4;color:#8E3B3B}
+.fb b{display:block;margin-bottom:2px}
+
+/* Rohstoff-Auswahl */
+.picker{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:16px}
+@media(min-width:700px){.picker{grid-template-columns:repeat(2,1fr)}}
+.pick{border:2px solid var(--line);background:#fff;border-radius:14px;padding:13px 14px;font:inherit;
+  font-weight:700;color:var(--navy);cursor:pointer;min-height:64px;text-align:left;line-height:1.3}
+.pick small{display:block;font-weight:600;font-size:13.5px;color:var(--muted);margin-top:3px}
+.pick[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.pick[aria-pressed="true"] small{color:#CFE0EC}
+
+/* Rechenkarte */
+.calc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}
+.facts{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:14px}
+@media(min-width:620px){.facts{grid-template-columns:1fr 1fr}}
+.fact{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--navy-t)}
+.fact .fl{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fact .fv{font-size:22px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;margin-top:2px}
+.fact .fu{font-size:14px;color:var(--muted)}
+.formel{background:var(--navy-t);border:1px dashed #A9C0D2;border-radius:12px;padding:14px;text-align:center;
+  font-size:17px;font-weight:700;color:var(--navy);margin:6px 0 14px;line-height:1.6}
+.formel .op{color:var(--coral)}
+.inrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px}
+input[type=number],input[type=text]{font:inherit;font-size:17px;padding:12px 14px;border:2px solid var(--line);
+  border-radius:12px;width:150px;min-height:48px;background:#fff;color:var(--ink)}
+input:focus{outline:none;border-color:var(--navy)}
+label.lb{font-size:14.5px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px}
+.ownrow{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:620px){.ownrow{grid-template-columns:1fr 1fr auto}}
+.ownrow input{width:100%}
+
+/* Simulator */
+.simgrid{display:grid;grid-template-columns:1fr;gap:14px}
+.simbar{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.simbar .sl{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.simbar .sv{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1;margin:2px 0 8px}
+.simbar.a .sv{color:var(--teal)} .simbar.b .sv{color:var(--coral)}
+.track{height:16px;background:var(--navy-t);border-radius:99px;overflow:hidden}
+.track > i{display:block;height:100%;border-radius:99px;transition:width .3s ease}
+.simbar.a .track > i{background:var(--teal)} .simbar.b .track > i{background:var(--coral)}
+input[type=range]{width:100%;margin:10px 0 4px;height:44px;accent-color:#1F3B57}
+.rangelab{display:flex;justify-content:space-between;font-size:13.5px;color:var(--muted);font-weight:600}
+
+/* Vergleichstabelle */
+.tbl{width:100%;border-collapse:collapse;font-size:15.5px;background:#fff}
+.tbl th,.tbl td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+.tbl th{background:var(--navy-t);color:var(--navy);font-weight:800;font-size:14.5px}
+.tbl td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.scrollx{overflow-x:auto;border-radius:12px;border:1px solid var(--line);margin-bottom:14px}
+.scrollx .tbl th,.scrollx .tbl td{border-left:0;border-top:0}
+.scrollx .tbl tr th:first-child,.scrollx .tbl tr td:first-child{border-left:0}
+
+/* Fragen / Quiz */
+.fall{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.fall .q{font-weight:700;margin:0 0 12px}
+.fall .q span.nr{display:inline-block;background:var(--navy);color:#fff;border-radius:8px;
+  width:26px;height:26px;line-height:26px;text-align:center;font-size:14px;margin-right:8px;vertical-align:2px}
+.fallchoices{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:700px){.fallchoices{grid-template-columns:1fr 1fr}}
+.choice{border:2px solid var(--line);background:#fff;border-radius:14px;padding:13px 14px;font:inherit;
+  font-weight:600;color:var(--navy);cursor:pointer;min-height:54px;text-align:left;line-height:1.3}
+.choice:hover{border-color:var(--navy)}
+.choice.right{background:var(--teal-t);border-color:var(--teal);color:var(--teal)}
+.choice.wrong{background:var(--coral-t);border-color:var(--coral);color:var(--coral)}
+.choice[disabled]{cursor:default}
+
+/* Links */
+.linkcard{display:block;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 16px;
+  margin-bottom:10px;text-decoration:none;color:var(--ink)}
+.linkcard:hover{border-color:var(--navy)}
+.linkcard .lt{font-weight:800;color:var(--navy);font-size:17px}
+.linkcard .ld{font-size:15px;color:var(--muted);margin-top:2px}
+.linkcard .lu{font-size:13.5px;color:var(--teal);margin-top:6px;word-break:break-all;font-weight:700}
+
+ol.steps{padding-left:22px;margin:10px 0 0}
+ol.steps li{margin-bottom:7px}
+ul.tight{padding-left:20px;margin:8px 0 0}
+ul.tight li{margin-bottom:6px}
+
+footer.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">Stunde 5 &middot; Umgang mit Ressourcen</p>
+    <h1>Reichweiten-Rechner</h1>
+    <p>Rechne aus, wie lange Vorr&auml;te reichen &ndash; und finde heraus, warum diese Zahl kein Ablaufdatum ist. Alles funktioniert auch ohne Internet.</p>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap" role="tablist">
+    <button role="tab" id="t1" aria-selected="true" data-p="p1">1 &middot; Rechner</button>
+    <button role="tab" id="t2" aria-selected="false" data-p="p2">2 &middot; Wenn der Verbrauch w&auml;chst</button>
+    <button role="tab" id="t3" aria-selected="false" data-p="p3">3 &middot; Der Lithium-Fall</button>
+    <button role="tab" id="t4" aria-selected="false" data-p="p4">4 &middot; Quiz</button>
+    <button role="tab" id="t5" aria-selected="false" data-p="p5">5 &middot; Weiterarbeiten</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ================= TEIL 1 ================= -->
+<section class="panel active" id="p1" role="tabpanel" aria-labelledby="t1">
+  <h2>Teil 1 &middot; Der Reichweiten-Rechner</h2>
+  <p class="lead">W&auml;hle einen Rohstoff. Du siehst die Reserven und die Jahresf&ouml;rderung &ndash; die statische Reichweite rechnest du selbst aus.</p>
+
+  <div class="box tint-navy">
+    <h3>Die Formel</h3>
+    <div class="formel" style="background:#fff;margin-bottom:10px">
+      statische Reichweite &nbsp;<span class="op">=</span>&nbsp; Reserven &nbsp;<span class="op">&divide;</span>&nbsp; Jahresf&ouml;rderung
+    </div>
+    <p style="margin:0"><b>So liest man das Ergebnis:</b> &bdquo;Wenn genau so weiter gef&ouml;rdert wird wie heute und keine neuen Reserven dazukommen, reicht der Vorrat noch so viele Jahre.&ldquo; Beide Bedingungen treffen in der Wirklichkeit fast nie zu &ndash; darum geht es in Teil 2 und 3.</p>
+  </div>
+
+  <div class="score">
+    <span class="num" id="s1num">0/4</span>
+    <span class="lbl">Rohstoffe richtig berechnet</span>
+    <span class="bar"><i id="s1bar"></i></span>
+  </div>
+
+  <div class="picker" id="picker"></div>
+
+  <div class="calc">
+    <div class="facts">
+      <div class="fact"><div class="fl">Reserven</div><div class="fv" id="fRes">&nbsp;</div><div class="fu" id="fResU">&nbsp;</div></div>
+      <div class="fact"><div class="fl">F&ouml;rderung pro Jahr</div><div class="fv" id="fFoe">&nbsp;</div><div class="fu" id="fFoeU">&nbsp;</div></div>
+    </div>
+    <p class="hint" id="fQuelle" style="margin:-4px 0 14px">&nbsp;</p>
+
+    <div class="formel" id="fFormel">&nbsp;</div>
+
+    <div>
+      <label class="lb" for="inAnt">Dein Ergebnis in Jahren (auf ganze Jahre runden)</label>
+      <div class="inrow">
+        <input type="number" id="inAnt" inputmode="decimal" step="1" min="0" placeholder="z. B. 60">
+        <button class="btn primary" id="btnCheck">Pr&uuml;fen</button>
+        <button class="btn ghost" id="btnTipp">Tipp</button>
+      </div>
+    </div>
+    <div class="fb" id="fb1"></div>
+  </div>
+
+  <h3>Eigene Werte ausprobieren</h3>
+  <div class="box">
+    <p style="margin-top:0">Trage beliebige Zahlen ein &ndash; die Einheit ist egal, sie muss nur oben und unten dieselbe sein.</p>
+    <div class="ownrow">
+      <div><label class="lb" for="ownRes">Reserven</label><input type="number" id="ownRes" inputmode="decimal" placeholder="980"></div>
+      <div><label class="lb" for="ownFoe">F&ouml;rderung pro Jahr</label><input type="number" id="ownFoe" inputmode="decimal" placeholder="23"></div>
+      <div style="display:flex;align-items:flex-end"><button class="btn primary" id="ownBtn" style="width:100%">Ausrechnen</button></div>
+    </div>
+    <div class="fb" id="ownFb"></div>
+  </div>
+
+  <div class="merk">
+    <b>Merke</b> Die statische Reichweite ist eine <b>Momentaufnahme</b>, kein Ablaufdatum. Sie sagt nur: So lange w&uuml;rde es reichen, <i>wenn</i> sich nichts &auml;ndert. Genau das tut es aber st&auml;ndig.
+  </div>
+</section>
+
+<!-- ================= TEIL 2 ================= -->
+<section class="panel" id="p2" role="tabpanel" aria-labelledby="t2">
+  <h2>Teil 2 &middot; Wenn der Verbrauch w&auml;chst</h2>
+  <p class="lead">Die statische Reichweite nimmt an, dass jedes Jahr gleich viel gef&ouml;rdert wird. Tats&auml;chlich steigt der Verbrauch bei vielen Rohstoffen. Zieh den Regler und schau, was passiert.</p>
+
+  <div class="box">
+    <h3 style="margin-top:0">Beispiel Kupfer</h3>
+    <p style="margin:0 0 4px">Reserven <b>980 Mio. t</b> &middot; F&ouml;rderung im ersten Jahr <b>23 Mio. t</b></p>
+    <label class="lb" for="rng" style="margin-top:14px">J&auml;hrliches Wachstum des Verbrauchs: <span id="rngVal" style="color:var(--navy);font-size:17px">0,0&nbsp;%</span></label>
+    <input type="range" id="rng" min="0" max="60" step="5" value="0">
+    <div class="rangelab"><span>0 %</span><span>3 %</span><span>6 %</span></div>
+
+    <div class="simgrid" style="margin-top:16px">
+      <div class="simbar a">
+        <div class="sl">Statische Reichweite (Verbrauch bleibt gleich)</div>
+        <div class="sv" id="simA">43 Jahre</div>
+        <div class="track"><i id="simAbar" style="width:100%"></i></div>
+      </div>
+      <div class="simbar b">
+        <div class="sl">Tats&auml;chliche Reichweite bei wachsendem Verbrauch</div>
+        <div class="sv" id="simB">43 Jahre</div>
+        <div class="track"><i id="simBbar" style="width:100%"></i></div>
+      </div>
+    </div>
+    <p id="simText" style="margin:14px 0 0;font-size:15.5px"></p>
+  </div>
+
+  <div class="box tint-amber">
+    <h3>Warum das so stark wirkt</h3>
+    <p>Wachstum von 3&nbsp;% klingt klein. Aber es wirkt jedes Jahr auf die bereits gewachsene Menge &ndash; wie Zinseszins. Nach rund 23 Jahren wird bei 3&nbsp;% Wachstum doppelt so viel gef&ouml;rdert wie heute. Der Vorrat schmilzt deshalb <b>nicht gleichm&auml;&szlig;ig, sondern immer schneller</b>.</p>
+    <p style="margin-bottom:0">Umgekehrt gilt genauso: Wer den Verbrauch senkt, verl&auml;ngert die Reichweite &uuml;berproportional.</p>
+  </div>
+
+  <div class="merk">
+    <b>Merke</b> Statische Reichweite = Rechnung mit gleichbleibendem Verbrauch. <b>Dynamische Reichweite</b> = Rechnung mit steigendem (oder sinkendem) Verbrauch. Die dynamische Reichweite ist bei Wachstum immer k&uuml;rzer.
+  </div>
+</section>
+
+<!-- ================= TEIL 3 ================= -->
+<section class="panel" id="p3" role="tabpanel" aria-labelledby="t3">
+  <h2>Teil 3 &middot; Der Lithium-Fall</h2>
+  <p class="lead">Lithium steckt in jedem Akku. Zwischen 2023 und 2025 ist etwas passiert, das auf den ersten Blick nicht zusammenpasst. Rechne beide Jahre aus und finde die Erkl&auml;rung.</p>
+
+  <div class="scrollx">
+    <table class="tbl">
+      <tr><th>Weltweit</th><th>Stand 2023</th><th>Stand 2025</th><th>Ver&auml;nderung</th></tr>
+      <tr><td>Reserven</td><td class="n">28 Mio. t</td><td class="n">37 Mio. t</td><td class="n" style="color:var(--teal);font-weight:700">+ 32 %</td></tr>
+      <tr><td>F&ouml;rderung pro Jahr</td><td class="n">0,18 Mio. t</td><td class="n">0,29 Mio. t</td><td class="n" style="color:var(--coral);font-weight:700">+ 61 %</td></tr>
+      <tr><td><b>Statische Reichweite</b></td><td class="n" id="li23">?</td><td class="n" id="li25">?</td><td class="n" id="liDiff">?</td></tr>
+    </table>
+  </div>
+  <p class="hint" style="margin-top:-4px">Quelle: U.S. Geological Survey, Mineral Commodity Summaries 2024 und 2026. Angaben ohne die USA, gerundet.</p>
+
+  <div class="btnrow">
+    <button class="btn primary" id="liBtn">Reichweiten berechnen</button>
+    <button class="btn ghost" id="liReset">Zur&uuml;cksetzen</button>
+  </div>
+  <div class="fb" id="liFb"></div>
+
+  <div class="box tint-teal" style="margin-top:18px">
+    <h3>Die Aufl&ouml;sung</h3>
+    <p>Es wurden <b>mehr</b> Lithium-Reserven gefunden und wirtschaftlich nutzbar &ndash; trotzdem ist die Reichweite <b>gesunken</b>. Der Grund steht in der Formel: Der Nenner (die F&ouml;rderung) ist st&auml;rker gewachsen als der Z&auml;hler (die Reserven).</p>
+    <p style="margin-bottom:0">Beide Zahlen in der Formel bewegen sich also &ndash; und zwar unabh&auml;ngig voneinander. Deshalb kann dieselbe Reichweite von Jahr zu Jahr steigen oder fallen, ohne dass ein einziges Gramm mehr oder weniger im Boden liegt.</p>
+  </div>
+
+  <h3>F&uuml;nf Gr&uuml;nde, warum Vorr&auml;te l&auml;nger reichen als berechnet</h3>
+  <div class="box">
+    <ul class="tight">
+      <li><b>Neue Funde.</b> Es wird weiter gesucht. Was heute noch niemand kennt, kann morgen Reserve sein.</li>
+      <li><b>Preis und Technik.</b> Aus Stunde 4: Steigt der Preis oder verbessert sich die Technik, werden aus Ressourcen Reserven &ndash; ohne dass neue Vorkommen entstehen.</li>
+      <li><b>Recycling.</b> Kupfer l&auml;sst sich nahezu unbegrenzt oft einschmelzen. Recyceltes Metall muss nicht neu gef&ouml;rdert werden.</li>
+      <li><b>Ersatzstoffe.</b> Glasfaser statt Kupfer, Natrium statt Lithium &ndash; wo ein Rohstoff knapp wird, wird an Alternativen geforscht.</li>
+      <li><b>Weniger Verbrauch.</b> Sparsamere Ger&auml;te und l&auml;ngere Nutzung senken die F&ouml;rderung &ndash; und verl&auml;ngern damit direkt die Reichweite.</li>
+    </ul>
+  </div>
+
+  <div class="box tint-coral">
+    <h3>Aber Vorsicht &ndash; zwei Grenzen der Rechnung</h3>
+    <p><b>1. Sie passt nicht auf alle Ressourcen.</b> F&uuml;r Wasser, Boden, Holz oder Fisch ergibt &bdquo;Vorrat geteilt durch Verbrauch&ldquo; keinen Sinn. Dort z&auml;hlt der Vergleich von <b>Entnahme und Erneuerungsrate</b> &ndash; genau die Gruppe &bdquo;erneuerbar, aber &uuml;bernutzbar&ldquo; aus Stunde 4.</p>
+    <p style="margin-bottom:0"><b>2. Oft entscheidet nicht die Menge.</b> In den deutschen Braunkohlerevieren liegen rechnerisch Vorr&auml;te f&uuml;r Jahrhunderte. Trotzdem endet die F&ouml;rderung &ndash; in Welzow-S&uuml;d 2030, bundesweit sp&auml;testens 2038. Die Grenze ist hier nicht geologisch, sondern <b>klimapolitisch und wirtschaftlich</b>.</p>
+  </div>
+</section>
+
+<!-- ================= TEIL 4 ================= -->
+<section class="panel" id="p4" role="tabpanel" aria-labelledby="t4">
+  <h2>Teil 4 &middot; Quiz</h2>
+  <p class="lead">Acht Fragen zur Reichweite. Eine Antwort pro Frage, danach siehst du die Erkl&auml;rung.</p>
+
+  <div class="score">
+    <span class="num" id="s4num">0/8</span>
+    <span class="lbl">Punkte</span>
+    <span class="bar"><i id="s4bar"></i></span>
+  </div>
+
+  <div id="quizList"></div>
+
+  <div class="btnrow" style="justify-content:flex-start">
+    <button class="btn ghost" id="q4reset">Quiz zur&uuml;cksetzen</button>
+  </div>
+</section>
+
+<!-- ================= TEIL 5 ================= -->
+<section class="panel" id="p5" role="tabpanel" aria-labelledby="t5">
+  <h2>Teil 5 &middot; Weiterarbeiten</h2>
+  <p class="lead">F&uuml;r die Hausaufgabe und den Ausblick auf die n&auml;chste Stunde.</p>
+
+  <div class="box tint-teal">
+    <h3>Dein Auftrag bis zur n&auml;chsten Stunde</h3>
+    <ol class="steps">
+      <li>Suche eine Schlagzeile oder Aussage nach dem Muster &bdquo;Rohstoff X reicht noch Y Jahre&ldquo;. Notiere Rohstoff, Zahl und Quelle.</li>
+      <li>Pr&uuml;fe: Ist die Zahl eine <b>statische</b> Reichweite? Wird gesagt, von welchem Jahr die Daten stammen?</li>
+      <li>Schreibe in drei bis f&uuml;nf S&auml;tzen, warum die Aussage so nicht stimmen muss &ndash; nutze mindestens zwei der f&uuml;nf Gr&uuml;nde aus Teil 3.</li>
+      <li>Bring deine Notizen mit. In Stunde 6 lernst du, solche Zahlen in Diagrammen darzustellen und auszuwerten.</li>
+    </ol>
+  </div>
+
+  <h3>Nachschlagen und vertiefen</h3>
+
+  <a class="linkcard" href="https://www.bgr.bund.de/DE/Themen/Rohstoffe/Produkte/Energiestudien/energiestudie_node.html" target="_blank" rel="noopener">
+    <div class="lt">BGR &ndash; Energiestudien</div>
+    <div class="ld">Die Bundesanstalt f&uuml;r Geowissenschaften und Rohstoffe ver&ouml;ffentlicht die amtlichen deutschen Zahlen zu Reserven und Ressourcen der Energierohstoffe.</div>
+    <div class="lu">bgr.bund.de/DE/Themen/Rohstoffe/Produkte/Energiestudien/energiestudie_node.html</div>
+  </a>
+
+  <a class="linkcard" href="https://pubs.usgs.gov/periodicals/mcs2026/mcs2026.pdf" target="_blank" rel="noopener">
+    <div class="lt">USGS Mineral Commodity Summaries</div>
+    <div class="ld">Der weltweite Standard f&uuml;r Reserven und F&ouml;rdermengen von Metallen. Jedes Jahr neu, zwei Seiten pro Rohstoff (englisch).</div>
+    <div class="lu">pubs.usgs.gov/periodicals/mcs2026/mcs2026.pdf</div>
+  </a>
+
+  <a class="linkcard" href="https://www.umweltbundesamt.de/themen/abfall-ressourcen/ressourcennutzung-ihre-folgen" target="_blank" rel="noopener">
+    <div class="lt">Umweltbundesamt &ndash; Ressourcennutzung und ihre Folgen</div>
+    <div class="ld">Wie viele Rohstoffe Deutschland verbraucht und was das f&uuml;r Umwelt und Klima bedeutet.</div>
+    <div class="lu">umweltbundesamt.de/themen/abfall-ressourcen/ressourcennutzung-ihre-folgen</div>
+  </a>
+
+  <a class="linkcard" href="https://kohlenstatistik.de/braunkohle/" target="_blank" rel="noopener">
+    <div class="lt">Statistik der Kohlenwirtschaft &ndash; Braunkohle</div>
+    <div class="ld">F&ouml;rdermengen der deutschen Braunkohlereviere Jahr f&uuml;r Jahr, auch f&uuml;r die Lausitz.</div>
+    <div class="lu">kohlenstatistik.de/braunkohle</div>
+  </a>
+
+  <div class="box" style="margin-top:18px">
+    <h3>Die Zahlen dieser Stunde auf einen Blick</h3>
+    <div class="scrollx" style="margin-bottom:6px">
+      <table class="tbl">
+        <tr><th>Rohstoff</th><th>Reserven</th><th>F&ouml;rderung/Jahr</th><th>stat. Reichweite</th></tr>
+        <tr><td>Kupfer (Welt)</td><td class="n">980 Mio. t</td><td class="n">23 Mio. t</td><td class="n">rund 43 Jahre</td></tr>
+        <tr><td>Lithium (Welt)</td><td class="n">37 Mio. t</td><td class="n">0,29 Mio. t</td><td class="n">rund 128 Jahre</td></tr>
+        <tr><td>Braunkohle Deutschland,<br>erschlossene und geplante Tagebaue</td><td class="n">1.250 Mio. t</td><td class="n">84,4 Mio. t</td><td class="n">rund 15 Jahre</td></tr>
+        <tr><td>Braunkohle Deutschland,<br>weitere Reserven</td><td class="n">34.150 Mio. t</td><td class="n">84,4 Mio. t</td><td class="n">rund 405 Jahre</td></tr>
+      </table>
+    </div>
+    <p class="hint" style="margin:0">Kupfer und Lithium: USGS Mineral Commodity Summaries 2026 (F&ouml;rderung 2025, ohne USA). Braunkohle-Vorr&auml;te: BGR Energiestudie 2023, Stand Ende 2022. Braunkohlef&ouml;rderung Deutschland 2025: 84,4 Mio. t, davon Lausitzer Revier rund 41&nbsp;% (Statistik der Kohlenwirtschaft).</p>
+  </div>
+
+  <footer class="foot">
+    Geografie Klasse 9 &middot; Humboldt-Gymnasium Cottbus &middot; Stunde 5: Verf&uuml;gbarkeit und Reichweite<br>
+    Stand der Sachangaben: September 2026. Die Einteilung in Reserven und Ressourcen folgt der Systematik der Bundesanstalt f&uuml;r Geowissenschaften und Rohstoffe (BGR).
+  </footer>
+</section>
+
+</div>
+<script>
+(function(){
+"use strict";
+
+/* ---------- Navigation ---------- */
+var tabs=[].slice.call(document.querySelectorAll('nav.tabs button'));
+tabs.forEach(function(b){
+  b.addEventListener('click',function(){
+    tabs.forEach(function(x){x.setAttribute('aria-selected','false');});
+    b.setAttribute('aria-selected','true');
+    [].forEach.call(document.querySelectorAll('section.panel'),function(p){p.classList.remove('active');});
+    document.getElementById(b.dataset.p).classList.add('active');
+    window.scrollTo(0,0);
+  });
+});
+function setBar(barId,numId,got,total){
+  document.getElementById(barId).style.width=(got/total*100)+'%';
+  document.getElementById(numId).textContent=got+'/'+total;
+}
+function de(n,dec){
+  return n.toLocaleString('de-DE',{minimumFractionDigits:dec||0,maximumFractionDigits:dec||0});
+}
+
+/* ---------- TEIL 1: Rechner ---------- */
+var STOFFE=[
+  {name:'Kupfer',sub:'weltweit',res:980,foe:23,ein:'Mio. t',
+   q:'USGS Mineral Commodity Summaries 2026 &middot; F&ouml;rderung 2025 ohne USA, gerundet',
+   e:'Kupfer steckt in jedem Kabel, jedem Motor und jeder Leitung. Der Bedarf steigt durch Elektroautos und Stromnetze stark an. Kupfer l&auml;sst sich aber sehr gut recyceln.'},
+  {name:'Lithium',sub:'weltweit',res:37,foe:0.29,ein:'Mio. t',
+   q:'USGS Mineral Commodity Summaries 2026 &middot; F&ouml;rderung 2025 ohne USA, gerundet',
+   e:'Lithium ist der Schl&uuml;sselrohstoff f&uuml;r Akkus. Obwohl die Reichweite hoch aussieht, gilt Lithium als kritisch &ndash; weil die F&ouml;rderung mit dem Bedarf kaum Schritt h&auml;lt und nur wenige L&auml;nder liefern.'},
+  {name:'Braunkohle Deutschland',sub:'erschlossene und konkret geplante Tagebaue',res:1250,foe:84.4,ein:'Mio. t',
+   q:'Vorr&auml;te: BGR Energiestudie 2023, Stand Ende 2022 &middot; F&ouml;rderung 2025: Statistik der Kohlenwirtschaft',
+   e:'Das ist die Kohle, die in den heute genehmigten Tagebauen tats&auml;chlich erreichbar ist &ndash; auch in der Lausitz. Der gesetzliche Ausstieg kommt hier fast zeitgleich mit dem rechnerischen Ende.'},
+  {name:'Braunkohle Deutschland',sub:'alle weiteren Reserven im Boden',res:34150,foe:84.4,ein:'Mio. t',
+   q:'Vorr&auml;te: BGR Energiestudie 2023, Stand Ende 2022 &middot; F&ouml;rderung 2025: Statistik der Kohlenwirtschaft',
+   e:'Geologisch liegt in Deutschland Braunkohle f&uuml;r mehrere Jahrhunderte. Trotzdem endet die F&ouml;rderung sp&auml;testens 2038. Die Grenze setzt hier nicht die Menge, sondern der Klimaschutz.'}
+];
+var cur=0, solved=[false,false,false,false];
+
+function renderPicker(){
+  var host=document.getElementById('picker'); host.innerHTML='';
+  STOFFE.forEach(function(s,i){
+    var b=document.createElement('button');
+    b.className='pick'; b.type='button';
+    b.setAttribute('aria-pressed', i===cur?'true':'false');
+    b.innerHTML=(solved[i]?'&#10003; ':'')+s.name+'<small>'+s.sub+'</small>';
+    b.addEventListener('click',function(){cur=i;renderStoff();renderPicker();});
+    host.appendChild(b);
+  });
+}
+function renderStoff(){
+  var s=STOFFE[cur];
+  document.getElementById('fRes').textContent=de(s.res,s.res<10?2:0);
+  document.getElementById('fResU').textContent=s.ein;
+  document.getElementById('fFoe').textContent=de(s.foe,s.foe<10?2:1);
+  document.getElementById('fFoeU').textContent=s.ein+' pro Jahr';
+  document.getElementById('fQuelle').innerHTML='Quelle: '+s.q;
+  document.getElementById('fFormel').innerHTML=
+    de(s.res,s.res<10?2:0)+' '+s.ein+' &nbsp;<span class="op">&divide;</span>&nbsp; '+
+    de(s.foe,s.foe<10?2:1)+' '+s.ein+'/Jahr &nbsp;<span class="op">=</span>&nbsp; ? Jahre';
+  document.getElementById('inAnt').value='';
+  var fb=document.getElementById('fb1'); fb.className='fb'; fb.innerHTML='';
+}
+document.getElementById('btnCheck').addEventListener('click',function(){
+  var s=STOFFE[cur], exact=s.res/s.foe;
+  var v=parseFloat((document.getElementById('inAnt').value||'').replace(',','.'));
+  var fb=document.getElementById('fb1');
+  if(isNaN(v)){fb.className='fb show no';fb.innerHTML='<b>Noch keine Zahl.</b>Trage dein Ergebnis in das Feld ein und tippe erneut auf &bdquo;Pr&uuml;fen&ldquo;.';return;}
+  var tol=Math.max(1,exact*0.03);
+  if(Math.abs(v-exact)<=tol){
+    fb.className='fb show ok';
+    fb.innerHTML='<b>Richtig &ndash; rund '+de(exact,0)+' Jahre.</b>'+
+      de(s.res,s.res<10?2:0)+' &divide; '+de(s.foe,s.foe<10?2:1)+' = '+de(exact,1)+'. '+s.e;
+    if(!solved[cur]){solved[cur]=true;}
+  }else{
+    fb.className='fb show no';
+    fb.innerHTML='<b>Noch nicht.</b>Teile die Reserven durch die Jahresf&ouml;rderung: '+
+      de(s.res,s.res<10?2:0)+' &divide; '+de(s.foe,s.foe<10?2:1)+'. Achte darauf, dass beide Zahlen dieselbe Einheit haben.';
+  }
+  var n=solved.filter(Boolean).length;
+  setBar('s1bar','s1num',n,STOFFE.length);
+  renderPicker();
+});
+document.getElementById('btnTipp').addEventListener('click',function(){
+  var s=STOFFE[cur];
+  var fb=document.getElementById('fb1');
+  fb.className='fb show ok';
+  fb.innerHTML='<b>Tipp</b>Rechne '+de(s.res,s.res<10?2:0)+' geteilt durch '+de(s.foe,s.foe<10?2:1)+
+    '. Beide Zahlen sind in '+s.ein+' angegeben, die Einheit k&uuml;rzt sich weg &ndash; &uuml;brig bleiben Jahre.';
+});
+document.getElementById('ownBtn').addEventListener('click',function(){
+  var r=parseFloat((document.getElementById('ownRes').value||'').replace(',','.'));
+  var f=parseFloat((document.getElementById('ownFoe').value||'').replace(',','.'));
+  var fb=document.getElementById('ownFb');
+  if(isNaN(r)||isNaN(f)||f<=0||r<0){
+    fb.className='fb show no';
+    fb.innerHTML='<b>Das geht so nicht.</b>Beide Felder brauchen eine Zahl, und die F&ouml;rderung muss gr&ouml;&szlig;er als null sein.';
+    return;
+  }
+  fb.className='fb show ok';
+  fb.innerHTML='<b>Statische Reichweite: rund '+de(r/f,1)+' Jahre.</b>'+
+    de(r,2)+' &divide; '+de(f,2)+' = '+de(r/f,2)+'. Denk daran: Diese Zahl gilt nur, solange sich weder Reserven noch F&ouml;rderung &auml;ndern.';
+});
+setBar('s1bar','s1num',0,STOFFE.length);
+renderPicker(); renderStoff();
+
+/* ---------- TEIL 2: Simulator ---------- */
+var R2=980, F2=23, STAT=R2/F2;
+function dyn(R,F,g){ if(g<=0) return R/F; return Math.log(1+R*g/F)/Math.log(1+g); }
+function updateSim(){
+  var g=parseInt(document.getElementById('rng').value,10)/1000; /* 0..60 -> 0..0.06 */
+  document.getElementById('rngVal').textContent=de(g*100,1)+' %';
+  var d=dyn(R2,F2,g);
+  document.getElementById('simA').textContent=de(STAT,0)+' Jahre';
+  document.getElementById('simB').textContent=de(d,0)+' Jahre';
+  document.getElementById('simAbar').style.width='100%';
+  document.getElementById('simBbar').style.width=(d/STAT*100)+'%';
+  var t=document.getElementById('simText');
+  if(g<=0){
+    t.innerHTML='Bei gleichbleibendem Verbrauch sind beide Werte identisch &ndash; das ist genau die statische Rechnung aus Teil 1.';
+  }else{
+    var verlust=STAT-d;
+    var jahrVerdopp=Math.log(2)/Math.log(1+g);
+    t.innerHTML='Bei <b>'+de(g*100,1)+' %</b> Wachstum pro Jahr reicht der Vorrat nur noch <b>'+de(d,0)+
+      ' statt '+de(STAT,0)+' Jahre</b> &ndash; das sind '+de(verlust,0)+' Jahre weniger. '+
+      'Nach '+de(jahrVerdopp,0)+' Jahren wird dann doppelt so viel gef&ouml;rdert wie heute.';
+  }
+}
+document.getElementById('rng').addEventListener('input',updateSim);
+updateSim();
+
+/* ---------- TEIL 3: Lithium ---------- */
+document.getElementById('liBtn').addEventListener('click',function(){
+  var a=28/0.18, b=37/0.29;
+  document.getElementById('li23').innerHTML='<b>rund '+de(a,0)+' Jahre</b>';
+  document.getElementById('li25').innerHTML='<b>rund '+de(b,0)+' Jahre</b>';
+  document.getElementById('liDiff').innerHTML='<span style="color:var(--coral);font-weight:700">&minus; '+de(a-b,0)+' Jahre</span>';
+  var fb=document.getElementById('liFb');
+  fb.className='fb show ok';
+  fb.innerHTML='<b>28 &divide; 0,18 = '+de(a,0)+' &nbsp;&middot;&nbsp; 37 &divide; 0,29 = '+de(b,0)+'</b>'+
+    'Die Reserven sind gewachsen, die Reichweite ist um rund '+de(a-b,0)+' Jahre gesunken. Wie kann das sein? Die Aufl&ouml;sung steht direkt darunter.';
+});
+document.getElementById('liReset').addEventListener('click',function(){
+  document.getElementById('li23').textContent='?';
+  document.getElementById('li25').textContent='?';
+  document.getElementById('liDiff').textContent='?';
+  var fb=document.getElementById('liFb'); fb.className='fb'; fb.innerHTML='';
+});
+
+/* ---------- TEIL 4: Quiz ---------- */
+var QUIZ=[
+  {q:'Wie berechnet man die statische Reichweite eines Rohstoffs?',
+   o:['Reserven geteilt durch die Jahresf&ouml;rderung',
+      'Jahresf&ouml;rderung geteilt durch die Reserven',
+      'Ressourcen mal Reserven',
+      'Reserven plus Ressourcen geteilt durch die Einwohnerzahl'],a:0,
+   e:'Oben steht der Vorrat, unten der Verbrauch eines Jahres. Weil sich die Einheit k&uuml;rzt, kommt eine Zahl in Jahren heraus.'},
+  {q:'Kupfer hat eine statische Reichweite von rund 43 Jahren. Was bedeutet das genau?',
+   o:['In 43 Jahren gibt es weltweit kein Kupfer mehr.',
+      'Der heute bekannte, wirtschaftlich gewinnbare Vorrat w&uuml;rde 43 Jahre reichen, wenn F&ouml;rderung und Reserven gleich blieben.',
+      'Kupfer wird in 43 Jahren doppelt so teuer sein.',
+      'Die Kupferminen d&uuml;rfen nur noch 43 Jahre betrieben werden.'],a:1,
+   e:'Die Zahl beschreibt eine Rechenannahme, kein Ereignis. Sie enth&auml;lt zwei Bedingungen, die in Wirklichkeit fast nie gelten: gleichbleibende F&ouml;rderung und gleichbleibende Reserven.'},
+  {q:'Der Verbrauch eines Rohstoffs w&auml;chst jedes Jahr um 3 %. Wie ver&auml;ndert sich die Reichweite gegen&uuml;ber der statischen Rechnung?',
+   o:['Sie bleibt gleich, weil die Reserven gleich bleiben.',
+      'Sie wird l&auml;nger, weil mehr investiert wird.',
+      'Sie wird deutlich k&uuml;rzer, weil jedes Jahr mehr entnommen wird als im Jahr davor.',
+      'Sie l&auml;sst sich nicht mehr berechnen.'],a:2,
+   e:'Wachstum wirkt wie Zinseszins: Es rechnet sich auf die schon gewachsene Menge auf. Bei Kupfer sinkt die Reichweite von rund 43 auf rund 28 Jahre.'},
+  {q:'Die weltweiten Lithiumreserven sind von 2023 bis 2025 um 32 % gestiegen &ndash; die statische Reichweite ist trotzdem gesunken. Warum?',
+   o:['Weil Lithium schlechter recycelbar geworden ist.',
+      'Weil die Jahresf&ouml;rderung im selben Zeitraum noch st&auml;rker gestiegen ist (+ 61 %).',
+      'Weil Reserven zu Ressourcen umgewandelt wurden.',
+      'Weil sich die Formel ge&auml;ndert hat.'],a:1,
+   e:'In der Formel bewegen sich Z&auml;hler und Nenner unabh&auml;ngig voneinander. W&auml;chst der Nenner st&auml;rker als der Z&auml;hler, sinkt das Ergebnis &ndash; obwohl mehr Vorrat da ist.'},
+  {q:'Welche Aussage &uuml;ber Reserven trifft zu? (Erinnerung aus Stunde 4)',
+   o:['Reserven sind alle Vorkommen, die es auf der Erde gibt.',
+      'Reserven sind nur geologisch vermutete Vorkommen.',
+      'Reserven sind nachgewiesen und mit heutiger Technik wirtschaftlich gewinnbar &ndash; ihre Menge &auml;ndert sich mit Preis und Technik.',
+      'Reserven sind eine geologische Gr&ouml;&szlig;e und &auml;ndern sich nie.'],a:2,
+   e:'Genau deshalb ist auch die Reichweite beweglich: Sie wird aus einer Gr&ouml;&szlig;e berechnet, die selbst von Preis, Technik und Politik abh&auml;ngt.'},
+  {q:'Warum l&auml;sst sich die Reichweitenformel nicht sinnvoll auf Grundwasser oder Ackerboden anwenden?',
+   o:['Weil man die Mengen nicht messen kann.',
+      'Weil dort kein fester Vorrat aufgebraucht wird, sondern Entnahme und Erneuerungsrate verglichen werden m&uuml;ssen.',
+      'Weil Wasser und Boden unersch&ouml;pflich sind.',
+      'Weil sie nicht gehandelt werden.'],a:1,
+   e:'Das ist die Gruppe &bdquo;erneuerbar, aber &uuml;bernutzbar&ldquo; aus Stunde 4. Hier lautet die Frage nicht &bdquo;Wie lange reicht der Vorrat?&ldquo;, sondern &bdquo;Nehmen wir mehr, als nachkommt?&ldquo;'},
+  {q:'In den deutschen Braunkohlerevieren liegen rechnerisch Vorr&auml;te f&uuml;r mehrere Jahrhunderte. Warum endet die F&ouml;rderung trotzdem?',
+   o:['Weil die Kohle geologisch nicht mehr auffindbar ist.',
+      'Weil die Bagger technisch nicht tiefer graben k&ouml;nnen.',
+      'Weil Klimaschutz und Wirtschaftlichkeit die Grenze setzen, nicht die Menge im Boden.',
+      'Weil die Reserven in Ressourcen umbenannt wurden.'],a:2,
+   e:'Der Kohleausstieg ist gesetzlich geregelt, sp&auml;testens 2038. In Welzow-S&uuml;d endet die F&ouml;rderung bereits 2030. Die Reichweite sagt hier fast nichts &uuml;ber die Zukunft aus.'},
+  {q:'Warum ist eine Schlagzeile wie &bdquo;Rohstoff X reicht noch 30 Jahre&ldquo; problematisch?',
+   o:['Weil solche Zahlen grunds&auml;tzlich erfunden sind.',
+      'Weil sie eine Momentaufnahme als Ablaufdatum darstellt &ndash; Funde, Preis, Technik, Recycling und Verbrauch ver&auml;ndern die Zahl jedes Jahr.',
+      'Weil Rohstoffe niemals ausgehen k&ouml;nnen.',
+      'Weil nur die dynamische Reichweite in Jahren angegeben werden darf.'],a:1,
+   e:'Die Zahl ist nicht falsch, aber sie wird falsch verstanden. Wer sie richtig liest, fragt zuerst: Von wann sind die Daten, und welche Annahmen stecken drin?'}
+];
+function buildQuiz(){
+  var host=document.getElementById('quizList'); host.innerHTML='';
+  var got=0,done=[];
+  setBar('s4bar','s4num',0,QUIZ.length);
+  QUIZ.forEach(function(f,i){
+    var d=document.createElement('div'); d.className='fall';
+    d.innerHTML='<p class="q"><span class="nr">'+(i+1)+'</span>'+f.q+'</p>';
+    var cc=document.createElement('div'); cc.className='fallchoices';
+    f.o.forEach(function(lab,li){
+      var b=document.createElement('button'); b.className='choice'; b.type='button'; b.innerHTML=lab;
+      b.addEventListener('click',function(){
+        if(done[i])return; done[i]=true;
+        var all=[].slice.call(cc.querySelectorAll('.choice'));
+        all.forEach(function(x,xi){x.disabled=true;if(xi===f.a)x.classList.add('right');});
+        if(li!==f.a)b.classList.add('wrong'); else got++;
+        var fb=d.querySelector('.fb');
+        fb.className='fb show '+(li===f.a?'ok':'no');
+        fb.innerHTML='<b>'+(li===f.a?'Richtig.':'Noch nicht richtig.')+'</b>'+f.e;
+        setBar('s4bar','s4num',got,QUIZ.length);
+      });
+      cc.appendChild(b);
+    });
+    d.appendChild(cc);
+    var fb=document.createElement('div'); fb.className='fb'; d.appendChild(fb);
+    host.appendChild(d);
+  });
+}
+buildQuiz();
+document.getElementById('q4reset').addEventListener('click',buildQuiz);
+
+})();
+</script>
+</body>
+</html>
