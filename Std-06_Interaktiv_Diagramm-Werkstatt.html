@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagramm-Werkstatt &middot; Geografie 9 &middot; Stunde 6</title>
+<style>
+:root{
+  --navy:#1F3B57; --teal:#2E7D6B; --amber:#C97A2B; --coral:#C05A5A;
+  --bg:#F4F7F6; --card:#FFFFFF; --line:#D9E2E0; --ink:#22303A; --muted:#5C6B76;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:17px;line-height:1.55;padding-bottom:48px}
+header{background:var(--navy);color:#fff;padding:22px 16px 26px}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+header .wrap{padding:0 16px}
+.kicker{font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin:0 0 6px}
+header h1{margin:0 0 8px;font-size:28px;line-height:1.2}
+header p{margin:0;opacity:.9;font-size:16px}
+nav{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);
+  overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:8px 12px;min-width:max-content}
+nav a{display:block;padding:10px 14px;border-radius:999px;text-decoration:none;color:var(--navy);
+  font-size:15px;font-weight:600;white-space:nowrap;min-height:44px;line-height:24px}
+nav a:hover{background:var(--bg)}
+section{margin:26px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
+h2{font-size:22px;margin:0 0 4px;color:var(--navy)}
+h2 .num{display:inline-block;background:var(--teal);color:#fff;border-radius:8px;
+  font-size:15px;padding:2px 9px;margin-right:8px;vertical-align:2px}
+h3{font-size:18px;margin:18px 0 6px;color:var(--navy)}
+.lead{color:var(--muted);margin:0 0 6px;font-size:16px}
+p{margin:8px 0}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:var(--ink);padding:11px 15px;min-height:46px}
+button:hover{background:#EEF3F2}
+.btn-main{background:var(--teal);color:#fff;border-color:var(--teal);font-weight:600}
+.btn-main:hover{background:#26685a}
+.btn-ghost{background:#fff;border-color:var(--teal);color:var(--teal);font-weight:600}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.opt{flex:1 1 150px;text-align:left}
+.opt.right{background:#E4F2ED;border-color:var(--teal);color:#1d5546;font-weight:600}
+.opt.wrong{background:#FAE7E7;border-color:var(--coral);color:#8c3a3a}
+.fb{margin-top:8px;padding:11px 13px;border-radius:10px;font-size:16px;display:none}
+.fb.show{display:block}
+.fb.ok{background:#E4F2ED;border-left:4px solid var(--teal)}
+.fb.no{background:#FAE7E7;border-left:4px solid var(--coral)}
+.fb.info{background:#FBF0E2;border-left:4px solid var(--amber)}
+.q{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+.q:first-of-type{border-top:0;padding-top:0;margin-top:0}
+.qh{font-weight:600;margin:0 0 6px}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:10px 0}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left}
+th{background:#EEF3F2;color:var(--navy)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+svg{display:block;max-width:100%;height:auto}
+.chartbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;margin:10px 0}
+.chartbox:empty{display:none}
+input[type=text],input[type=number]{font:inherit;padding:10px 12px;border:1px solid var(--line);
+  border-radius:10px;min-height:46px;width:110px;background:#fff;color:var(--ink)}
+input[type=range]{width:100%;max-width:420px;height:44px}
+label{font-size:15px;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.pill{display:inline-block;background:#EEF3F2;color:var(--navy);border-radius:999px;
+  padding:3px 11px;font-size:14px;font-weight:600;margin:0 6px 6px 0}
+.merk{background:#FBF0E2;border:1px solid #EAD4B4;border-left:5px solid var(--amber);
+  border-radius:12px;padding:16px}
+.merk h3{margin-top:0;color:#8a5316}
+ol,ul{margin:8px 0;padding-left:22px}
+li{margin:4px 0}
+.score{font-weight:700;color:var(--navy)}
+.small{font-size:14px;color:var(--muted)}
+.flag{display:inline-block;border-radius:6px;padding:1px 7px;font-size:13px;font-weight:700;
+  color:#fff;margin-right:6px}
+.flag.t{background:var(--teal)} .flag.a{background:var(--amber)} .flag.c{background:var(--coral)}
+.hot{cursor:pointer}
+.hot rect,.hot circle{transition:opacity .15s}
+.found{outline:3px solid var(--teal)}
+footer{margin-top:30px;padding:18px 0;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+a{color:var(--teal)}
+li a{display:inline-block;padding:10px 0;min-height:44px;line-height:24px}
+@media (max-width:520px){
+  header h1{font-size:23px}
+  body{font-size:16px}
+  .opt{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <p class="kicker">Geografie 9 &middot; Stunde 6 &middot; Methode M2</p>
+    <h1>Diagramm-Werkstatt</h1>
+    <p>Diagramme auswerten, durchschauen und selbst erstellen &ndash; mit Zahlen aus der Lausitz.</p>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap" style="padding:0">
+    <ul>
+      <li><a href="#t1">1 Welcher Typ?</a></li>
+      <li><a href="#t2">2 Auswerten</a></li>
+      <li><a href="#t3">3 Detektiv</a></li>
+      <li><a href="#t4">4 Selbst zeichnen</a></li>
+      <li><a href="#t5">5 Quiz</a></li>
+      <li><a href="#t6">6 Zahlen &amp; HA</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ============ TEIL 1 ============ -->
+<section id="t1">
+  <h2><span class="num">1</span>Welcher Diagrammtyp passt?</h2>
+  <p class="lead">Jeder Diagrammtyp beantwortet eine andere Frage. Ordne zu &ndash; du bekommst sofort eine Begr&uuml;ndung.</p>
+
+  <div class="card">
+    <div class="scroll">
+    <table>
+      <tr><th>Diagrammtyp</th><th>Leitfrage</th><th>Beispiel</th></tr>
+      <tr><td><b>S&auml;ulen-/Balkendiagramm</b></td><td>Wie gro&szlig; ist etwas im Vergleich?</td><td>Reichweite von vier Rohstoffen</td></tr>
+      <tr><td><b>Liniendiagramm</b></td><td>Wie ver&auml;ndert sich etwas im Lauf der Zeit?</td><td>F&ouml;rdermenge 2021 bis 2025</td></tr>
+      <tr><td><b>Kreisdiagramm</b></td><td>Wie verteilt sich ein Ganzes auf seine Teile?</td><td>Anteil der Reviere an der F&ouml;rderung</td></tr>
+      <tr><td><b>Klimadiagramm</b></td><td>Wie h&auml;ngen zwei Gr&ouml;&szlig;en am selben Ort zusammen?</td><td>Temperatur und Niederschlag in Cottbus</td></tr>
+    </table>
+    </div>
+    <p class="small">Das Klimadiagramm lernst du in Stunde 21 (Methode M4) genauer kennen.</p>
+  </div>
+
+  <div class="card" id="typq"></div>
+  <p class="row"><span class="score" id="typscore">0 von 6 richtig</span>
+    <button class="btn-ghost" onclick="resetTyp()">Noch einmal</button></p>
+</section>
+
+<!-- ============ TEIL 2 ============ -->
+<section id="t2">
+  <h2><span class="num">2</span>Auswerten in drei Schritten</h2>
+  <p class="lead">Tippe auf eine S&auml;ule, um ihren Wert zu sehen. Bearbeite dann die drei Schritte.</p>
+
+  <div class="merk">
+    <h3>Der Dreischritt</h3>
+    <ol>
+      <li><b>Beschreiben</b> &ndash; Was zeigt das Diagramm? Titel, Raum, Zeit, Achsen, Einheit, Quelle.</li>
+      <li><b>Auswerten</b> &ndash; Welche Werte stehen da? H&ouml;chst- und Tiefstwert, Unterschiede, Entwicklung. Rechne nach: Differenz, Faktor, Anteil.</li>
+      <li><b>Erkl&auml;ren und beurteilen</b> &ndash; Warum ist das so? Was folgt daraus? Ist die Darstellung sachgerecht?</li>
+    </ol>
+  </div>
+
+  <div class="chartbox" id="c-reich"></div>
+  <p class="small" id="reich-info">Tippe auf eine S&auml;ule.</p>
+
+  <div class="card" id="dreiq"></div>
+
+  <h3>Dasselbe Thema, anderer Diagrammtyp: das Kreisdiagramm</h3>
+  <p class="lead">Tippe auf ein Kreissegment. Das Werkzeug zeigt dir Anteil, Winkel und Menge.</p>
+  <div class="chartbox" id="c-kreis"></div>
+  <p class="small" id="kreis-info">Tippe auf ein Segment.</p>
+  <div class="card" id="kreisq"></div>
+</section>
+
+<!-- ============ TEIL 3 ============ -->
+<section id="t3">
+  <h2><span class="num">3</span>Manipulations-Detektiv</h2>
+  <p class="lead">Beide Diagramme zeigen dieselbe Sache &ndash; aber nur eines ist sauber gemacht. Finde drei M&auml;ngel im linken Diagramm, indem du sie antippst.</p>
+
+  <div class="card">
+    <div class="row">
+      <button class="btn-main" id="btn-manip" onclick="setManip(true)">Fragw&uuml;rdige Fassung</button>
+      <button class="btn-ghost" id="btn-korr" onclick="setManip(false)">Saubere Fassung</button>
+    </div>
+    <div class="chartbox" id="c-manip"></div>
+    <p class="small" id="manip-caption"></p>
+    <div class="fb info show" id="manip-hint">Angetippt werden k&ouml;nnen: die <b>Werteachse</b>, die <b>Zeitachse</b> und der Bereich <b>unter dem Diagramm</b>.</div>
+    <div id="manip-list"></div>
+    <p class="row"><span class="score" id="manipscore">0 von 3 M&auml;ngeln gefunden</span>
+      <button class="btn-ghost" onclick="resetManip()">Noch einmal</button></p>
+  </div>
+
+  <h3>Selbst ausprobieren: der Achsentrick</h3>
+  <div class="card">
+    <p>Verschiebe den Regler und beobachte, wie derselbe R&uuml;ckgang immer dramatischer aussieht.</p>
+    <div class="row">
+      <label for="ymin">Die Werteachse beginnt bei: <b><span id="yminval">0</span> Mio.&nbsp;t</b></label>
+    </div>
+    <input type="range" id="ymin" min="0" max="80" step="5" value="0" oninput="drawTrick()">
+    <div class="chartbox" id="c-trick"></div>
+    <div class="fb info show" id="trickfb"></div>
+  </div>
+</section>
+
+<!-- ============ TEIL 4 ============ -->
+<section id="t4">
+  <h2><span class="num">4</span>Selbst zeichnen &ndash; und kontrollieren</h2>
+  <p class="lead">Zeichne das Liniendiagramm zuerst von Hand auf dein Arbeitsblatt (Aufgabe&nbsp;5). Trage die Werte danach hier ein und vergleiche.</p>
+
+  <div class="merk">
+    <h3>Checkliste &bdquo;Mein Diagramm&ldquo;</h3>
+    <ol>
+      <li>&Uuml;berschrift: Was? Wo? Wann?</li>
+      <li>Passender Diagrammtyp gew&auml;hlt</li>
+      <li>Beide Achsen beschriftet &ndash; mit Einheit</li>
+      <li>Ma&szlig;stab gleichm&auml;&szlig;ig, Werteachse beginnt bei 0</li>
+      <li>Werte sauber abgetragen und verbunden</li>
+      <li>Legende, wenn mehrere Reihen gezeichnet sind</li>
+      <li>Quelle unter dem Diagramm</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="scroll">
+      <table id="inputtab">
+        <tr><th>Jahr</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr>
+        <tr><th>F&ouml;rderung in Mio.&nbsp;t</th>
+          <td><input type="number" step="0.1" id="v2021" style="width:92px"></td>
+          <td><input type="number" step="0.1" id="v2022" style="width:92px"></td>
+          <td><input type="number" step="0.1" id="v2023" style="width:92px"></td>
+          <td><input type="number" step="0.1" id="v2024" style="width:92px"></td>
+          <td><input type="number" step="0.1" id="v2025" style="width:92px"></td>
+        </tr>
+      </table>
+    </div>
+    <div class="row">
+      <button class="btn-main" onclick="checkOwn()">Diagramm zeichnen und pr&uuml;fen</button>
+      <button class="btn-ghost" onclick="fillOwn()">Werte aus der Tabelle &uuml;bernehmen</button>
+    </div>
+    <div class="fb" id="ownfb"></div>
+    <div class="chartbox" id="c-own"></div>
+  </div>
+</section>
+
+<!-- ============ TEIL 5 ============ -->
+<section id="t5">
+  <h2><span class="num">5</span>Quiz</h2>
+  <p class="lead">Acht Fragen zur Methode. Eine Antwort ist jeweils richtig.</p>
+  <div class="card" id="quiz"></div>
+  <p class="row"><span class="score" id="quizscore">0 von 8 richtig</span>
+    <button class="btn-ghost" onclick="resetQuiz()">Noch einmal</button></p>
+</section>
+
+<!-- ============ TEIL 6 ============ -->
+<section id="t6">
+  <h2><span class="num">6</span>Zahlen, Hausaufgabe und Links</h2>
+
+  <div class="card">
+    <h3>Datensatz A &ndash; Statische Reichweite ausgew&auml;hlter Rohstoffe</h3>
+    <div class="scroll"><table>
+      <tr><th>Rohstoff</th><th class="num">Reichweite in Jahren</th></tr>
+      <tr><td>Braunkohle Deutschland, erschlossene und geplante Tagebaue</td><td class="num">15</td></tr>
+      <tr><td>Kupfer, weltweit</td><td class="num">43</td></tr>
+      <tr><td>Lithium, weltweit</td><td class="num">128</td></tr>
+      <tr><td>Braunkohle Deutschland, alle weiteren Reserven</td><td class="num">405</td></tr>
+    </table></div>
+    <p class="small">Eigene Berechnung aus Stunde 5 nach USGS Mineral Commodity Summaries 2026 und BGR-Energiestudie 2023; Braunkohlef&ouml;rderung 2025 nach Statistik der Kohlenwirtschaft.</p>
+
+    <h3>Datensatz B &ndash; Anteile der Reviere an der deutschen Braunkohlef&ouml;rderung 2025</h3>
+    <div class="scroll"><table>
+      <tr><th>Revier</th><th class="num">Anteil</th><th class="num">Menge in Mio.&nbsp;t</th></tr>
+      <tr><td>Rheinland</td><td class="num">45,4&nbsp;%</td><td class="num">38,3</td></tr>
+      <tr><td>Lausitz</td><td class="num">41,0&nbsp;%</td><td class="num">34,6</td></tr>
+      <tr><td>Mitteldeutschland</td><td class="num">13,6&nbsp;%</td><td class="num">11,5</td></tr>
+      <tr><td><b>Deutschland insgesamt</b></td><td class="num"><b>100&nbsp;%</b></td><td class="num"><b>84,4</b></td></tr>
+    </table></div>
+    <p class="small">DEBRIV / Statistik der Kohlenwirtschaft, Stand Februar 2026. Die Mengen sind aus den Anteilen berechnet und gerundet.</p>
+
+    <h3>Datensatz C &ndash; Braunkohlef&ouml;rderung in Deutschland 2021 bis 2025</h3>
+    <div class="scroll"><table>
+      <tr><th>Jahr</th><th class="num">2021</th><th class="num">2022</th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th></tr>
+      <tr><td>Mio.&nbsp;t</td><td class="num">126,3</td><td class="num">130,8</td><td class="num">102,3</td><td class="num">91,9</td><td class="num">84,4</td></tr>
+    </table></div>
+    <p class="small">Statistik der Kohlenwirtschaft e.&nbsp;V.; Wert 2022 &uuml;ber das Forum &Ouml;kologisch-Soziale Marktwirtschaft, Wert 2025 &uuml;ber DEBRIV.</p>
+
+    <h3>Datensatz D &ndash; F&ouml;rderung nach Revieren 2023 und 2024 (f&uuml;r die Hausaufgabe)</h3>
+    <div class="scroll"><table>
+      <tr><th>Revier</th><th class="num">2023</th><th class="num">2024</th><th class="num">Ver&auml;nderung</th></tr>
+      <tr><td>Rheinland</td><td class="num">48,2</td><td class="num">43,9</td><td class="num">&minus;9,1&nbsp;%</td></tr>
+      <tr><td>Lausitz</td><td class="num">41,7</td><td class="num">37,8</td><td class="num">&minus;9,2&nbsp;%</td></tr>
+      <tr><td>Mitteldeutschland</td><td class="num">12,3</td><td class="num">10,2</td><td class="num">&minus;16,9&nbsp;%</td></tr>
+    </table></div>
+    <p class="small">Angaben in Mio.&nbsp;t. Statistik der Kohlenwirtschaft, Lagebericht Braunkohlenbergbau 2024. Die Summe der drei Reviere weicht wegen der Rundung leicht von der Gesamtf&ouml;rderung ab.</p>
+  </div>
+
+  <div class="card">
+    <h3>Hausaufgabe (Aufgabe 7 auf dem Arbeitsblatt)</h3>
+    <ol>
+      <li>Entscheide, welcher Diagrammtyp zu Datensatz&nbsp;D passt, und begr&uuml;nde deine Wahl in einem Satz.</li>
+      <li>Zeichne das Diagramm sauber nach der Checkliste.</li>
+      <li>Werte es in drei bis f&uuml;nf S&auml;tzen nach dem Dreischritt aus.</li>
+    </ol>
+    <p class="small">Abgabe in der n&auml;chsten Stunde. Bewertet wird nach dem Raster auf dem Arbeitsblatt (10 Punkte).</p>
+  </div>
+
+  <div class="card">
+    <h3>Weiterarbeiten</h3>
+    <ul>
+      <li><a href="https://kohlenstatistik.de/" target="_blank" rel="noopener">Statistik der Kohlenwirtschaft e.&nbsp;V.</a> &ndash; amtsnahe Zahlen zur Kohle, viele Tabellen zum Download</li>
+      <li><a href="https://www.destatis.de/" target="_blank" rel="noopener">Statistisches Bundesamt</a> &ndash; Daten zu Wirtschaft, Umwelt und Energie</li>
+      <li><a href="https://www.energy-charts.info/" target="_blank" rel="noopener">Energy-Charts (Fraunhofer ISE)</a> &ndash; Stromerzeugung in Diagrammen, tagesaktuell</li>
+      <li><a href="https://bb-viewer.geobasis-bb.de/" target="_blank" rel="noopener">BrandenburgViewer der LGB</a> &ndash; das WebGIS aus Stunde 3</li>
+    </ul>
+  </div>
+
+  <footer>
+    Humboldt-Gymnasium Cottbus &middot; Geografie Jahrgangsstufe 9 &middot; Stunde 6 &middot; Methode M2<br>
+    Dieses Werkzeug l&auml;dt keine Inhalte aus dem Netz und funktioniert auch ohne Verbindung.
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* ---------- gemeinsame Zeichenfunktionen ---------- */
+var NAVY="#1F3B57", TEAL="#2E7D6B", AMBER="#C97A2B", CORAL="#C05A5A", LINE="#D9E2E0", MUTED="#5C6B76";
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function el(id){return document.getElementById(id);}
+
+/* ---------- Daten ---------- */
+var REICH=[
+ {name:"Braunkohle D.\nerschlossen", v:15, c:CORAL},
+ {name:"Kupfer\nweltweit", v:43, c:TEAL},
+ {name:"Lithium\nweltweit", v:128, c:AMBER},
+ {name:"Braunkohle D.\nalle Reserven", v:405, c:NAVY}
+];
+var JAHRE=[2021,2022,2023,2024,2025];
+var FOERD=[126.3,130.8,102.3,91.9,84.4];
+
+/* ---------- Teil 1: Diagrammtyp ---------- */
+var TYPQ=[
+ {f:"Wie hat sich die Braunkohlef&ouml;rderung in Deutschland von 2021 bis 2025 ver&auml;ndert?",
+  a:1, e:"Es geht um eine Entwicklung &uuml;ber die Zeit &ndash; daf&uuml;r ist das Liniendiagramm gemacht."},
+ {f:"Welchen Anteil hat die Lausitz an der deutschen Braunkohlef&ouml;rderung?",
+  a:2, e:"Ein Teil eines Ganzen, alle Teile ergeben 100&nbsp;%. Das ist der Fall f&uuml;rs Kreisdiagramm."},
+ {f:"Welcher von vier Rohstoffen hat die gr&ouml;&szlig;te Reichweite?",
+  a:0, e:"Ein Vergleich zwischen Dingen, die nichts mit Zeit zu tun haben &ndash; S&auml;ulen oder Balken."},
+ {f:"Wie verteilt sich der Stromverbrauch eines Haushalts auf K&uuml;hlschrank, Licht, Waschmaschine und Rest?",
+  a:2, e:"Wieder Anteile an einem Ganzen. Achtung: Ein Kreisdiagramm ist nur sinnvoll, wenn die Summe wirklich 100&nbsp;% ergibt."},
+ {f:"Wie viele Besch&auml;ftigte hatte der Braunkohlenbergbau in jedem Jahr seit 2015?",
+  a:1, e:"Eine Zeitreihe mit vielen Jahren &ndash; das Liniendiagramm zeigt den Verlauf am besten."},
+ {f:"Wie viel Kohle f&ouml;rderten 2024 das Rheinland, die Lausitz und Mitteldeutschland jeweils?",
+  a:0, e:"Drei Gr&ouml;&szlig;en werden verglichen. S&auml;ulen zeigen den Unterschied am deutlichsten. Ein Kreisdiagramm w&auml;re auch m&ouml;glich &ndash; dann s&auml;he man aber die Mengen nicht mehr, nur noch die Anteile."}
+];
+var TYPNAMES=["S&auml;ulendiagramm","Liniendiagramm","Kreisdiagramm"];
+var typState=[];
+function buildTyp(){
+  var h="";
+  for(var i=0;i<TYPQ.length;i++){
+    h+='<div class="q"><p class="qh">'+(i+1)+". "+TYPQ[i].f+'</p><div class="opts">';
+    for(var j=0;j<3;j++){
+      h+='<button class="opt" id="ty'+i+'_'+j+'" onclick="ansTyp('+i+','+j+')">'+TYPNAMES[j]+'</button>';
+    }
+    h+='</div><div class="fb" id="tyf'+i+'"></div></div>';
+  }
+  el("typq").innerHTML=h;
+}
+function ansTyp(i,j){
+  if(typState[i]!==undefined) return;
+  typState[i]=j;
+  var ok=(j===TYPQ[i].a);
+  el("ty"+i+"_"+j).className="opt "+(ok?"right":"wrong");
+  if(!ok) el("ty"+i+"_"+TYPQ[i].a).className="opt right";
+  var f=el("tyf"+i);
+  f.className="fb show "+(ok?"ok":"no");
+  f.innerHTML=(ok?"<b>Richtig.</b> ":"<b>Nicht ganz.</b> Richtig ist das "+TYPNAMES[TYPQ[i].a]+". ")+TYPQ[i].e;
+  scoreTyp();
+}
+function scoreTyp(){
+  var n=0,d=0;
+  for(var i=0;i<TYPQ.length;i++){ if(typState[i]!==undefined){d++; if(typState[i]===TYPQ[i].a)n++;} }
+  el("typscore").innerHTML=n+" von "+TYPQ.length+" richtig"+(d<TYPQ.length?" ("+d+" bearbeitet)":"");
+}
+function resetTyp(){ typState=[]; buildTyp(); scoreTyp(); }
+
+/* ---------- Teil 2: Reichweiten-Saeulendiagramm ---------- */
+var reichSel=-1;
+function drawReich(){
+  var W=680,H=330,L=62,R=18,T=44,B=62;
+  var pw=W-L-R, ph=H-T-B, max=420;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Saeulendiagramm der statischen Reichweite von vier Rohstoffen">';
+  s+='<rect width="'+W+'" height="'+H+'" fill="#fff"/>';
+  s+='<text x="'+L+'" y="20" font-size="15" font-weight="700" fill="'+NAVY+'">Statische Reichweite ausgew&#228;hlter Rohstoffe</text>';
+  s+='<text x="'+L+'" y="36" font-size="12" fill="'+MUTED+'">Stand 2025/2026, in Jahren</text>';
+  for(var g=0;g<=400;g+=100){
+    var y=T+ph-(g/max)*ph;
+    s+='<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'" stroke="'+LINE+'" stroke-width="1"/>';
+    s+='<text x="'+(L-8)+'" y="'+(y+4)+'" font-size="12" text-anchor="end" fill="'+MUTED+'">'+g+'</text>';
+  }
+  s+='<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(T+ph)+'" stroke="'+NAVY+'" stroke-width="1.5"/>';
+  s+='<line x1="'+L+'" y1="'+(T+ph)+'" x2="'+(W-R)+'" y2="'+(T+ph)+'" stroke="'+NAVY+'" stroke-width="1.5"/>';
+  s+='<text x="14" y="'+(T+ph/2)+'" font-size="12" fill="'+MUTED+'" transform="rotate(-90 14 '+(T+ph/2)+')" text-anchor="middle">Jahre</text>';
+  var bw=pw/REICH.length;
+  for(var i=0;i<REICH.length;i++){
+    var d=REICH[i], hgt=(d.v/max)*ph, x=L+i*bw+bw*0.18, w=bw*0.64, y=T+ph-hgt;
+    s+='<g class="hot" onclick="selReich('+i+')">';
+    s+='<rect x="'+(L+i*bw)+'" y="'+T+'" width="'+bw+'" height="'+ph+'" fill="transparent"/>';
+    s+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+hgt+'" fill="'+d.c+'" opacity="'+(reichSel===i?1:0.85)+'" rx="3"/>';
+    if(reichSel===i) s+='<rect x="'+(x-2)+'" y="'+(y-2)+'" width="'+(w+4)+'" height="'+(hgt+4)+'" fill="none" stroke="'+NAVY+'" stroke-width="2.5" rx="4"/>';
+    s+='<text x="'+(x+w/2)+'" y="'+(y-6)+'" font-size="13" font-weight="700" text-anchor="middle" fill="'+NAVY+'">'+d.v+'</text>';
+    var parts=d.name.split("\n");
+    for(var k=0;k<parts.length;k++){
+      s+='<text x="'+(x+w/2)+'" y="'+(T+ph+18+k*14)+'" font-size="11.5" text-anchor="middle" fill="'+MUTED+'">'+parts[k]+'</text>';
+    }
+    s+='</g>';
+  }
+  s+='<text x="'+L+'" y="'+(H-6)+'" font-size="10.5" fill="'+MUTED+'">Quelle: eigene Berechnung nach USGS 2026, BGR 2023 und Statistik der Kohlenwirtschaft</text>';
+  s+='</svg>';
+  el("c-reich").innerHTML=s;
+}
+function selReich(i){
+  reichSel=i; drawReich();
+  var d=REICH[i];
+  el("reich-info").innerHTML="<b>"+d.name.replace("\n"," ")+":</b> rund "+d.v+" Jahre.";
+}
+var DREIQ=[
+ {h:"Schritt 1 &ndash; Beschreiben: Welche Einheit steht auf der Werteachse?",
+  opts:["Millionen Tonnen","Jahre","Prozent"],a:1,
+  e:"Auf der senkrechten Achse steht &bdquo;Jahre&ldquo;. Ohne die Einheit w&auml;re jeder Wert wertlos."},
+ {h:"Schritt 2 &ndash; Auswerten: Wie oft passt die Reichweite der erschlossenen Tagebaue in die aller Reserven?",
+  opts:["rund 3-mal","rund 10-mal","rund 27-mal"],a:2,
+  e:"405 : 15 = 27. Die Differenz betr&auml;gt 390 Jahre &ndash; das ist der gr&ouml;&szlig;te Unterschied im ganzen Diagramm."},
+ {h:"Schritt 3 &ndash; Erkl&auml;ren: Warum endet die Braunkohlef&ouml;rderung lange vor Ablauf der 405 Jahre?",
+  opts:["Die Kohle ist in Wahrheit schon fast aufgebraucht.",
+        "Nicht die Menge entscheidet, sondern politische Entscheidungen, Genehmigungen und Wirtschaftlichkeit.",
+        "Die 405 Jahre sind ein Rechenfehler."],a:1,
+  e:"Der Kohleausstieg beendet die F&ouml;rderung in Welzow-S&uuml;d 2030 und bundesweit sp&auml;testens 2038. Die statische Reichweite sagt nur, wie lange die Menge <i>rechnerisch</i> reichen w&uuml;rde &ndash; sie ist kein Ablaufdatum."}
+];
+var dreiState=[];
+function buildDrei(){
+  var h="";
+  for(var i=0;i<DREIQ.length;i++){
+    h+='<div class="q"><p class="qh">'+DREIQ[i].h+'</p><div class="opts">';
+    for(var j=0;j<DREIQ[i].opts.length;j++){
+      h+='<button class="opt" id="dr'+i+'_'+j+'" onclick="ansDrei('+i+','+j+')">'+DREIQ[i].opts[j]+'</button>';
+    }
+    h+='</div><div class="fb" id="drf'+i+'"></div></div>';
+  }
+  el("dreiq").innerHTML=h;
+}
+function ansDrei(i,j){
+  if(dreiState[i]!==undefined) return;
+  dreiState[i]=j;
+  var ok=(j===DREIQ[i].a);
+  el("dr"+i+"_"+j).className="opt "+(ok?"right":"wrong");
+  if(!ok) el("dr"+i+"_"+DREIQ[i].a).className="opt right";
+  var f=el("drf"+i); f.className="fb show "+(ok?"ok":"no");
+  f.innerHTML=(ok?"<b>Richtig.</b> ":"<b>Schau noch einmal.</b> ")+DREIQ[i].e;
+}
+
+/* ---------- Teil 2b: Kreisdiagramm ---------- */
+var REV=[
+ {name:"Rheinland", p:45.4, m:38.3, c:NAVY},
+ {name:"Lausitz", p:41.0, m:34.6, c:TEAL},
+ {name:"Mitteldeutschland", p:13.6, m:11.5, c:AMBER}
+];
+var kreisSel=-1;
+function polar(cx,cy,r,degFromTop){
+  var a=(degFromTop-90)*Math.PI/180;
+  return [cx+r*Math.cos(a), cy+r*Math.sin(a)];
+}
+function drawKreis(){
+  var W=660,H=300,cx=178,cy=160,r=105;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Kreisdiagramm der Revieranteile an der Braunkohlefoerderung 2025">';
+  s+='<rect width="'+W+'" height="'+H+'" fill="#fff"/>';
+  s+='<text x="20" y="22" font-size="15" font-weight="700" fill="'+NAVY+'">Anteile der Reviere an der Braunkohlef&#246;rderung in Deutschland 2025</text>';
+  s+='<text x="20" y="38" font-size="12" fill="'+MUTED+'">Gesamtf&#246;rderung 84,4 Mio. t = 100 %</text>';
+  var start=0;
+  for(var i=0;i<REV.length;i++){
+    var sweep=REV[i].p*3.6;
+    var off=(kreisSel===i)?10:0;
+    var mid=start+sweep/2;
+    var mv=polar(0,0,off,mid);
+    var p1=polar(cx+mv[0],cy+mv[1],r,start);
+    var p2=polar(cx+mv[0],cy+mv[1],r,start+sweep);
+    var large=(sweep>180)?1:0;
+    s+='<g class="hot" onclick="selKreis('+i+')">';
+    s+='<path d="M '+(cx+mv[0]).toFixed(1)+' '+(cy+mv[1]).toFixed(1)+' L '+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+
+        ' A '+r+' '+r+' 0 '+large+' 1 '+p2[0].toFixed(1)+' '+p2[1].toFixed(1)+' Z" fill="'+REV[i].c+
+        '" stroke="#fff" stroke-width="2" opacity="'+((kreisSel===i||kreisSel<0)?1:0.55)+'"/>';
+    var lp=polar(cx+mv[0],cy+mv[1],r*0.62,mid);
+    s+='<text x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+5).toFixed(1)+'" font-size="14" font-weight="700" text-anchor="middle" fill="#fff">'+
+        REV[i].p.toFixed(1).replace(".",",")+' %</text>';
+    s+='</g>';
+    start+=sweep;
+  }
+  var ly=86;
+  for(var i=0;i<REV.length;i++){
+    s+='<g class="hot" onclick="selKreis('+i+')">';
+    s+='<rect x="330" y="'+(ly-13)+'" width="16" height="16" rx="3" fill="'+REV[i].c+'"/>';
+    s+='<text x="356" y="'+ly+'" font-size="14" fill="'+NAVY+'" font-weight="600">'+REV[i].name+'</text>';
+    s+='<text x="356" y="'+(ly+18)+'" font-size="12.5" fill="'+MUTED+'">'+REV[i].p.toFixed(1).replace(".",",")+
+        ' % &#8776; '+REV[i].m.toFixed(1).replace(".",",")+' Mio. t</text>';
+    s+='</g>';
+    ly+=52;
+  }
+  s+='<text x="20" y="'+(H-10)+'" font-size="10.5" fill="'+MUTED+'">Quelle: DEBRIV / Statistik der Kohlenwirtschaft, Stand Februar 2026; Mengen aus den Anteilen berechnet</text>';
+  s+='</svg>';
+  el("c-kreis").innerHTML=s;
+}
+function selKreis(i){
+  kreisSel=(kreisSel===i)?-1:i;
+  drawKreis();
+  if(kreisSel<0){ el("kreis-info").innerHTML="Tippe auf ein Segment."; return; }
+  var d=REV[i];
+  el("kreis-info").innerHTML="<b>"+d.name+":</b> "+d.p.toFixed(1).replace(".",",")+" % der F&ouml;rderung. "+
+    "Das entspricht einem Mittelpunktswinkel von "+(d.p*3.6).toFixed(1).replace(".",",")+"&deg; und einer Menge von "+
+    "84,4 &middot; "+(d.p/100).toFixed(3).replace(".",",")+" = "+d.m.toFixed(1).replace(".",",")+" Mio. t.";
+}
+var KREISQ=[
+ {h:"Wie rechnest du einen Prozentanteil in einen Mittelpunktswinkel um?",
+  opts:["Anteil &middot; 3,6","Anteil &middot; 100","Anteil : 3,6"],a:0,
+  e:"100 % entsprechen 360&deg;, also 1 % = 3,6&deg;. F&uuml;r die Lausitz: 41 &middot; 3,6 = 147,6&deg;."},
+ {h:"Wie viele Mio. t entfielen 2025 auf das Rheinland?",
+  opts:["rund 11,5 Mio. t","rund 34,6 Mio. t","rund 38,3 Mio. t"],a:2,
+  e:"84,4 &middot; 0,454 = 38,3 Mio. t. Der Rechenweg ist immer: Gesamtwert &middot; Anteil."},
+ {h:"Warum w&auml;re ein Kreisdiagramm f&uuml;r die Jahre 2021 bis 2025 ungeeignet?",
+  opts:["Weil es zu viele Werte w&auml;ren.",
+        "Weil die Jahreswerte kein gemeinsames Ganzes bilden, das man aufteilen k&ouml;nnte.",
+        "Weil Kreisdiagramme nur f&uuml;r Prozentzahlen gelten."],a:1,
+  e:"Die F&ouml;rdermengen f&uuml;nf aufeinander folgender Jahre ergeben zusammen kein sinnvolles Ganzes. F&uuml;r Entwicklungen nimmt man das Liniendiagramm."}
+];
+var kreisState=[];
+function buildKreisQ(){
+  var h="";
+  for(var i=0;i<KREISQ.length;i++){
+    h+='<div class="q"><p class="qh">'+KREISQ[i].h+'</p><div class="opts">';
+    for(var j=0;j<KREISQ[i].opts.length;j++){
+      h+='<button class="opt" id="kr'+i+'_'+j+'" onclick="ansKreis('+i+','+j+')">'+KREISQ[i].opts[j]+'</button>';
+    }
+    h+='</div><div class="fb" id="krf'+i+'"></div></div>';
+  }
+  el("kreisq").innerHTML=h;
+}
+function ansKreis(i,j){
+  if(kreisState[i]!==undefined) return;
+  kreisState[i]=j;
+  var ok=(j===KREISQ[i].a);
+  el("kr"+i+"_"+j).className="opt "+(ok?"right":"wrong");
+  if(!ok) el("kr"+i+"_"+KREISQ[i].a).className="opt right";
+  var f=el("krf"+i); f.className="fb show "+(ok?"ok":"no");
+  f.innerHTML=(ok?"<b>Richtig.</b> ":"<b>Noch nicht.</b> ")+KREISQ[i].e;
+}
+
+/* ---------- Teil 3: Manipulation ---------- */
+var manipOn=true, manipFound={y:false,x:false,q:false};
+var MANGEL={
+ y:{t:"Abgeschnittene Werteachse",
+    e:"Die senkrechte Achse beginnt nicht bei 0, sondern bei 80 Mio.&nbsp;t. Dadurch wirkt der R&uuml;ckgang wie ein Absturz auf fast nichts. Tats&auml;chlich sank die F&ouml;rderung von 130,8 auf 84,4 Mio.&nbsp;t, also um rund 35&nbsp;%."},
+ x:{t:"Ein Jahr fehlt",
+    e:"Das Jahr 2022 ist weggelassen &ndash; ausgerechnet das Jahr, in dem die F&ouml;rderung noch einmal <i>anstieg</i> (130,8 Mio.&nbsp;t). Ohne dieses Jahr sieht die Entwicklung aus wie ein gleichm&auml;&szlig;iger Sturzflug."},
+ q:{t:"Keine Quelle",
+    e:"Unter dem Diagramm steht keine Quelle. Damit l&auml;sst sich nicht pr&uuml;fen, woher die Zahlen stammen und auf welches Gebiet sie sich beziehen."}
+};
+function drawManip(){
+  var W=660,H=320,L=66,R=18,T=44,B=52;
+  var pw=W-L-R, ph=H-T-B;
+  var yrs, vals, ymin, ymax, step;
+  if(manipOn){ yrs=[2021,2023,2024,2025]; vals=[126.3,102.3,91.9,84.4]; ymin=80; ymax=140; step=20; }
+  else { yrs=JAHRE.slice(); vals=FOERD.slice(); ymin=0; ymax=140; step=20; }
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Liniendiagramm der Braunkohlefoerderung">';
+  s+='<rect width="'+W+'" height="'+H+'" fill="#fff"/>';
+  s+='<text x="'+L+'" y="20" font-size="15" font-weight="700" fill="'+NAVY+'">'+(manipOn?"Das Ende der Kohle":"Braunkohlef&#246;rderung in Deutschland 2021 bis 2025")+'</text>';
+  s+='<text x="'+L+'" y="36" font-size="12" fill="'+MUTED+'">'+(manipOn?"F&#246;rderung in Mio. t":"F&#246;rderung in Mio. t")+'</text>';
+  function ypos(v){ return T+ph-((v-ymin)/(ymax-ymin))*ph; }
+  for(var g=ymin; g<=ymax; g+=step){
+    var y=ypos(g);
+    s+='<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'" stroke="'+LINE+'"/>';
+    s+='<text x="'+(L-8)+'" y="'+(y+4)+'" font-size="12" text-anchor="end" fill="'+MUTED+'">'+g+'</text>';
+  }
+  /* Hotspot Werteachse */
+  s+='<g class="hot" onclick="findM(\'y\')"><rect x="'+(L-58)+'" y="'+(T-6)+'" width="56" height="'+(ph+12)+'" fill="'+(manipOn&&manipFound.y?"#E4F2ED":"transparent")+'" stroke="'+(manipOn&&manipFound.y?TEAL:"transparent")+'" stroke-width="2" rx="6"/></g>';
+  s+='<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(T+ph)+'" stroke="'+NAVY+'" stroke-width="1.5"/>';
+  s+='<line x1="'+L+'" y1="'+(T+ph)+'" x2="'+(W-R)+'" y2="'+(T+ph)+'" stroke="'+NAVY+'" stroke-width="1.5"/>';
+  var pts=[];
+  for(var i=0;i<yrs.length;i++){
+    var x;
+    var pad=16, iw=pw-2*pad;
+    if(manipOn){ x=L+pad+ (iw/(yrs.length-1))*i; }
+    else { x=L+pad+ ((yrs[i]-2021)/4)*iw; }
+    pts.push([x,ypos(vals[i])]);
+  }
+  var dpath="";
+  for(var i=0;i<pts.length;i++){ dpath+=(i?" L ":"M ")+pts[i][0].toFixed(1)+" "+pts[i][1].toFixed(1); }
+  s+='<path d="'+dpath+'" fill="none" stroke="'+(manipOn?CORAL:TEAL)+'" stroke-width="3" stroke-linejoin="round"/>';
+  for(var i=0;i<pts.length;i++){
+    s+='<circle cx="'+pts[i][0].toFixed(1)+'" cy="'+pts[i][1].toFixed(1)+'" r="5" fill="#fff" stroke="'+(manipOn?CORAL:TEAL)+'" stroke-width="3"/>';
+    s+='<text x="'+pts[i][0].toFixed(1)+'" y="'+(pts[i][1]-12).toFixed(1)+'" font-size="12" font-weight="700" text-anchor="middle" fill="'+NAVY+'">'+vals[i].toFixed(1).replace(".",",")+'</text>';
+    s+='<text x="'+pts[i][0].toFixed(1)+'" y="'+(T+ph+18)+'" font-size="12" text-anchor="middle" fill="'+MUTED+'">'+yrs[i]+'</text>';
+  }
+  /* Hotspot Zeitachse */
+  s+='<g class="hot" onclick="findM(\'x\')"><rect x="'+L+'" y="'+(T+ph+4)+'" width="'+pw+'" height="22" fill="'+(manipOn&&manipFound.x?"#E4F2ED":"transparent")+'" stroke="'+(manipOn&&manipFound.x?TEAL:"transparent")+'" stroke-width="2" rx="6"/></g>';
+  /* Quellenzeile / Hotspot */
+  if(manipOn){
+    s+='<g class="hot" onclick="findM(\'q\')"><rect x="'+L+'" y="'+(H-24)+'" width="'+(pw*0.8)+'" height="20" fill="'+(manipFound.q?"#E4F2ED":"#FBF0E2")+'" stroke="'+(manipFound.q?TEAL:AMBER)+'" stroke-width="1.5" rx="5"/>';
+    s+='<text x="'+(L+8)+'" y="'+(H-10)+'" font-size="11" fill="'+MUTED+'">hier fehlt etwas &#8211; antippen</text></g>';
+  } else {
+    s+='<text x="'+L+'" y="'+(H-10)+'" font-size="10.5" fill="'+MUTED+'">Quelle: Statistik der Kohlenwirtschaft e. V.; Wert 2025 nach DEBRIV, Stand Februar 2026</text>';
+  }
+  s+='</svg>';
+  el("c-manip").innerHTML=s;
+  el("manip-caption").innerHTML = manipOn
+    ? "Diese Fassung enth&auml;lt drei M&auml;ngel. Tippe sie an."
+    : "So ist es richtig: Werteachse ab 0, alle Jahre ma&szlig;st&auml;blich, Quelle angegeben.";
+  el("btn-manip").className = manipOn?"btn-main":"btn-ghost";
+  el("btn-korr").className = manipOn?"btn-ghost":"btn-main";
+  el("manip-hint").style.display = manipOn?"block":"none";
+  renderMList();
+}
+function setManip(v){ manipOn=v; drawManip(); }
+function findM(k){
+  if(!manipOn){ return; }
+  if(manipFound[k]) return;
+  manipFound[k]=true; drawManip();
+}
+function renderMList(){
+  var keys=["y","x","q"], h="", n=0;
+  for(var i=0;i<keys.length;i++){
+    if(manipFound[keys[i]]){
+      n++;
+      h+='<div class="fb ok show"><b>'+MANGEL[keys[i]].t+'</b><br>'+MANGEL[keys[i]].e+'</div>';
+    }
+  }
+  el("manip-list").innerHTML=h;
+  el("manipscore").innerHTML=n+" von 3 M&auml;ngeln gefunden";
+  if(n===3){
+    el("manip-list").innerHTML+='<div class="fb info show"><b>Alle drei gefunden.</b> Merke dir: Wer ein Diagramm liest, pr&uuml;ft immer zuerst die <b>Achsen</b> und die <b>Quelle</b> &ndash; erst danach die Linie.</div>';
+  }
+}
+function resetManip(){ manipFound={y:false,x:false,q:false}; manipOn=true; drawManip(); }
+
+function drawTrick(){
+  var ymin=parseInt(el("ymin").value,10);
+  el("yminval").innerHTML=ymin;
+  var W=620,H=250,L=60,R=16,T=26,B=42;
+  var pw=W-L-R, ph=H-T-B, ymax=140;
+  function yp(v){ return T+ph-((v-ymin)/(ymax-ymin))*ph; }
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Wirkung der abgeschnittenen Achse">';
+  s+='<rect width="'+W+'" height="'+H+'" fill="#fff"/>';
+  var stp = (ymax-ymin)<=40?10:20;
+  for(var g=Math.ceil(ymin/stp)*stp; g<=ymax; g+=stp){
+    var y=yp(g);
+    s+='<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'" stroke="'+LINE+'"/>';
+    s+='<text x="'+(L-8)+'" y="'+(y+4)+'" font-size="11" text-anchor="end" fill="'+MUTED+'">'+g+'</text>';
+  }
+  s+='<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(T+ph)+'" stroke="'+NAVY+'" stroke-width="1.5"/>';
+  s+='<line x1="'+L+'" y1="'+(T+ph)+'" x2="'+(W-R)+'" y2="'+(T+ph)+'" stroke="'+NAVY+'" stroke-width="1.5"/>';
+  var pts=[];
+  for(var i=0;i<JAHRE.length;i++){ pts.push([L+16+((pw-32)/4)*i, yp(FOERD[i])]); }
+  var d="";
+  for(var i=0;i<pts.length;i++){ d+=(i?" L ":"M ")+pts[i][0].toFixed(1)+" "+pts[i][1].toFixed(1); }
+  s+='<path d="'+d+'" fill="none" stroke="'+(ymin===0?TEAL:CORAL)+'" stroke-width="3"/>';
+  for(var i=0;i<pts.length;i++){
+    s+='<circle cx="'+pts[i][0].toFixed(1)+'" cy="'+pts[i][1].toFixed(1)+'" r="4.5" fill="#fff" stroke="'+(ymin===0?TEAL:CORAL)+'" stroke-width="2.5"/>';
+    s+='<text x="'+pts[i][0].toFixed(1)+'" y="'+(T+ph+18)+'" font-size="11" text-anchor="middle" fill="'+MUTED+'">'+JAHRE[i]+'</text>';
+  }
+  s+='</svg>';
+  el("c-trick").innerHTML=s;
+  var fb=el("trickfb");
+  if(ymin===0){
+    fb.className="fb ok show";
+    fb.innerHTML="<b>Sauber.</b> Die Achse beginnt bei 0. Der R&uuml;ckgang von 130,8 auf 84,4 Mio.&nbsp;t ist deutlich zu sehen &ndash; aber nicht &uuml;bertrieben.";
+  } else {
+    fb.className="fb no show";
+    var fak=(140-0)/(140-ymin);
+    fb.className="fb no show";
+    fb.innerHTML="<b>Achtung.</b> Die Zahlen sind unver&auml;ndert, nur die Achse ist beschnitten. Der Absturz wirkt jetzt rund "+fak.toFixed(1).replace(".",",")+"-mal so steil. Genau dieser Trick begegnet dir in Zeitungen und in sozialen Netzwerken.";
+  }
+}
+
+/* ---------- Teil 4: eigenes Diagramm ---------- */
+function fillOwn(){
+  for(var i=0;i<JAHRE.length;i++){ el("v"+JAHRE[i]).value=FOERD[i]; }
+}
+function checkOwn(){
+  var vals=[], miss=0, wrong=[];
+  for(var i=0;i<JAHRE.length;i++){
+    var raw=el("v"+JAHRE[i]).value;
+    if(raw===""){ miss++; vals.push(null); }
+    else{
+      var v=parseFloat(String(raw).replace(",","."));
+      if(isNaN(v)){ miss++; vals.push(null); }
+      else{ vals.push(v); if(Math.abs(v-FOERD[i])>0.05) wrong.push(JAHRE[i]); }
+    }
+  }
+  var fb=el("ownfb");
+  if(miss>0){
+    fb.className="fb no show";
+    fb.innerHTML="Es fehlen noch "+miss+" Werte. Trage alle f&uuml;nf Jahre ein.";
+    el("c-own").innerHTML=""; return;
+  }
+  if(wrong.length===0){
+    fb.className="fb ok show";
+    fb.innerHTML="<b>Alle f&uuml;nf Werte stimmen.</b> Vergleiche jetzt dein Diagramm auf dem Arbeitsblatt mit dem unten. Pr&uuml;fe besonders: Beginnt deine Werteachse bei 0? Sind die Jahresabst&auml;nde gleich breit? Steht die Quelle darunter?";
+  } else {
+    fb.className="fb no show";
+    fb.innerHTML="Pr&uuml;fe noch einmal die Jahre: <b>"+wrong.join(", ")+"</b>. Die &uuml;brigen Werte stimmen.";
+  }
+  drawOwn(vals);
+}
+function drawOwn(vals){
+  var W=640,H=300,L=62,R=18,T=44,B=52;
+  var pw=W-L-R, ph=H-T-B, ymax=140;
+  function yp(v){ return T+ph-(v/ymax)*ph; }
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Dein Liniendiagramm">';
+  s+='<rect width="'+W+'" height="'+H+'" fill="#fff"/>';
+  s+='<text x="'+L+'" y="20" font-size="15" font-weight="700" fill="'+NAVY+'">Braunkohlef&#246;rderung in Deutschland 2021 bis 2025</text>';
+  s+='<text x="'+L+'" y="36" font-size="12" fill="'+MUTED+'">F&#246;rderung in Mio. t</text>';
+  for(var g=0;g<=140;g+=20){
+    var y=yp(g);
+    s+='<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'" stroke="'+LINE+'"/>';
+    s+='<text x="'+(L-8)+'" y="'+(y+4)+'" font-size="12" text-anchor="end" fill="'+MUTED+'">'+g+'</text>';
+  }
+  s+='<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(T+ph)+'" stroke="'+NAVY+'" stroke-width="1.5"/>';
+  s+='<line x1="'+L+'" y1="'+(T+ph)+'" x2="'+(W-R)+'" y2="'+(T+ph)+'" stroke="'+NAVY+'" stroke-width="1.5"/>';
+  var pts=[];
+  for(var i=0;i<JAHRE.length;i++){ pts.push([L+16+((pw-32)/4)*i, yp(vals[i])]); }
+  var d="";
+  for(var i=0;i<pts.length;i++){ d+=(i?" L ":"M ")+pts[i][0].toFixed(1)+" "+pts[i][1].toFixed(1); }
+  s+='<path d="'+d+'" fill="none" stroke="'+TEAL+'" stroke-width="3"/>';
+  for(var i=0;i<pts.length;i++){
+    var ok=Math.abs(vals[i]-FOERD[i])<=0.05;
+    s+='<circle cx="'+pts[i][0].toFixed(1)+'" cy="'+pts[i][1].toFixed(1)+'" r="5" fill="#fff" stroke="'+(ok?TEAL:CORAL)+'" stroke-width="3"/>';
+    s+='<text x="'+pts[i][0].toFixed(1)+'" y="'+(pts[i][1]-12).toFixed(1)+'" font-size="12" font-weight="700" text-anchor="middle" fill="'+(ok?NAVY:CORAL)+'">'+vals[i].toFixed(1).replace(".",",")+'</text>';
+    s+='<text x="'+pts[i][0].toFixed(1)+'" y="'+(T+ph+18)+'" font-size="12" text-anchor="middle" fill="'+MUTED+'">'+JAHRE[i]+'</text>';
+  }
+  s+='<text x="'+L+'" y="'+(H-10)+'" font-size="10.5" fill="'+MUTED+'">Quelle: Statistik der Kohlenwirtschaft e. V.; Wert 2025 nach DEBRIV, Stand Februar 2026</text>';
+  s+='</svg>';
+  el("c-own").innerHTML=s;
+}
+
+/* ---------- Teil 5: Quiz ---------- */
+var QUIZ=[
+ {f:"Womit beginnt die Auswertung eines Diagramms immer?",
+  o:["Mit der Erkl&auml;rung der Ursachen","Mit Titel, Achsen, Einheit und Quelle","Mit dem h&ouml;chsten Wert"],a:1,
+  e:"Schritt 1 ist das Beschreiben. Erst wenn klar ist, <i>was</i> dargestellt wird, lohnt sich der Blick auf die Werte."},
+ {f:"Ein Kreisdiagramm ist nur dann sinnvoll, wenn &hellip;",
+  o:["&hellip; h&ouml;chstens drei Teile vorkommen.","&hellip; alle Teile zusammen ein Ganzes ergeben.","&hellip; die Werte &uuml;ber mehrere Jahre reichen."],a:1,
+  e:"Die Teile m&uuml;ssen sich zu 100&nbsp;% erg&auml;nzen. Zeitreihen geh&ouml;ren nie in ein Kreisdiagramm."},
+ {f:"Warum soll die Werteachse bei 0 beginnen?",
+  o:["Damit das Diagramm h&uuml;bscher aussieht.","Damit die H&ouml;he der S&auml;ulen oder die Steigung der Linie den Gr&ouml;&szlig;enverh&auml;ltnissen entspricht.","Weil man sonst nicht rechnen kann."],a:1,
+  e:"Bei abgeschnittener Achse stimmt das Bild nicht mehr mit den Zahlen &uuml;berein &ndash; kleine Unterschiede sehen riesig aus."},
+ {f:"2025 wurden in Deutschland 84,4 Mio.&nbsp;t Braunkohle gef&ouml;rdert, davon 41&nbsp;% in der Lausitz. Wie viel war das?",
+  o:["rund 20,6 Mio.&nbsp;t","rund 34,6 Mio.&nbsp;t","rund 41,0 Mio.&nbsp;t"],a:1,
+  e:"84,4 &middot; 0,41 = 34,6 Mio.&nbsp;t. Achtung: 41 ist hier ein <i>Prozentwert</i>, keine Menge."},
+ {f:"Die F&ouml;rderung sank von 130,8 (2022) auf 84,4 Mio.&nbsp;t (2025). Wie gro&szlig; war der R&uuml;ckgang ungef&auml;hr?",
+  o:["rund 15&nbsp;%","rund 35&nbsp;%","rund 55&nbsp;%"],a:1,
+  e:"130,8 &minus; 84,4 = 46,4. Und 46,4 : 130,8 = 0,355, also rund 35&nbsp;%."},
+ {f:"Welche Angabe fehlt in einem Diagramm am h&auml;ufigsten &ndash; und macht es unbrauchbar?",
+  o:["Die Quelle","Die Farbe","Die Anzahl der Werte"],a:0,
+  e:"Ohne Quelle l&auml;sst sich nicht pr&uuml;fen, woher die Zahlen stammen, auf welchen Raum und welchen Zeitpunkt sie sich beziehen."},
+ {f:"Du sollst die Entwicklung der Besch&auml;ftigtenzahl im Braunkohlenbergbau von 2015 bis 2025 darstellen. Was w&auml;hlst du?",
+  o:["Kreisdiagramm","Liniendiagramm","Klimadiagramm"],a:1,
+  e:"Elf Jahreswerte, also eine Entwicklung &uuml;ber die Zeit. Das ist der klassische Fall f&uuml;rs Liniendiagramm."},
+ {f:"Was geh&ouml;rt <b>nicht</b> zu Schritt 3 (Erkl&auml;ren und beurteilen)?",
+  o:["Ursachen f&uuml;r eine Entwicklung nennen","Die Achsenbeschriftung vorlesen","Pr&uuml;fen, ob die Darstellung sachgerecht ist"],a:1,
+  e:"Die Achsenbeschriftung geh&ouml;rt zu Schritt 1, dem Beschreiben."}
+];
+var quizState=[];
+function buildQuiz(){
+  var h="";
+  for(var i=0;i<QUIZ.length;i++){
+    h+='<div class="q"><p class="qh">'+(i+1)+". "+QUIZ[i].f+'</p><div class="opts">';
+    for(var j=0;j<QUIZ[i].o.length;j++){
+      h+='<button class="opt" id="qz'+i+'_'+j+'" onclick="ansQuiz('+i+','+j+')">'+QUIZ[i].o[j]+'</button>';
+    }
+    h+='</div><div class="fb" id="qzf'+i+'"></div></div>';
+  }
+  el("quiz").innerHTML=h;
+}
+function ansQuiz(i,j){
+  if(quizState[i]!==undefined) return;
+  quizState[i]=j;
+  var ok=(j===QUIZ[i].a);
+  el("qz"+i+"_"+j).className="opt "+(ok?"right":"wrong");
+  if(!ok) el("qz"+i+"_"+QUIZ[i].a).className="opt right";
+  var f=el("qzf"+i); f.className="fb show "+(ok?"ok":"no");
+  f.innerHTML=(ok?"<b>Richtig.</b> ":"<b>Leider nicht.</b> ")+QUIZ[i].e;
+  scoreQuiz();
+}
+function scoreQuiz(){
+  var n=0,d=0;
+  for(var i=0;i<QUIZ.length;i++){ if(quizState[i]!==undefined){d++; if(quizState[i]===QUIZ[i].a)n++;} }
+  el("quizscore").innerHTML=n+" von "+QUIZ.length+" richtig"+(d<QUIZ.length?" ("+d+" bearbeitet)":"");
+}
+function resetQuiz(){ quizState=[]; buildQuiz(); scoreQuiz(); }
+
+/* ---------- Start ---------- */
+buildTyp(); scoreTyp();
+drawReich(); buildDrei();
+drawKreis(); buildKreisQ();
+drawManip(); drawTrick();
+buildQuiz(); scoreQuiz();
+</script>
+</body>
+</html>
