@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zeitreise Braunkohle &ndash; Stunde 7</title>
+<style>
+:root{
+  --navy:#1F3B57; --teal:#2E7D6B; --amber:#C97A2B; --coral:#C05A5A;
+  --bg:#F4F7F6; --card:#FFFFFF; --line:#D6E0DC; --ink:#22303A; --muted:#5C6B75;
+  --kohle:#3A2A22; --sand:#E3CDA4; --ton:#A9B7A0; --torf:#6B4F2A;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.55; font-size:17px;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:980px;margin:0 auto;padding:16px 16px 64px}
+header.top{
+  background:linear-gradient(135deg,var(--navy) 0%,#2b5570 100%);
+  color:#fff;border-radius:18px;padding:22px 22px 20px;margin-bottom:18px;
+}
+header.top .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.82;margin-bottom:6px}
+header.top h1{margin:0 0 8px;font-size:27px;line-height:1.2}
+header.top p{margin:0;opacity:.92;font-size:15px}
+nav.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+nav.tabs button{
+  border:1px solid var(--line);background:#fff;color:var(--navy);
+  border-radius:999px;padding:11px 16px;font-size:15px;font-weight:600;
+  cursor:pointer;min-height:46px;
+}
+nav.tabs button[aria-selected="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+section.panel{display:none}
+section.panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+.card h2{margin:0 0 4px;font-size:21px;color:var(--navy)}
+.card h3{margin:18px 0 6px;font-size:17px;color:var(--teal)}
+.lead{color:var(--muted);font-size:15px;margin:0 0 14px}
+.btn{
+  border:none;border-radius:12px;padding:12px 18px;font-size:16px;font-weight:600;
+  cursor:pointer;min-height:48px;background:var(--teal);color:#fff;
+}
+.btn.alt{background:var(--amber)}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn:active{transform:translateY(1px)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pill{display:inline-block;background:#EAF1EE;color:var(--teal);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600}
+.pill.amber{background:#FBF0E2;color:var(--amber)}
+.pill.coral{background:#FAEBEB;color:var(--coral)}
+.pill.navy{background:#E7EDF3;color:var(--navy)}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+th{color:var(--navy);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.note{background:#FBF0E2;border-left:4px solid var(--amber);border-radius:0 10px 10px 0;padding:12px 14px;font-size:15px;margin:14px 0}
+.ok{background:#EAF1EE;border-left:4px solid var(--teal);border-radius:0 10px 10px 0;padding:12px 14px;font-size:15px;margin:10px 0}
+.bad{background:#FAEBEB;border-left:4px solid var(--coral);border-radius:0 10px 10px 0;padding:12px 14px;font-size:15px;margin:10px 0}
+svg{max-width:100%;height:auto;display:block}
+.stepnav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.stepnav button{
+  flex:1 1 90px;min-height:56px;border-radius:12px;border:1px solid var(--line);
+  background:#fff;color:var(--navy);font-weight:700;font-size:14px;cursor:pointer;padding:6px 4px;
+}
+.stepnav button[aria-current="true"]{background:var(--teal);color:#fff;border-color:var(--teal)}
+.stepnav button .n{display:block;font-size:12px;opacity:.75;font-weight:600}
+input[type=range]{width:100%;height:44px;accent-color:var(--teal)}
+.big{font-size:30px;font-weight:800;color:var(--navy);line-height:1.1}
+.big small{display:block;font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:4px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.tile{background:#F7FAF9;border:1px solid var(--line);border-radius:14px;padding:14px}
+.choice{
+  display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;
+  border-radius:12px;padding:13px 14px;margin-bottom:9px;font-size:16px;cursor:pointer;min-height:48px;color:var(--ink);
+}
+.choice.correct{background:#EAF1EE;border-color:var(--teal);font-weight:600}
+.choice.wrong{background:#FAEBEB;border-color:var(--coral)}
+.choice:disabled{cursor:default;opacity:1}
+.layer{cursor:pointer}
+.layer:hover rect,.layer:focus rect{stroke:#111;stroke-width:2}
+footer.foot{color:var(--muted);font-size:13px;text-align:center;padding:24px 8px 0}
+a{color:var(--teal)}
+.linklist a{display:block;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.hidden{display:none}
+@media (max-width:420px){
+  body{font-size:16px}
+  header.top h1{font-size:23px}
+  .big{font-size:26px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Geografie &middot; Klasse 9 &middot; Stunde 7</div>
+  <h1>Zeitreise Braunkohle &ndash; wie die Lausitz zu ihrer Kohle kam</h1>
+  <p>Von der Sumpfzypresse im Miozän bis zum Flöz unter Welzow-Süd. Alles funktioniert ohne Internet.</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-p="p1">1 Zeitreise</button>
+  <button role="tab" aria-selected="false" data-p="p2">2 Schichten</button>
+  <button role="tab" aria-selected="false" data-p="p3">3 Torf-Rechner</button>
+  <button role="tab" aria-selected="false" data-p="p4">4 Inkohlungsreihe</button>
+  <button role="tab" aria-selected="false" data-p="p5">5 Eiszeit</button>
+  <button role="tab" aria-selected="false" data-p="p6">6 Quiz</button>
+  <button role="tab" aria-selected="false" data-p="p7">7 Zahlen &amp; Hausaufgabe</button>
+</nav>
+<section class="panel active" id="p1">
+  <div class="card">
+    <h2>Teil 1 &middot; Fünf Schritte durch 18 Millionen Jahre</h2>
+    <p class="lead">Tippe dich durch die Stationen. Jede Station beantwortet eine Frage.</p>
+    <div class="stepnav" id="stepnav"></div>
+    <div id="stepstage"></div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn ghost" id="prevStep">&larr; zurück</button>
+      <button class="btn" id="nextStep">weiter &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="p2">
+  <div class="card">
+    <h2>Teil 2 &middot; Was liegt über der Kohle?</h2>
+    <p class="lead">Ein Profil durch den Tagebau Welzow-Süd. Tippe auf eine Schicht &ndash; die Angaben erscheinen darunter.</p>
+    <svg viewBox="0 0 640 400" role="img" aria-label="Profil durch den Tagebau Welzow-Sued">
+      <rect x="0" y="0" width="640" height="400" fill="#F7FAF9"/>
+      <!-- Massstabsleiste -->
+      <g font-size="11" fill="#5C6B75">
+        <line x1="44" y1="40" x2="44" y2="360" stroke="#5C6B75" stroke-width="1"/>
+        <line x1="40" y1="40" x2="48" y2="40" stroke="#5C6B75"/><text x="4" y="44">0 m</text>
+        <line x1="40" y1="120" x2="48" y2="120" stroke="#5C6B75"/><text x="2" y="124">40 m</text>
+        <line x1="40" y1="200" x2="48" y2="200" stroke="#5C6B75"/><text x="2" y="204">80 m</text>
+        <line x1="40" y1="280" x2="48" y2="280" stroke="#5C6B75"/><text x="0" y="284">120 m</text>
+        <line x1="40" y1="360" x2="48" y2="360" stroke="#5C6B75"/><text x="0" y="364">160 m</text>
+      </g>
+      <g class="layer" tabindex="0" data-k="boden" role="button" aria-label="Boden und Kiefernwald">
+        <rect x="60" y="40" width="540" height="26" fill="#7E9A6B" stroke="#5C6B75"/>
+        <text x="72" y="58" font-size="13" fill="#173322" font-weight="600">Boden, Kiefernwald, Felder &ndash; heute</text>
+      </g>
+      <g class="layer" tabindex="0" data-k="eis" role="button" aria-label="Eiszeitliche Sande und Geschiebemergel">
+        <rect x="60" y="66" width="540" height="54" fill="#CBD6C4" stroke="#5C6B75"/>
+        <text x="72" y="88" font-size="13" fill="#22303A" font-weight="600">Eiszeitliche Sande und Geschiebemergel</text>
+        <text x="72" y="106" font-size="12" fill="#5C6B75">rund 25 m &middot; Elster- und Saale-Kaltzeit</text>
+      </g>
+      <g class="layer" tabindex="0" data-k="deck" role="button" aria-label="Deckgebirge aus Sanden und Tonen">
+        <rect x="60" y="120" width="540" height="150" fill="#E3CDA4" stroke="#5C6B75"/>
+        <rect x="60" y="160" width="540" height="12" fill="#A9B7A0" opacity=".85"/>
+        <rect x="60" y="212" width="540" height="10" fill="#A9B7A0" opacity=".85"/>
+        <text x="72" y="142" font-size="13" fill="#22303A" font-weight="600">Deckgebirge: Sande, Kiese, Tone (Abraum)</text>
+        <text x="72" y="196" font-size="12" fill="#5C6B75">insgesamt 90&ndash;130 m &middot; graue Bänder = Tonschichten</text>
+        <text x="72" y="254" font-size="12" fill="#5C6B75">muss vor der Kohle weggebaggert werden</text>
+      </g>
+      <g class="layer" tabindex="0" data-k="floez" role="button" aria-label="2. Lausitzer Floez">
+        <rect x="60" y="270" width="540" height="40" fill="#3A2A22" stroke="#111"/>
+        <text x="72" y="286" font-size="13" fill="#F4F7F6" font-weight="700">2. Lausitzer Flöz &ndash; die Braunkohle</text>
+        <text x="72" y="303" font-size="12" fill="#E3CDA4">10&ndash;16 m mächtig &middot; entstanden im Miozän</text>
+      </g>
+      <g class="layer" tabindex="0" data-k="liegend" role="button" aria-label="Liegendes">
+        <rect x="60" y="310" width="540" height="50" fill="#BFA98A" stroke="#5C6B75"/>
+        <text x="72" y="332" font-size="13" fill="#22303A" font-weight="600">Liegendes: ältere Sande und Tone</text>
+        <text x="72" y="350" font-size="12" fill="#5C6B75">darunter folgen noch das 3. und 4. Lausitzer Flöz</text>
+      </g>
+    </svg>
+    <div id="layerinfo" class="note">Noch keine Schicht ausgewählt. Tippe oben auf eine Schicht.</div>
+    <div class="note" style="background:#E7EDF3;border-left-color:#1F3B57">
+      <strong>Merke:</strong> Für jede Tonne Kohle müssen im Tagebau Nochten rund <strong>7 Kubikmeter Abraum</strong> bewegt werden.
+      Das Deckgebirge ist in Welzow-Süd im Mittel etwa <strong>8,5-mal so mächtig</strong> wie das Flöz selbst (110 m zu 13 m).
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="p3">
+  <div class="card">
+    <h2>Teil 3 &middot; Wie lange wuchs das Moor?</h2>
+    <p class="lead">Bei der Inkohlung schrumpft das Material auf etwa ein Zehntel seines Volumens. Aus 10 m Torf wird also rund 1 m Braunkohle. Torf wächst etwa 1 mm pro Jahr.</p>
+    <label for="dick" style="font-weight:600">Mächtigkeit des Flözes: <span id="dickout">12,0</span> m</label>
+    <input type="range" id="dick" min="8" max="16" step="0.5" value="12">
+    <div class="grid2" style="margin-top:10px">
+      <div class="tile"><div class="big" id="outTorf">120 m<small>Torf war nötig</small></div></div>
+      <div class="tile"><div class="big" id="outJahre">120 000<small>Jahre Moorwachstum</small></div></div>
+      <div class="tile"><div class="big" id="outGen"><span id="genzahl">4 800</span><small>Menschengenerationen (25 Jahre)</small></div></div>
+    </div>
+    <svg viewBox="0 0 640 210" style="margin-top:14px" role="img" aria-label="Vergleich Torfmaechtigkeit und Kohlemaechtigkeit">
+      <rect x="0" y="0" width="640" height="210" fill="#F7FAF9"/>
+      <text x="16" y="24" font-size="13" fill="#5C6B75" font-weight="600">damals: Torf</text>
+      <rect id="barTorf" x="16" y="32" width="120" height="150" fill="#6B4F2A" rx="4"/>
+      <text id="labTorf" x="150" y="112" font-size="14" fill="#22303A" font-weight="700">120 m</text>
+      <text x="360" y="24" font-size="13" fill="#5C6B75" font-weight="600">heute: Braunkohle</text>
+      <rect id="barKohle" x="360" y="167" width="120" height="15" fill="#3A2A22" rx="3"/>
+      <text id="labKohle" x="494" y="178" font-size="14" fill="#22303A" font-weight="700">12 m</text>
+      <line x1="16" y1="182" x2="624" y2="182" stroke="#5C6B75"/>
+      <text x="16" y="202" font-size="12" fill="#5C6B75">Beide Balken im gleichen Maßstab gezeichnet.</text>
+    </svg>
+    <div class="note"><strong>Rechenweg:</strong> Flözmächtigkeit &times; 10 = Torfmächtigkeit. Torfmächtigkeit in Millimeter geteilt durch 1 mm pro Jahr = Zahl der Jahre.</div>
+    <div class="ok"><strong>Der Punkt der Stunde:</strong> Was in rund 120 000 Jahren gewachsen ist, wird in einem einzigen Menschenleben verbrannt. Genau deshalb heißt Braunkohle <em>nicht erneuerbar</em>.</div>
+  </div>
+</section>
+<section class="panel" id="p4">
+  <div class="card">
+    <h2>Teil 4 &middot; Die Inkohlungsreihe</h2>
+    <p class="lead">Je tiefer das Material versinkt, desto wärmer wird es und desto mehr Wasser wird herausgepresst. Tippe auf eine Station.</p>
+    <svg viewBox="0 0 640 220" role="img" aria-label="Inkohlungsreihe Torf Braunkohle Steinkohle Anthrazit">
+      <rect x="0" y="0" width="640" height="220" fill="#F7FAF9"/>
+      <polygon points="30,170 610,170 610,40 30,150" fill="#E7EDF3"/>
+      <text x="36" y="196" font-size="12" fill="#5C6B75">flach, kühl, jung</text>
+      <text x="470" y="196" font-size="12" fill="#5C6B75">tief, heiß, alt</text>
+      <g class="stat" tabindex="0" role="button" data-s="torf">
+        <circle cx="90" cy="150" r="30" fill="#6B4F2A"/><text x="90" y="155" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">Torf</text>
+      </g>
+      <g class="stat" tabindex="0" role="button" data-s="braun">
+        <circle cx="253" cy="122" r="30" fill="#3A2A22"/><text x="253" y="119" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">Braun-</text><text x="253" y="133" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">kohle</text>
+      </g>
+      <g class="stat" tabindex="0" role="button" data-s="stein">
+        <circle cx="416" cy="93" r="30" fill="#22303A"/><text x="416" y="90" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">Stein-</text><text x="416" y="104" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">kohle</text>
+      </g>
+      <g class="stat" tabindex="0" role="button" data-s="anth">
+        <circle cx="579" cy="64" r="30" fill="#0E1418"/><text x="579" y="60" font-size="11" fill="#fff" text-anchor="middle" font-weight="700">Anthra-</text><text x="579" y="74" font-size="11" fill="#fff" text-anchor="middle" font-weight="700">zit</text>
+      </g>
+    </svg>
+    <div id="statinfo" class="note">Noch keine Station ausgewählt.</div>
+    <h3>Zuordnen &ndash; welche Station ist gemeint?</h3>
+    <div id="zuordnen"></div>
+    <div id="zuordnenScore" class="ok hidden"></div>
+  </div>
+</section>
+
+<section class="panel" id="p5">
+  <div class="card">
+    <h2>Teil 5 &middot; Als das Eis die Flöze faltete</h2>
+    <p class="lead">Rund 18 Millionen Jahre nach der Kohlebildung kam die Elster-Kaltzeit. Ein bis zu 500 m mächtiger Gletscher schob die Schichten wie einen Teppich zusammen.</p>
+    <div class="row" style="margin-bottom:12px">
+      <button class="btn ghost" id="btnVorher" aria-pressed="true">vor der Eiszeit</button>
+      <button class="btn" id="btnNachher" aria-pressed="false">nach der Eiszeit</button>
+    </div>
+    <svg viewBox="0 0 640 230" role="img" aria-label="Floezlage vor und nach der glazialen Stauchung">
+      <rect x="0" y="0" width="640" height="230" fill="#F7FAF9"/>
+      <g id="gFlach">
+        <rect x="20" y="60" width="600" height="60" fill="#E3CDA4"/>
+        <rect x="20" y="120" width="600" height="22" fill="#3A2A22"/>
+        <rect x="20" y="142" width="600" height="60" fill="#BFA98A"/>
+        <text x="30" y="46" font-size="14" fill="#22303A" font-weight="700">Die Flöze liegen waagerecht wie Buchseiten.</text>
+        <text x="30" y="220" font-size="12" fill="#5C6B75">So entstand die Kohle im Miozän: Schicht auf Schicht.</text>
+      </g>
+      <g id="gGefaltet" class="hidden">
+        <rect x="20" y="60" width="600" height="142" fill="#E3CDA4"/>
+        <path d="M20,150 C60,80 100,200 140,120 C180,50 220,190 260,110 C300,40 340,185 380,115 C420,55 460,195 500,125 C540,60 580,180 620,130 L620,152 C580,202 540,82 500,147 C460,217 420,77 380,137 C340,207 300,62 260,132 C220,212 180,72 140,142 C100,222 60,102 20,172 Z" fill="#3A2A22"/>
+        <rect x="20" y="20" width="600" height="34" fill="#CFE3EE"/>
+        <text x="30" y="42" font-size="13" fill="#1F3B57" font-weight="700">Gletscher, bis 500 m mächtig &ndash; Schubrichtung &rarr;</text>
+        <text x="30" y="220" font-size="12" fill="#5C6B75">Muskauer Faltenbogen: über 40 km lang, seit 2016 UNESCO Global Geopark.</text>
+      </g>
+    </svg>
+    <div class="note">
+      <strong>Folgen für den Bergbau:</strong> Wo die Flöze gefaltet sind, stehen sie teilweise fast senkrecht und reichen bis dicht unter die Oberfläche.
+      Dort konnte schon im 19. Jahrhundert mit einfachen Mitteln gegraben werden &ndash; dafür ist ein großer Tagebau dort kaum möglich.
+    </div>
+    <div class="ok">
+      <strong>Gieser:</strong> Wo gestauchte Flöze an die Luft kamen, oxidierte die Kohle und der Boden sackte ab. So entstanden langgestreckte Senken von 3 bis 5 m Tiefe (selten bis 20 m), 10 bis 30 m Breite und mehreren Kilometern Länge.
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="p6">
+  <div class="card">
+    <h2>Teil 6 &middot; Quiz</h2>
+    <p class="lead">Acht Fragen. Eine Antwort ist jeweils richtig. Du siehst sofort, ob es stimmt.</p>
+    <div id="quiz"></div>
+    <div class="row" style="margin-top:8px">
+      <button class="btn ghost" id="quizReset">noch einmal</button>
+      <span id="quizScore" style="font-weight:700;color:#1F3B57"></span>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="p7">
+  <div class="card">
+    <h2>Teil 7 &middot; Alle Zahlen auf einen Blick</h2>
+    <table>
+      <tr><th>Angabe</th><th>Wert</th><th>gilt für</th></tr>
+      <tr><td>Entstehungszeit der Lausitzer Kohle</td><td>vor rund 15&ndash;20 Mio. Jahren (Miozän)</td><td>Lausitzer Revier</td></tr>
+      <tr><td>Abgebautes Flöz</td><td>2. Lausitzer Flöz</td><td>Welzow-Süd, Nochten, Reichwalde</td></tr>
+      <tr><td>Mächtigkeit des Flözes</td><td>10&ndash;16 m</td><td>Welzow-Süd (Hauptflöz)</td></tr>
+      <tr><td>Tiefe der Flöze</td><td>35&ndash;120 m</td><td>Lausitzer Revier</td></tr>
+      <tr><td>Mächtigkeit des Deckgebirges</td><td>90&ndash;130 m</td><td>Welzow-Süd</td></tr>
+      <tr><td>Abraum je Tonne Kohle</td><td>rund 7 m&sup3;</td><td>Nochten</td></tr>
+      <tr><td>Heizwert Rohbraunkohle</td><td>7 900&ndash;9 300 kJ/kg</td><td>2. Lausitzer Flöz</td></tr>
+      <tr><td>Wassergehalt</td><td>50&ndash;60 %</td><td>2. Lausitzer Flöz</td></tr>
+      <tr><td>Aschegehalt</td><td>6&ndash;14 %</td><td>2. Lausitzer Flöz</td></tr>
+      <tr><td>Torfwachstum</td><td>rund 1 mm je Jahr</td><td>Moore allgemein</td></tr>
+      <tr><td>Volumen nach der Inkohlung</td><td>rund ein Zehntel</td><td>Torf zu Braunkohle</td></tr>
+      <tr><td>Förderung Deutschland 2025</td><td>84,4 Mio. t, davon 41 % Lausitz</td><td>aus Stunde 6</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>Hausaufgabe</h2>
+    <p>Im <strong>Spreeauenpark in Cottbus</strong> steht ein <strong>Tertiärwald</strong>: 1,8 Hektar mit rund 760 Gehölzen in fast 130 Arten &ndash; Sumpfzypressen, Mammutbäume, Amberbäume. Er zeigt, wie die Lausitz vor etwa 10 Millionen Jahren aussah.</p>
+    <ol>
+      <li>Notiere <strong>fünf Baumarten</strong>, die im Miozän in der Lausitz wuchsen.</li>
+      <li>Erkläre in <strong>drei bis fünf Sätzen</strong>, warum ausgerechnet ein Sumpfwald zu Kohle werden konnte und ein trockener Kiefernwald nicht.</li>
+      <li><strong>Zusatz:</strong> Suche im Diercke Weltatlas 2023 die Karte <em>Lausitz &ndash; Wandel einer Energielandschaft</em> (S. 56, Abb. 5) und nenne drei Tagebaue.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h2>Zum Weiterlesen</h2>
+    <div class="linklist">
+      <a href="https://www.lmbv.de/glossareintrag/entstehung-der-braunkohle/">LMBV &ndash; Entstehung der Braunkohle</a>
+      <a href="https://www.muskauer-faltenbogen.de/">UNESCO Global Geopark Muskauer Faltenbogen</a>
+      <a href="https://www.nvn-cottbus.de/tertiaerwald/">Tertiärwald im Spreeauenpark Cottbus</a>
+      <a href="https://www.geologie.sachsen.de/Tertiaer-28534.html">LfULG Sachsen &ndash; Das Tertiär</a>
+    </div>
+    <p class="lead" style="margin-top:12px">Die Links brauchen Internet. Alles andere in diesem Werkzeug funktioniert auch offline.</p>
+  </div>
+</section>
+
+<footer class="foot">
+  Humboldt-Gymnasium Cottbus &middot; Geografie Jahrgangsstufe 9 &middot; Stunde 7 &middot; Std-07_Interaktiv_Zeitreise-Braunkohle.html
+</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s);};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+/* ---------- Tabs ---------- */
+$$('nav.tabs button').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('nav.tabs button').forEach(function(x){x.setAttribute('aria-selected','false');});
+    b.setAttribute('aria-selected','true');
+    $$('section.panel').forEach(function(p){p.classList.remove('active');});
+    $('#'+b.dataset.p).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Teil 1: Zeitreise ---------- */
+var SKY='<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#BFE0EA"/><stop offset="100%" stop-color="#E8F2E6"/></linearGradient></defs>';
+function baum(x,y,s){
+  return '<g transform="translate('+x+','+y+') scale('+s+')">'+
+    '<path d="M-9,0 L-4.5,-70 L4.5,-70 L9,0 Z" fill="#6B4F2A"/>'+
+    '<ellipse cx="0" cy="-86" rx="34" ry="26" fill="#3F7A4E"/>'+
+    '<ellipse cx="-16" cy="-70" rx="22" ry="16" fill="#4C8C59"/>'+
+    '<ellipse cx="17" cy="-70" rx="22" ry="16" fill="#4C8C59"/>'+
+    '<ellipse cx="0" cy="-108" rx="22" ry="18" fill="#4C8C59"/>'+
+    '<path d="M-14,0 l0,-9 M-7,0 l0,-13 M7,0 l0,-13 M14,0 l0,-9" stroke="#6B4F2A" stroke-width="4" stroke-linecap="round"/>'+
+  '</g>';
+}
+var STEPS=[
+ {n:'Schritt 1', t:'Ein Sumpfwald im Miozän',
+  frage:'Wo kommt das Material her?',
+  svg:'<svg viewBox="0 0 640 280">'+SKY+
+    '<rect width="640" height="280" fill="url(#sky)"/>'+
+    '<circle cx="560" cy="52" r="26" fill="#F0C46A"/>'+
+    '<rect x="0" y="196" width="640" height="84" fill="#7FA6A0"/>'+
+    '<path d="M0,196 q80,-10 160,0 t160,0 t160,0 t160,0 v84 H0 Z" fill="#7FA6A0"/>'+
+    baum(80,200,1.0)+baum(190,206,1.25)+baum(320,198,0.9)+baum(430,208,1.15)+baum(545,200,1.0)+
+    '<g fill="#3F7A4E">'+
+      '<path d="M20,240 q10,-30 22,0 z"/><path d="M270,246 q12,-34 24,0 z"/><path d="M600,244 q11,-30 22,0 z"/>'+
+    '</g>'+
+    '<text x="16" y="30" font-size="15" font-weight="700" fill="#1F3B57">vor rund 18 Millionen Jahren, Niederlausitz</text>'+
+    '<text x="16" y="52" font-size="13" fill="#22303A">warm und feucht &middot; flaches Küstentiefland am Rand der damaligen Nordsee</text>'+
+    '<text x="16" y="272" font-size="12" fill="#22303A">Sumpfzypresse &middot; Mammutbaum &middot; Tupelobaum &middot; Amberbaum &middot; Erle</text>'+
+  '</svg>',
+  text:'Die Lausitz war ein flaches, sumpfiges Tiefland. Es lag nahe am Rand des damaligen Nordsee-Beckens, das Klima war deutlich wärmer und feuchter als heute. In riesigen Mooren und Sumpfwäldern wuchsen Sumpfzypressen, Mammutbäume, Tupelo- und Amberbäume. Diese Pflanzen sind das Ausgangsmaterial der Braunkohle &ndash; und sie hatten ihre Energie aus dem Sonnenlicht.'},
+
+ {n:'Schritt 2', t:'Vertorfung unter Wasser',
+  frage:'Warum verrotteten die Pflanzen nicht einfach?',
+  svg:'<svg viewBox="0 0 640 280">'+
+    '<rect width="640" height="280" fill="#F7FAF9"/>'+
+    '<rect x="0" y="40" width="640" height="90" fill="#8FB6B0"/>'+
+    '<rect x="0" y="130" width="640" height="60" fill="#6B4F2A"/>'+
+    '<rect x="0" y="190" width="640" height="90" fill="#BFA98A"/>'+
+    '<g stroke="#4A3318" stroke-width="3" stroke-linecap="round">'+
+      '<line x1="60" y1="150" x2="130" y2="146"/><line x1="180" y1="162" x2="250" y2="158"/>'+
+      '<line x1="300" y1="142" x2="370" y2="150"/><line x1="420" y1="170" x2="490" y2="164"/>'+
+      '<line x1="520" y1="148" x2="590" y2="154"/>'+
+    '</g>'+
+    '<g fill="#3F7A4E">'+
+      '<path d="M120,120 q14,-22 28,0 z"/><path d="M340,124 q14,-24 28,0 z"/><path d="M500,118 q14,-22 28,0 z"/>'+
+    '</g>'+
+    '<g><path d="M200,70 l0,36" stroke="#1F3B57" stroke-width="3"/><path d="M194,100 l6,10 l6,-10 z" fill="#1F3B57"/>'+
+      '<path d="M440,66 l0,40" stroke="#1F3B57" stroke-width="3"/><path d="M434,100 l6,10 l6,-10 z" fill="#1F3B57"/></g>'+
+    '<text x="16" y="28" font-size="15" font-weight="700" fill="#1F3B57">Abgestorbene Pflanzen sinken ins Moorwasser</text>'+
+    '<text x="16" y="86" font-size="13" fill="#123A38" font-weight="600">Wasser &ndash; darunter kommt kein Sauerstoff an</text>'+
+    '<text x="16" y="182" font-size="13" fill="#F4F7F6" font-weight="700">Torf: halb zersetzte Pflanzenreste</text>'+
+    '<text x="16" y="216" font-size="13" fill="#22303A">älterer Untergrund</text>'+
+  '</svg>',
+  text:'Unter Wasser fehlt der Sauerstoff. Bakterien und Pilze können die Pflanzenreste deshalb nur unvollständig zersetzen. Statt zu vermodern, sammeln sie sich als Torf an &ndash; Schicht für Schicht, etwa einen Millimeter pro Jahr. Damit ein Flöz von 12 m entsteht, musste das Moor rund 120 m Torf aufbauen und dafür etwa 120 000 Jahre ungestört wachsen.'},
+
+ {n:'Schritt 3', t:'Überdeckung durch Sand und Ton',
+  frage:'Wie kam das Material unter die Erde?',
+  svg:'<svg viewBox="0 0 640 280">'+
+    '<rect width="640" height="280" fill="#F7FAF9"/>'+
+    '<rect x="0" y="34" width="640" height="52" fill="#8FB6B0"/>'+
+    '<rect x="0" y="86" width="640" height="44" fill="#E3CDA4"/>'+
+    '<rect x="0" y="130" width="640" height="16" fill="#A9B7A0"/>'+
+    '<rect x="0" y="146" width="640" height="44" fill="#E3CDA4"/>'+
+    '<rect x="0" y="190" width="640" height="40" fill="#6B4F2A"/>'+
+    '<rect x="0" y="230" width="640" height="50" fill="#BFA98A"/>'+
+    '<g stroke="#1F3B57" stroke-width="3" fill="none">'+
+      '<path d="M100,52 q40,14 80,0 q40,-14 80,0"/><path d="M340,58 q40,14 80,0 q40,-14 80,0"/>'+
+    '</g>'+
+    '<text x="16" y="24" font-size="15" font-weight="700" fill="#1F3B57">Das Meer kommt, das Meer geht &ndash; immer wieder</text>'+
+    '<text x="16" y="78" font-size="13" fill="#123A38" font-weight="600">flaches Meer und Flüsse</text>'+
+    '<text x="16" y="114" font-size="13" fill="#22303A" font-weight="600">Sande und Kiese</text>'+
+    '<text x="16" y="172" font-size="13" fill="#22303A" font-weight="600">weitere Sande, dazwischen Tonbänder</text>'+
+    '<text x="16" y="216" font-size="13" fill="#F4F7F6" font-weight="700">der Torf &ndash; jetzt begraben</text>'+
+  '</svg>',
+  text:'Der Meeresspiegel schwankte. Immer wieder überfluteten flache Meere und Flüsse das Moor und legten Sand, Kies und Ton darüber. Das Moor wurde begraben. In Welzow-Süd liegt heute ein Deckgebirge von 90 bis 130 m über der Kohle &ndash; im Mittel etwa 8,5-mal so viel, wie das Flöz selbst mächtig ist. Dass die Lausitz mehrere Flöze übereinander hat, liegt genau an diesem Wechsel: Moor, Überflutung, wieder Moor.'},
+
+ {n:'Schritt 4', t:'Inkohlung unter Druck und Wärme',
+  frage:'Wie wird aus Torf Kohle?',
+  svg:'<svg viewBox="0 0 640 280">'+
+    '<rect width="640" height="280" fill="#F7FAF9"/>'+
+    '<rect x="0" y="40" width="640" height="110" fill="#E3CDA4"/>'+
+    '<g stroke="#1F3B57" stroke-width="4" stroke-linecap="round">'+
+      '<line x1="90" y1="56" x2="90" y2="132"/><line x1="230" y1="56" x2="230" y2="132"/>'+
+      '<line x1="400" y1="56" x2="400" y2="132"/><line x1="550" y1="56" x2="550" y2="132"/>'+
+    '</g>'+
+    '<g fill="#1F3B57">'+
+      '<path d="M82,126 l8,16 l8,-16 z"/><path d="M222,126 l8,16 l8,-16 z"/>'+
+      '<path d="M392,126 l8,16 l8,-16 z"/><path d="M542,126 l8,16 l8,-16 z"/>'+
+    '</g>'+
+    '<rect x="0" y="150" width="640" height="26" fill="#3A2A22"/>'+
+    '<rect x="0" y="176" width="640" height="104" fill="#BFA98A"/>'+
+    '<g><rect x="470" y="192" width="18" height="70" rx="9" fill="#fff" stroke="#C05A5A" stroke-width="2"/>'+
+      '<rect x="474" y="222" width="10" height="38" fill="#C05A5A"/><circle cx="479" cy="264" r="12" fill="#C05A5A"/>'+
+      '<text x="500" y="228" font-size="13" fill="#22303A" font-weight="700">35 bis 80 °C</text>'+
+      '<text x="500" y="248" font-size="12" fill="#5C6B75">in einigen hundert Metern Tiefe</text></g>'+
+    '<text x="16" y="28" font-size="15" font-weight="700" fill="#1F3B57">Druck von oben, Wärme von unten</text>'+
+    '<text x="16" y="100" font-size="13" fill="#22303A" font-weight="600">Auflast des Deckgebirges</text>'+
+    '<text x="16" y="168" font-size="13" fill="#F4F7F6" font-weight="700">aus 120 m Torf werden 12 m Braunkohle</text>'+
+  '</svg>',
+  text:'Unter der Auflast des Deckgebirges wird das Wasser aus dem Torf gepresst, die Temperatur steigt auf 35 bis 80 °C. Dabei entweichen Sauerstoff und Wasserstoff, der Anteil an Kohlenstoff steigt. Dieser Vorgang heißt Inkohlung. Das Volumen schrumpft auf etwa ein Zehntel. Trotzdem steckt in der Lausitzer Rohbraunkohle noch immer 50 bis 60 % Wasser &ndash; deshalb ist ihr Heizwert mit 7 900 bis 9 300 kJ/kg nur etwa ein Drittel dessen von Steinkohle.'},
+
+ {n:'Schritt 5', t:'Das Eis faltet die Flöze',
+  frage:'Warum liegt die Kohle nicht überall gleich?',
+  svg:'<svg viewBox="0 0 640 280">'+
+    '<rect width="640" height="280" fill="#F7FAF9"/>'+
+    '<rect x="0" y="34" width="640" height="56" fill="#CFE3EE"/>'+
+    '<g stroke="#1F3B57" stroke-width="5" stroke-linecap="round">'+
+      '<line x1="120" y1="62" x2="210" y2="62"/><line x1="300" y1="62" x2="390" y2="62"/>'+
+    '</g>'+
+    '<g fill="#1F3B57"><path d="M206,52 l16,10 l-16,10 z"/><path d="M386,52 l16,10 l-16,10 z"/></g>'+
+    '<rect x="0" y="90" width="640" height="190" fill="#E3CDA4"/>'+
+    '<path d="M0,180 C50,110 100,236 150,156 C200,82 250,222 300,146 C350,74 400,220 450,152 C500,88 550,214 600,162 L640,150 L640,174 L600,186 C550,238 500,112 450,176 C400,244 350,98 300,170 C250,246 200,106 150,180 C100,260 50,134 0,204 Z" fill="#3A2A22"/>'+
+    '<text x="16" y="24" font-size="15" font-weight="700" fill="#1F3B57">Elster-Kaltzeit: ein bis zu 500 m mächtiger Gletscher</text>'+
+    '<text x="16" y="82" font-size="13" fill="#1F3B57" font-weight="600">Schubrichtung des Eises</text>'+
+    '<text x="16" y="268" font-size="12" fill="#22303A">Muskauer Faltenbogen &ndash; über 40 km lang, UNESCO Global Geopark seit 2016</text>'+
+  '</svg>',
+  text:'Lange nach der Kohlebildung schoben sich in der Elster-Kaltzeit Gletscher über die Lausitz. Nördlich von Weißwasser stauchte das Eis Sand- und Kohleschichten auf über 40 km Länge zu einem Bogen zusammen. Die Flöze stehen dort teils fast senkrecht und reichen bis dicht unter die Oberfläche. Dieser Muskauer Faltenbogen ist seit 2016 UNESCO Global Geopark. Merke: Nicht nur die Entstehung, auch die spätere Verformung entscheidet, wo heute gebaggert werden kann.'}
+];
+var cur=0;
+function renderSteps(){
+  $('#stepnav').innerHTML=STEPS.map(function(s,i){
+    return '<button data-i="'+i+'" aria-current="'+(i===cur)+'"><span class="n">'+s.n+'</span>'+s.t.split(' ').slice(0,2).join(' ')+'</button>';
+  }).join('');
+  $$('#stepnav button').forEach(function(b){b.addEventListener('click',function(){cur=+b.dataset.i;renderSteps();});});
+  var s=STEPS[cur];
+  $('#stepstage').innerHTML='<span class="pill navy">'+s.frage+'</span><h3 style="margin-top:10px">'+s.t+'</h3>'+s.svg+'<p style="margin-top:12px">'+s.text+'</p>';
+}
+$('#prevStep').addEventListener('click',function(){cur=(cur+STEPS.length-1)%STEPS.length;renderSteps();});
+$('#nextStep').addEventListener('click',function(){cur=(cur+1)%STEPS.length;renderSteps();});
+renderSteps();
+
+/* ---------- Teil 2: Schichten ---------- */
+var LAYER={
+ boden:'<strong>Boden und heutige Landschaft.</strong> Kiefernwald, Felder, Dörfer. Alles, was hier steht, muss vor dem Abbau weichen &ndash; das ist der Grund für die Umsiedlungen, um die es in Stunde 8 und 11 geht.',
+ eis:'<strong>Eiszeitliche Sande und Geschiebemergel, rund 25 m.</strong> Von den Gletschern der Elster- und Saale-Kaltzeit abgelagert, also erst wenige hunderttausend Jahre alt &ndash; viel jünger als die Kohle darunter.',
+ deck:'<strong>Deckgebirge, 90 bis 130 m.</strong> Sande, Kiese und Tone aus dem Tertiär. Im Bergbau heißt alles, was über der Kohle liegt, Abraum. In Nochten müssen für jede Tonne Kohle rund 7 m&sup3; Abraum bewegt werden.',
+ floez:'<strong>2. Lausitzer Flöz, 10 bis 16 m.</strong> Das Hauptflöz der Lausitz, entstanden im Miozän vor rund 15 bis 20 Mio. Jahren. Heizwert 7 900 bis 9 300 kJ/kg, Wassergehalt 50 bis 60 %, Aschegehalt 6 bis 14 %.',
+ liegend:'<strong>Liegendes.</strong> Ältere Sande und Tone. Darunter folgen noch das 3. und das 4. Lausitzer Flöz &ndash; sie liegen zu tief, um sie im Tagebau zu gewinnen. Über dem 2. Flöz liegt stellenweise noch das jüngere 1. Lausitzer Flöz.'
+};
+$$('.layer').forEach(function(g){
+  function show(){ $('#layerinfo').innerHTML=LAYER[g.dataset.k]; }
+  g.addEventListener('click',show);
+  g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();show();}});
+});
+
+/* ---------- Teil 3: Torf-Rechner ---------- */
+function nf(x){return x.toLocaleString('de-DE');}
+function rechne(){
+  var d=parseFloat($('#dick').value);
+  var torf=d*10;
+  var jahre=Math.round(torf*1000);
+  var gen=Math.round(jahre/25);
+  $('#dickout').textContent=d.toFixed(1).replace('.',',');
+  $('#outTorf').innerHTML=nf(torf).replace(',',',')+' m<small>Torf war nötig</small>';
+  $('#outJahre').innerHTML=nf(jahre)+'<small>Jahre Moorwachstum</small>';
+  $('#genzahl').textContent=nf(gen);
+  var maxTorf=160, H=150;
+  var hT=torf/maxTorf*H, hK=d/maxTorf*H;
+  $('#barTorf').setAttribute('y',(182-hT).toFixed(1)); $('#barTorf').setAttribute('height',hT.toFixed(1));
+  $('#barKohle').setAttribute('y',(182-hK).toFixed(1)); $('#barKohle').setAttribute('height',Math.max(hK,2).toFixed(1));
+  $('#labTorf').setAttribute('y',(182-hT/2+5).toFixed(1));
+  $('#labTorf').textContent=nf(torf)+' m';
+  $('#labKohle').textContent=d.toFixed(1).replace('.',',')+' m';
+}
+$('#dick').addEventListener('input',rechne); rechne();
+})();
+</script>
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s);};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+/* ---------- Teil 4: Inkohlungsreihe ---------- */
+var STAT={
+ torf:'<strong>Torf</strong> &ndash; noch keine Kohle. Kohlenstoffanteil rund 50 bis 60 % (im trockenen Material), im Moor bis zu 90 % Wasser. Entsteht heute noch, zum Beispiel im Spreewald.',
+ braun:'<strong>Braunkohle</strong> &ndash; Kohlenstoffanteil 58 bis 73 %, Wassergehalt in der Lausitz 50 bis 60 %, Heizwert 7 900 bis 9 300 kJ/kg. Umwandlungstemperatur etwa 35 bis 80 °C. Alter in der Lausitz: rund 15 bis 20 Mio. Jahre.',
+ stein:'<strong>Steinkohle</strong> &ndash; Kohlenstoffanteil rund 75 bis 90 %, Wassergehalt unter 10 %, Heizwert rund 29 300 kJ/kg (das ist die Definition von 1 kg Steinkohleeinheit). Deutsche Steinkohle entstand im Karbon vor rund 300 Mio. Jahren.',
+ anth:'<strong>Anthrazit</strong> &ndash; Kohlenstoffanteil über 90 %, höchste Inkohlungsstufe der Kohlen. Dafür sind mindestens 180 bis 245 °C nötig, also eine sehr tiefe Versenkung. In Deutschland selten.'
+};
+$$('.stat').forEach(function(g){
+  function show(){
+    $('#statinfo').innerHTML=STAT[g.dataset.s];
+    $$('.stat circle').forEach(function(c){c.setAttribute('stroke','none');});
+    g.querySelector('circle').setAttribute('stroke','#C97A2B');
+    g.querySelector('circle').setAttribute('stroke-width','5');
+  }
+  g.addEventListener('click',show);
+  g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();show();}});
+});
+
+var ZU=[
+ {f:'Enthält noch 50 bis 60 % Wasser und wird in der Lausitz gefördert.',a:'Braunkohle'},
+ {f:'Ist gar keine Kohle, sondern die Vorstufe &ndash; sie entsteht heute noch in Mooren.',a:'Torf'},
+ {f:'Rund 29 300 kJ pro Kilogramm; in Deutschland im Karbon entstanden.',a:'Steinkohle'},
+ {f:'Über 90 % Kohlenstoff; braucht mindestens 180 bis 245 °C.',a:'Anthrazit'},
+ {f:'Umwandlung bei etwa 35 bis 80 °C, Volumen schrumpft auf rund ein Zehntel.',a:'Braunkohle'}
+];
+var OPT=['Torf','Braunkohle','Steinkohle','Anthrazit'];
+var zdone=0, zright=0;
+$('#zuordnen').innerHTML=ZU.map(function(z,i){
+  return '<div class="tile" style="margin-bottom:10px"><p style="margin:0 0 8px"><strong>'+(i+1)+'.</strong> '+z.f+'</p>'+
+    '<div class="row" data-z="'+i+'">'+OPT.map(function(o){
+      return '<button class="btn ghost" style="flex:1 1 120px;font-size:15px" data-a="'+o+'">'+o+'</button>';
+    }).join('')+'</div></div>';
+}).join('');
+$$('#zuordnen .row').forEach(function(row){
+  var i=+row.dataset.z;
+  $$('button',row).forEach(function(b){
+    b.addEventListener('click',function(){
+      if(row.dataset.done)return;
+      row.dataset.done='1'; zdone++;
+      $$('button',row).forEach(function(x){
+        x.disabled=true;
+        if(x.dataset.a===ZU[i].a){x.style.background='#EAF1EE';x.style.borderColor='#2E7D6B';x.style.color='#2E7D6B';x.style.fontWeight='700';}
+      });
+      if(b.dataset.a===ZU[i].a){zright++;}
+      else{b.style.background='#FAEBEB';b.style.borderColor='#C05A5A';b.style.color='#C05A5A';}
+      if(zdone===ZU.length){
+        var el=$('#zuordnenScore'); el.classList.remove('hidden');
+        el.innerHTML='<strong>'+zright+' von '+ZU.length+' richtig.</strong> '+(zright===ZU.length?'Sauber &ndash; du kennst die Inkohlungsreihe.':'Schau dir die Stationen oben noch einmal an.');
+      }
+    });
+  });
+});
+
+/* ---------- Teil 5: Eiszeit ---------- */
+function eis(gefaltet){
+  $('#gFlach').classList.toggle('hidden',gefaltet);
+  $('#gGefaltet').classList.toggle('hidden',!gefaltet);
+  $('#btnVorher').setAttribute('aria-pressed',String(!gefaltet));
+  $('#btnNachher').setAttribute('aria-pressed',String(gefaltet));
+  $('#btnVorher').className=gefaltet?'btn ghost':'btn';
+  $('#btnNachher').className=gefaltet?'btn':'btn ghost';
+}
+$('#btnVorher').addEventListener('click',function(){eis(false);});
+$('#btnNachher').addEventListener('click',function(){eis(true);});
+eis(false);
+
+/* ---------- Teil 6: Quiz ---------- */
+var Q=[
+ {f:'In welchem Erdzeitalter entstand die Lausitzer Braunkohle?',
+  o:['im Karbon, vor rund 300 Mio. Jahren','im Miozän, vor rund 15 bis 20 Mio. Jahren','in der letzten Eiszeit, vor rund 20 000 Jahren','im Jura, vor rund 150 Mio. Jahren'],r:1,
+  e:'Die Lausitzer Kohle stammt aus dem Miozän. Im Karbon entstand die deutsche Steinkohle, also rund 280 Mio. Jahre früher.'},
+ {f:'Warum verrotteten die abgestorbenen Pflanzen im Moor nicht vollständig?',
+  o:['weil es zu kalt war','weil zu wenig Wasser da war','weil unter Wasser kein Sauerstoff an sie kam','weil sie sofort von Sand bedeckt wurden'],r:2,
+  e:'Ohne Sauerstoff arbeiten Bakterien und Pilze nur unvollständig. Deshalb sammelt sich Torf an, statt dass alles vermodert.'},
+ {f:'Welches Flöz wird in den Lausitzer Tagebauen heute abgebaut?',
+  o:['das 1. Lausitzer Flöz','das 2. Lausitzer Flöz','das 3. Lausitzer Flöz','das 4. Lausitzer Flöz'],r:1,
+  e:'Das 2. Lausitzer Flöz ist das Hauptflöz, zum Beispiel in Welzow-Süd und Nochten. Es ist dort 10 bis 16 m mächtig.'},
+ {f:'Aus wie viel Torf entstand ungefähr 1 m Braunkohle?',
+  o:['aus rund 2 m','aus rund 5 m','aus rund 10 m','aus rund 50 m'],r:2,
+  e:'Bei der Inkohlung schrumpft das Volumen auf etwa ein Zehntel. Für ein Flöz von 12 m brauchte es also rund 120 m Torf.'},
+ {f:'Torf wächst etwa 1 mm im Jahr. Wie lange wuchs das Moor für ein 12 m mächtiges Flöz?',
+  o:['rund 1 200 Jahre','rund 12 000 Jahre','rund 120 000 Jahre','rund 1,2 Mio. Jahre'],r:2,
+  e:'12 m Kohle brauchen 120 m Torf. 120 m sind 120 000 mm, bei 1 mm pro Jahr also 120 000 Jahre.'},
+ {f:'Was bedeutet der Begriff Abraum?',
+  o:['der Abfall aus dem Kraftwerk','alles Gestein, das über der Kohle liegt und weggebaggert wird','die minderwertige Kohle am Rand des Flözes','das Wasser, das aus dem Tagebau gepumpt wird'],r:1,
+  e:'In Welzow-Süd sind das 90 bis 130 m Sand, Kies und Ton &ndash; im Mittel rund das 8,5-Fache der Flözmächtigkeit.'},
+ {f:'Wie entstand der Muskauer Faltenbogen?',
+  o:['durch ein Erdbeben','durch einen Vulkanausbruch','durch die Stauchung der Schichten unter einem Gletscher der Elster-Kaltzeit','durch das Absinken eines Meeresbodens'],r:2,
+  e:'Ein bis zu 500 m mächtiger Gletscher schob Sand- und Kohleschichten auf über 40 km Länge zu einem Bogen zusammen. Seit 2016 ist das Gebiet UNESCO Global Geopark.'},
+ {f:'Warum ist der Heizwert der Lausitzer Rohbraunkohle nur etwa ein Drittel dessen von Steinkohle?',
+  o:['weil sie noch 50 bis 60 % Wasser enthält','weil sie zu fein gemahlen ist','weil sie nur aus Sand besteht','weil sie erst seit kurzem gefördert wird'],r:0,
+  e:'Rohbraunkohle enthält 50 bis 60 % Wasser. Das Wasser muss beim Verbrennen mit verdampft werden und liefert selbst keine Energie: 7 900 bis 9 300 kJ/kg gegenüber rund 29 300 kJ/kg bei Steinkohle.'}
+];
+var done=0, right=0;
+function renderQuiz(){
+  done=0;right=0;$('#quizScore').textContent='';
+  $('#quiz').innerHTML=Q.map(function(q,i){
+    return '<div class="tile" style="margin-bottom:12px" data-q="'+i+'">'+
+      '<p style="margin:0 0 10px"><strong>Frage '+(i+1)+':</strong> '+q.f+'</p>'+
+      q.o.map(function(o,j){return '<button class="choice" data-j="'+j+'">'+o+'</button>';}).join('')+
+      '<div class="ok hidden" data-e></div></div>';
+  }).join('');
+  $$('#quiz .tile').forEach(function(t){
+    var i=+t.dataset.q;
+    $$('.choice',t).forEach(function(b){
+      b.addEventListener('click',function(){
+        if(t.dataset.done)return;
+        t.dataset.done='1';done++;
+        $$('.choice',t).forEach(function(x,j){x.disabled=true;if(j===Q[i].r)x.classList.add('correct');});
+        if(+b.dataset.j===Q[i].r){right++;}else{b.classList.add('wrong');}
+        var e=$('[data-e]',t);e.classList.remove('hidden');e.innerHTML=Q[i].e;
+        $('#quizScore').textContent=right+' von '+done+' richtig'+(done===Q.length?' (alle '+Q.length+' Fragen beantwortet)':'');
+      });
+    });
+  });
+}
+$('#quizReset').addEventListener('click',renderQuiz);
+renderQuiz();
+})();
+</script>
+</body>
+</html>
