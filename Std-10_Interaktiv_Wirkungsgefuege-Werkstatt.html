@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wirkungsgefüge-Werkstatt – Geografie 9</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}:root{--navy:#1F3B57;--teal:#2E7D6B;--amber:#C97A2B;--coral:#C05A5A;--bg:#F4F7F6;--card:#FFFFFF;--line:#D7E2DD;--grey:#6B7B86;--light:#E8F0ED}html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}body{background:var(--bg);color:var(--navy);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.5;overflow-x:hidden}header{background:var(--navy);color:#fff;padding:18px 16px 14px}header .kicker{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#9FC4BA;font-weight:700}header h1{margin:4px 0 6px;font-size:25px;line-height:1.2}header p{margin:0;font-size:15px;color:#CFE0DA;max-width:62ch}nav{position:sticky;top:0;z-index:40;background:rgba(244,247,246,.97);border-bottom:1px solid var(--line);padding:8px 10px;display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}nav button{flex:0 0 auto;min-height:44px;padding:0 14px;border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:22px;font-size:15px;font-weight:600;cursor:pointer}nav button.on{background:var(--navy);color:#fff;border-color:var(--navy)}main{padding:14px 12px 60px;max-width:1040px;margin:0 auto}section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px;scroll-margin-top:66px}section>h2{margin:0 0 4px;font-size:20px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}section>h2 .no{background:var(--teal);color:#fff;border-radius:8px;font-size:14px;padding:3px 9px;font-weight:700;flex:0 0 auto}.lead{margin:0 0 14px;color:#41586A;font-size:16px}.hint{background:var(--light);border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:10px 12px;margin:12px 0;font-size:15px}.hint b{color:var(--navy)}.btn{min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--navy);background:var(--navy);color:#fff;font-size:16px;font-weight:600;cursor:pointer}.btn.ghost{background:#fff;color:var(--navy)}.btn.teal{background:var(--teal);border-color:var(--teal)}.btn.amber{background:var(--amber);border-color:var(--amber)}.btn:disabled{opacity:.45;cursor:default}.row{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.svgbox{width:100%;overflow-x:auto;background:#FBFDFC;border:1px solid var(--line);border-radius:10px;padding:6px}svg{display:block;width:100%;height:auto;min-width:520px;touch-action:manipulation}.q{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:11px}.q .qt{font-weight:600;margin-bottom:9px}.opt{display:block;width:100%;text-align:left;min-height:44px;padding:10px 12px;margin-bottom:7px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--navy);font-size:16px;cursor:pointer}.opt:hover{background:var(--light)}.opt.ok{background:#E4F1EC;border-color:var(--teal);font-weight:600}.opt.no{background:#FBE8E8;border-color:var(--coral)}.fb{display:none;margin-top:7px;padding:10px 12px;border-radius:9px;font-size:15px;background:var(--light)}.fb.show{display:block}.fb.bad{background:#FBE8E8}.score{font-weight:700;color:var(--teal)}.tblwrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.tbl{width:100%;min-width:430px;border-collapse:collapse;font-size:15px;margin-top:8px}#lk a{display:inline-block;min-height:44px;line-height:1.35;padding:10px 0;text-decoration:underline}.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}.tbl th{color:var(--grey);font-size:13px;text-transform:uppercase;letter-spacing:.06em}.tbl td.v{font-weight:700;white-space:nowrap}.cards{display:grid;grid-template-columns:1fr;gap:10px}@media(min-width:720px){.cards{grid-template-columns:1fr 1fr}}.card2{border:1px solid var(--line);border-radius:11px;padding:12px;background:#FBFDFC}.card2 h3{margin:0 0 6px;font-size:17px}.card2 p{margin:0;font-size:15px;color:#41586A}.pill{display:inline-block;min-height:44px;line-height:42px;padding:0 14px;border-radius:22px;border:1px solid var(--line);background:#fff;font-size:15px;font-weight:600;cursor:pointer;margin:0 7px 7px 0}.pill.sel{background:var(--amber);color:#fff;border-color:var(--amber)}.pill.done{background:#E4F1EC;border-color:var(--teal);cursor:default}.pill.dead{background:#F1F3F4;color:#9AA7AE;border-color:#E2E7E9;cursor:default}.bucket{border:2px dashed var(--line);border-radius:11px;padding:10px;min-height:92px;background:#FBFDFC}.bucket h4{margin:0 0 6px;font-size:15px;color:var(--teal)}.bucket.hot{border-color:var(--amber);background:#FDF6EE}.bucket .it{font-size:14px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 8px;margin-bottom:6px}.counter{display:inline-flex;align-items:center;gap:10px;background:var(--light);border-radius:11px;padding:9px 13px;font-weight:700;margin:4px 8px 4px 0}.counter span.n{font-size:23px;color:var(--amber)}a{color:var(--teal)}footer{text-align:center;color:var(--grey);font-size:13px;padding:0 12px 30px}.verdict{margin-top:11px;padding:12px;border-radius:10px;font-weight:600;display:none}.verdict.show{display:block}.verdict.aus{background:#E4F1EC;border:1px solid var(--teal)}.verdict.ver{background:#FDF0E4;border:1px solid var(--amber)}.ok-line{color:var(--teal);font-weight:700}.no-line{color:var(--coral);font-weight:700}.small{font-size:14px;color:var(--grey)}.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin:8px 0 0}.legend i{display:inline-block;width:26px;height:0;border-top:3px solid var(--teal);vertical-align:middle;margin-right:6px}.legend i.m{border-top-color:var(--coral);border-top-style:dashed}.ha{background:#FDF6EE;border:1px solid #EBD6BC;border-radius:11px;padding:12px;margin-top:12px}</style>
+</head>
+<body>
+<header>
+<div class="kicker">Geografie 9 &middot; Methodenbaustein M3 &middot; Stunde 10</div>
+<h1>Wirkungsgefüge-Werkstatt</h1>
+<p>Aus einer Kette wird ein Netz. In acht Teilen baut du das Wirkungsgefüge „Wasser in der Spree“ selbst auf &ndash; und findest heraus, warum der Spree nach dem Kohleausstieg Wasser fehlt.</p>
+</header>
+<nav id="nav"></nav>
+<main>
+<section id="t1">
+<h2><span class="no">1</span>Der Widerspruch</h2>
+<p class="lead">Zwei Sätze. Beide stimmen. Tippe sie an.</p>
+<div class="cards">
+<div class="card2"><h3>Satz A</h3><p>Der Bergbau hat der Landschaft das Wasser genommen.</p>
+<div class="row" style="margin-top:9px"><button class="btn ghost" data-rev="r1">Belege zeigen</button></div>
+<div class="fb" id="r1">Für die Kohle wurde das Grundwasser auf mehr als 2.000&nbsp;km² abgesenkt, bis zu 150&nbsp;m tief. 1990 fehlten im Sanierungsbereich rund 7&nbsp;Mrd.&nbsp;m³ Wasser.</div>
+</div>
+<div class="card2"><h3>Satz B</h3><p>Der Bergbau gibt der Spree Wasser &ndash; sehr viel Wasser.</p>
+<div class="row" style="margin-top:9px"><button class="btn ghost" data-rev="r2">Belege zeigen</button></div>
+<div class="fb" id="r2">Das abgepumpte Grundwasser wird in die Spree eingeleitet. Rund die Hälfte des Wassers, das die Spree bei Cottbus führt, stammt daraus &ndash; in heißen Sommermonaten bis zu 75&nbsp;%.</div>
+</div>
+</div>
+<div class="hint"><b>Die Leitfrage der Stunde:</b> Warum führt die Spree nach dem Ende des Bergbaus <i>weniger</i> Wasser &ndash; obwohl der Bergbau ihr Wasser entzogen hat? Mit einer geraden Ursache-Wirkungs-Kette lässt sich das nicht erklären. Dafür brauchst du ein Wirkungsgefüge.</div>
+</section>
+<section id="t2">
+<h2><span class="no">2</span>Pfeil-Schule: Plus oder Minus?</h2>
+<p class="lead">Ein Pfeil im Wirkungsgefüge trägt immer ein Vorzeichen. <b>Plus</b> heißt gleichsinnig: je mehr, desto mehr &ndash; <i>oder</i> je weniger, desto weniger. <b>Minus</b> heißt gegensinnig: je mehr, desto weniger.</p>
+<div id="ps"></div>
+<p class="row"><span class="counter">richtig <span class="n" id="psScore">0</span> / 8</span><button class="btn ghost" id="psReset">Noch einmal</button></p>
+</section>
+<section id="t3">
+<h2><span class="no">3</span>Gefüge-Bauer: Pfeile setzen</h2>
+<p class="lead">Fünf Elemente stehen schon da. Welche Pfeile gehören dazu? Tippe einen Vorschlag an. Es gibt vier richtige &ndash; und drei, die nicht stimmen.</p>
+<div id="kand" class="row" style="margin-bottom:10px"></div>
+<div class="fb" id="kandFb"></div>
+<div class="svgbox"><svg id="svg3" viewBox="0 0 1000 400" role="img" aria-label="Wirkungsgefüge im Aufbau"></svg></div>
+<div class="legend"><span><i></i>Pluspfeil: gleichsinnig</span><span><i class="m"></i>Minuspfeil: gegensinnig</span></div>
+<div class="fb" id="kandDone"></div>
+</section>
+<section id="t4">
+<h2><span class="no">4</span>Erweiterung A: zwei Wege, zwei Richtungen</h2>
+<p class="lead">Die Gruppe A baut zwei Elemente ein. Danach wirkt die Grundwasserabsenkung auf <b>zwei Wegen</b> auf das Sulfat in der Spree.</p>
+<div class="row"><button class="btn teal" id="addA">Zwei Elemente einbauen</button>
+<button class="btn ghost" id="wayUp" disabled>Weg über Belüftung zeigen</button>
+<button class="btn ghost" id="wayDown" disabled>Weg über Einleitung zeigen</button></div>
+<div class="svgbox" style="margin-top:10px"><svg id="svg4" viewBox="0 0 1000 400" role="img" aria-label="Wirkungsgefüge mit Erweiterung A"></svg></div>
+<div class="fb" id="fbA"></div>
+</section>
+<section id="t5">
+<h2><span class="no">5</span>Erweiterung B: der Kreis schließt sich</h2>
+<p class="lead">Die Gruppe B baut zwei andere Elemente ein. Jetzt läuft eine Wirkung zu ihrem Ausgangspunkt zurück.</p>
+<div class="row"><button class="btn teal" id="addB">Zwei Elemente einbauen</button>
+<button class="btn amber" id="runLoop" disabled>Kreis ablaufen lassen</button>
+<button class="btn ghost" id="showAll" disabled>Gesamtgefüge zeigen</button></div>
+<div class="svgbox" style="margin-top:10px"><svg id="svg5" viewBox="0 0 1000 620" role="img" aria-label="Gesamtes Wirkungsgefüge"></svg></div>
+<div class="fb" id="fbB"></div>
+</section>
+<section id="t6">
+<h2><span class="no">6</span>Die Zählregel</h2>
+<p class="lead">Ob ein Kreis sich selbst verstärkt oder sich selbst bremst, lässt sich <b>zählen</b>: Nur die Minuspfeile im Kreis zählen. Eine <b>gerade</b> Anzahl ergibt einen verstärkenden Kreis (Teufelskreis), eine <b>ungerade</b> Anzahl einen ausgleichenden (Regelkreis).</p>
+<div class="row"><button class="btn ghost on" id="loopWater">Kreis 1: Wasser in der Spree</button>
+<button class="btn ghost" id="loopVillage">Kreis 2: Das Dorf ist weg</button></div>
+<div class="svgbox" style="margin-top:10px"><svg id="svg6" viewBox="0 0 1000 450" role="img" aria-label="Kreis mit Vorzeichen"></svg></div>
+<p class="small">Tippe jeden Pfeil an und entscheide sein Vorzeichen.</p>
+<div id="loopCtrl"></div>
+<p class="row"><span class="counter">Minuspfeile <span class="n" id="minusN">0</span></span>
+<button class="btn" id="judge" disabled>Regel anwenden</button></p>
+<div class="verdict" id="verdict"></div>
+</section>
+<section id="t7">
+<h2><span class="no">7</span>Hebelpunkte: Wo kann man eingreifen?</h2>
+<p class="lead">Sieben Maßnahmen. Jede greift an einer anderen Stelle des Gefüges an. Wähle eine Maßnahme, dann ein Feld.</p>
+<div id="hebPool" style="margin-bottom:10px"></div>
+<div class="cards" style="grid-template-columns:1fr">
+<div class="bucket" data-b="ursache"><h4>greift an der Ursache an</h4><div class="list"></div></div>
+<div class="bucket" data-b="folge"><h4>mildert die Folge</h4><div class="list"></div></div>
+<div class="bucket" data-b="verschiebt"><h4>verschiebt das Problem</h4><div class="list"></div></div>
+</div>
+<div class="fb" id="hebFb"></div>
+<p class="row"><span class="counter">richtig <span class="n" id="hebScore">0</span> / 7</span><button class="btn ghost" id="hebReset">Noch einmal</button></p>
+</section>
+<section id="t8">
+<h2><span class="no">8</span>Quiz, Zahlen und Hausaufgabe</h2>
+<div id="quiz"></div>
+<p class="row"><span class="counter">richtig <span class="n" id="qScore">0</span> / 8</span><button class="btn ghost" id="qReset">Noch einmal</button></p>
+<h3 style="margin:22px 0 2px;font-size:18px">Die Zahlen dieser Stunde</h3>
+<p class="small">Stand Oktober 2026. Quellen am Ende der Seite.</p>
+<div class="tblwrap"><table class="tbl" id="zt"><thead><tr><th>Angabe</th><th>Wert</th><th>Quelle</th></tr></thead><tbody></tbody></table></div>
+<h3 style="margin:22px 0 6px;font-size:18px">Weiterlesen</h3>
+<div id="lk"></div>
+<div class="ha">
+<h3 style="margin:0 0 6px;font-size:17px">Hausaufgabe</h3>
+<p style="margin:0">Zeichne das Wirkungsgefüge <b>„Das Dorf ist weg“</b> mit den fünf Elementen aus Teil 6 ins Arbeitsblatt (Aufgabe 7). Setze alle Pfeile und Vorzeichen, zähle die Minuspfeile und schreibe in einem Satz, welche Art von Rückkopplung du gefunden hast. Schreibe darunter in zwei Sätzen, was dein Gefüge <i>nicht</i> zeigen kann.</p>
+</div>
+</section>
+<footer>
+Humboldt-Gymnasium Cottbus &middot; Geografie Jahrgangsstufe 9 &middot; Stunde 10 (M3) &middot; offline nutzbar<br>
+Quellen: Umweltbundesamt (PM 19/2023), MLEUV Brandenburg, LBGR Brandenburg, LEAG (23.12.2024), LMBV.
+</footer>
+</main>
+<script>
+var DATA = {"nodes": [{"id": "K", "kurz": "K", "label": ["Braunkohle-", "förderung"], "x": 12, "y": 88, "g": "basis"}, {"id": "A", "kurz": "A", "label": ["Grundwasser-", "absenkung", "(Sümpfung)"], "x": 12, "y": 62, "g": "basis"}, {"id": "E", "kurz": "E", "label": ["Einleitung von", "Sümpfungswasser", "in die Spree"], "x": 12, "y": 30, "g": "basis"}, {"id": "W", "kurz": "W", "label": ["Wasserführung", "der Spree"], "x": 46, "y": 30, "g": "basis"}, {"id": "S", "kurz": "S", "label": ["Sulfatkonzentration", "in der Spree"], "x": 46, "y": 62, "g": "basis"}, {"id": "P", "kurz": "P", "label": ["Belüftung des", "Kippenbodens", "(Pyritoxidation)"], "x": 82, "y": 88, "g": "A"}, {"id": "X", "kurz": "X", "label": ["Sulfataustrag aus", "Kippe und", "Grundwasser"], "x": 82, "y": 62, "g": "A"}, {"id": "B", "kurz": "B", "label": ["Freigabe von", "Spreewasser", "für die Flutung"], "x": 82, "y": 30, "g": "B"}, {"id": "F", "kurz": "F", "label": ["Wasserentnahme", "für die Flutung", "der Restlöcher"], "x": 46, "y": 6, "g": "B"}], "edges": [{"a": "K", "b": "A", "s": 1, "g": "basis", "why": "je mehr Kohle, desto tiefer die Absenkung"}, {"a": "A", "b": "E", "s": 1, "g": "basis", "why": "abgepumptes Grundwasser geht in die Spree"}, {"a": "E", "b": "W", "s": 1, "g": "basis", "why": "eingeleitetes Wasser erhoeht den Abfluss"}, {"a": "W", "b": "S", "s": -1, "g": "basis", "why": "mehr Wasser verdünnt das Sulfat"}, {"a": "A", "b": "P", "s": 1, "g": "A", "why": "trockener Boden lässt Luft an den Pyrit"}, {"a": "P", "b": "X", "s": 1, "g": "A", "why": "Oxidation setzt Sulfat und Eisen frei"}, {"a": "X", "b": "S", "s": 1, "g": "A", "why": "ausgetragenes Sulfat erreicht die Spree"}, {"a": "S", "b": "B", "s": -1, "g": "B", "why": "hohe Sulfatwerte bremsen die Freigabe"}, {"a": "B", "b": "F", "s": 1, "g": "B", "why": "freigegebenes Wasser wird entnommen"}, {"a": "F", "b": "W", "s": -1, "g": "B", "why": "entnommenes Wasser fehlt im Fluss"}], "haNodes": [{"id": "Z", "label": ["Zahl der Einwohner", "im Ort"], "x": 50, "y": 88}, {"id": "U", "label": ["Auslastung von Laden,", "Schule, Arztpraxis, Bus"], "x": 86, "y": 56}, {"id": "G", "label": ["Angebot an", "Einrichtungen im Ort"], "x": 70, "y": 16}, {"id": "T", "label": ["Attraktivität", "des Ortes"], "x": 30, "y": 16}, {"id": "W2", "label": ["Wegzug aus", "dem Ort"], "x": 14, "y": 56}], "haEdges": [{"a": "Z", "b": "U", "s": 1, "why": "weniger Menschen, weniger Kundschaft"}, {"a": "U", "b": "G", "s": 1, "why": "schlecht ausgelastete Angebote schließen"}, {"a": "G", "b": "T", "s": 1, "why": "ohne Angebote wird der Ort unattraktiv"}, {"a": "T", "b": "W2", "s": -1, "why": "wer es unattraktiv findet, zieht weg"}, {"a": "W2", "b": "Z", "s": -1, "why": "jeder Wegzug senkt die Einwohnerzahl"}], "pfeilschule": [["Je mehr Grundwasser abgepumpt wird, desto &hellip; Wasser leitet der Bergbau in die Spree.", 1, "mehr", "Das abgepumpte Grundwasser muss irgendwo hin &ndash; es geht in die Spree. Rund die H&auml;lfte des Spreewassers bei Cottbus stammt daraus."], ["Je mehr Wasser die Spree f&uuml;hrt, desto &hellip; ist die Sulfatkonzentration.", -1, "niedriger", "Dieselbe Menge Sulfat in mehr Wasser hei&szlig;t: geringere Konzentration. Das ist Verd&uuml;nnung."], ["Je tiefer das Grundwasser abgesenkt wird, desto &hellip; Luft kommt an den Pyrit im Boden.", 1, "mehr", "Wo das Wasser weg ist, str&ouml;mt Luft nach. Der Sauerstoff l&auml;sst den Pyrit oxidieren."], ["Je mehr Sulfat aus der Kippe ausgetragen wird, desto &hellip; ist die Sulfatkonzentration der Spree.", 1, "h&ouml;her", "Hier kommt Sulfat hinzu &ndash; der Z&auml;hler w&auml;chst, die Konzentration steigt."], ["Je h&ouml;her die Sulfatwerte gemessen werden, desto &hellip; Spreewasser wird f&uuml;r die Flutung freigegeben.", -1, "weniger", "Trinkwasser und Spreewald haben Vorrang. Steigt das Sulfat, wird die Freigabe zur&uuml;ckgenommen."], ["Je mehr Wasser f&uuml;r die Flutung entnommen wird, desto &hellip; Wasser bleibt im Fluss.", -1, "weniger", "Entnahme ist Abzug: Was in den See geht, fehlt flussabw&auml;rts."], ["Je mehr Kohle gef&ouml;rdert wird, desto &hellip; muss das Grundwasser abgesenkt werden.", 1, "tiefer", "Gef&ouml;rdert werden kann nur in der trockenen Grube. Mehr Kohle hei&szlig;t gr&ouml;&szlig;ere und tiefere Absenkung."], ["Je weniger Einwohner ein Ort hat, desto &hellip; ist der Laden ausgelastet.", 1, "schlechter", "Vorsicht: Beide Gr&ouml;&szlig;en sinken gemeinsam &ndash; weniger Einwohner, weniger Auslastung. Das ist gleichsinnig, also ein Pluspfeil."]], "kandidaten": [{"a": "K", "b": "A", "ok": true, "why": "Richtig. Gef&ouml;rdert wird nur in der trockenen Grube &ndash; die F&ouml;rderung verlangt die Absenkung."}, {"a": "A", "b": "E", "ok": true, "why": "Richtig. Das abgepumpte Grundwasser wird in die Spree eingeleitet."}, {"a": "E", "b": "W", "ok": true, "why": "Richtig. Eingeleitetes Wasser erh&ouml;ht den Abfluss der Spree."}, {"a": "W", "b": "S", "ok": true, "why": "Richtig. Mehr Wasser verd&uuml;nnt &ndash; die Konzentration sinkt."}, {"a": "S", "b": "K", "ok": false, "why": "Nein. Die Sulfatkonzentration der Spree steuert nicht die F&ouml;rdermenge im Tagebau. Hier w&uuml;rde ein Pfeil eine Wirkung behaupten, die es nicht gibt."}, {"a": "W", "b": "E", "ok": false, "why": "Nein, die Richtung stimmt nicht. Die Einleitung wirkt auf den Abfluss, nicht umgekehrt. Pfeilrichtung hei&szlig;t immer: wirkt auf."}, {"a": "K", "b": "W", "ok": false, "why": "Nein &ndash; nicht direkt. Die F&ouml;rderung wirkt auf die Wasserf&uuml;hrung, aber &uuml;ber zwei Zwischenschritte (A und E). Ein Wirkungsgef&uuml;ge zeigt den Weg, nicht die Abk&uuml;rzung."}], "hebel": [{"t": "Die Talsperre Spremberg h&auml;lt Eisenocker zur&uuml;ck (unter guten Bedingungen 70 bis 80 % der Eisenfracht).", "b": "folge", "why": "Das Eisen ist schon im Wasser; die Talsperre f&auml;ngt es ab. Wirksam, aber nur gegen Eisen &ndash; auf das gel&ouml;ste Sulfat hat der R&uuml;ckhalt kaum Einfluss."}, {"t": "Speicher ausbauen: 99 Mio. m&sup3; heute, geplant sind 27 Mio. m&sup3; mehr.", "b": "folge", "why": "Mehr Speicher erlaubt es, in trockenen Monaten Wasser nachzugeben &ndash; das st&uuml;tzt den Pfeil auf die Wasserf&uuml;hrung. 99 + 27 = 126 Mio. m&sup3; &ndash; genau ein Jahresdefizit des Unterlaufs."}, {"t": "Nur dann fluten, wenn die Spree genug Wasser f&uuml;hrt.", "b": "folge", "why": "Das ist der Regelkreis von Hand bedient: Die Entnahme wird gedrosselt, wenn es knapp wird. Das Sulfat entsteht weiter, nur die Wirkung wird gemildert &ndash; und die Flutung dauert l&auml;nger."}, {"t": "Kippenb&ouml;den abdecken oder wiedervern&auml;ssen, damit keine Luft an den Pyrit kommt.", "b": "ursache", "why": "Hier wird der Pfeil Absenkung &rarr; Bel&uuml;ftung unterbrochen. Ohne Sauerstoff keine Oxidation, ohne Oxidation kein neues Sulfat."}, {"t": "Fr&uuml;her aus der Kohle aussteigen.", "b": "ursache", "why": "Das setzt am Anfang der Kette an. Aber Achtung &ndash; genau hier liegt der Doppeleffekt: Es entsteht weniger Sulfat, und gleichzeitig f&auml;llt das S&uuml;mpfungswasser weg, das die Spree heute f&uuml;hrt."}, {"t": "Das Grubenwasser einfach weiter pumpen, auch ohne Tagebau.", "b": "verschiebt", "why": "Die Spree beh&auml;lt ihr Wasser, aber die Sulfatbelastung steigt weiter. Das Umweltbundesamt nennt das eine zeitweilige Notl&ouml;sung und die teuerste Variante."}, {"t": "Wasser aus einem anderen Flussgebiet in die Spree &uuml;berleiten.", "b": "verschiebt", "why": "Ein neuer Pfeil von au&szlig;en ins Gef&uuml;ge. Die Spree gewinnt Wasser &ndash; das Herkunftsgebiet verliert es. Die Frage wandert nur weiter."}], "quiz": [{"q": "Was unterscheidet ein Wirkungsgef&uuml;ge von einer Ursache-Wirkungs-Kette?", "o": ["Es ist bunter gezeichnet.", "Eine Gr&ouml;&szlig;e kann von mehreren Seiten beeinflusst werden, und Wirkungen k&ouml;nnen zur&uuml;cklaufen.", "Es enth&auml;lt immer Zahlen.", "Es hat h&ouml;chstens f&uuml;nf Elemente."], "r": 1, "e": "Eine Kette l&auml;uft von vorn nach hinten. Im Gef&uuml;ge treffen mehrere Pfeile auf dieselbe Gr&ouml;&szlig;e, und ein Pfeil kann zum Ausgangspunkt zur&uuml;ckf&uuml;hren."}, {"q": "Welche Gr&ouml;&szlig;e geh&ouml;rt NICHT in ein Wirkungsgef&uuml;ge?", "o": ["Wasserf&uuml;hrung der Spree", "Sulfatkonzentration", "Am 22.12.2023 endete die F&ouml;rderung in J&auml;nschwalde.", "Zahl der Einwohner im Ort"], "r": 2, "e": "Elemente m&uuml;ssen gr&ouml;&szlig;er oder kleiner werden k&ouml;nnen. Ein einzelnes Datum ist ein Ereignis, keine ver&auml;nderliche Gr&ouml;&szlig;e."}, {"q": "Was bedeutet ein Minuspfeil von A nach B?", "o": ["A und B haben nichts miteinander zu tun.", "Je mehr A, desto weniger B.", "B ist schlecht f&uuml;r die Umwelt.", "A wirkt erst sp&auml;ter auf B."], "r": 1, "e": "Das Vorzeichen beschreibt die Richtung der Wirkung, nicht ihre Bewertung. Minus hei&szlig;t gegensinnig."}, {"q": "Im Kreis Wasserf&uuml;hrung &rarr; Sulfat &rarr; Freigabe &rarr; Entnahme &rarr; Wasserf&uuml;hrung stehen drei Minuspfeile. Was folgt daraus?", "o": ["Der Kreis ist verst&auml;rkend.", "Der Kreis ist ausgleichend.", "Der Kreis ist falsch gezeichnet.", "Das l&auml;sst sich nicht entscheiden."], "r": 1, "e": "Drei ist eine ungerade Zahl. Ungerade Anzahl von Minuspfeilen hei&szlig;t: ausgleichender Kreis, er h&auml;lt die Gr&ouml;&szlig;e in einem Bereich."}, {"q": "Warum f&uuml;hrt die Spree nach dem Kohleausstieg weniger Wasser, obwohl der Bergbau ihr Wasser entzogen hat?", "o": ["Weil der Klimawandel die Niederschl&auml;ge erh&ouml;ht.", "Weil rund die H&auml;lfte des Abflusses bei Cottbus aus abgepumptem Grundwasser stammt, das dann wegf&auml;llt.", "Weil die Spree umgeleitet wird.", "Weil die Talsperre Spremberg geschlossen wird."], "r": 1, "e": "Der Bergbau nimmt Grundwasser und gibt es als S&uuml;mpfungswasser dem Fluss. In hei&szlig;en Sommermonaten sind es bis zu 75 % des Abflusses. F&auml;llt die Pumpe weg, f&auml;llt dieses Wasser weg."}, {"q": "Zwei Wege f&uuml;hren von der Grundwasserabsenkung zur Sulfatkonzentration. Was gilt?", "o": ["Beide Wege erh&ouml;hen die Konzentration.", "Beide Wege senken die Konzentration.", "Ein Weg erh&ouml;ht sie, der andere senkt sie.", "Die Wege heben sich immer genau auf."], "r": 2, "e": "&Uuml;ber Bel&uuml;ftung und Austrag steigt die Konzentration. &Uuml;ber Einleitung und Wasserf&uuml;hrung sinkt sie durch Verd&uuml;nnung. Welcher Weg st&auml;rker wirkt, h&auml;ngt von den Mengen ab &ndash; das Gef&uuml;ge allein sagt es nicht."}, {"q": "Ein Kreis enth&auml;lt vier Minuspfeile. Welche Art von R&uuml;ckkopplung ist das?", "o": ["verst&auml;rkend", "ausgleichend", "gar keine", "je nach Reihenfolge der Pfeile"], "r": 0, "e": "Vier ist gerade &ndash; also verst&auml;rkend. Die Reihenfolge der Pfeile im Kreis spielt dabei keine Rolle, nur ihre Anzahl."}, {"q": "Welche Ma&szlig;nahme greift an der Ursache des Sulfats an?", "o": ["Eisenr&uuml;ckhalt in der Talsperre Spremberg", "Speicher ausbauen", "Kippenb&ouml;den vern&auml;ssen, damit keine Luft an den Pyrit kommt", "Wasser aus einem anderen Flussgebiet &uuml;berleiten"], "r": 2, "e": "Ohne Sauerstoff oxidiert der Pyrit nicht, also entsteht kein neues Sulfat. Die anderen drei mildern Folgen oder verschieben das Problem."}], "links": [["Wasserhaushalt und Bergbaufolgen in Brandenburg (MLEUV)", "https://mleuv.brandenburg.de/mleuv/de/umwelt/wasser/bergbaufolgen-fuer-den-wasserhaushalt/wassermenge/", "Die amtlichen Zahlen zum Wasserdefizit der Lausitz."], ["Bergbaubedingte Stoffeintr&auml;ge in die Spree &ndash; FAQ (LBGR)", "https://lbgr.brandenburg.de/lbgr/de/aktuell/buergerinformationen/bergbaubedingte-stoffeintraege-in-die-spree/stoffeintraege-spree-faq/", "Woher Eisen und Sulfat kommen, mit Grenz- und Richtwerten."], ["Spree k&uuml;nftig mit weniger Wasser (Umweltbundesamt, 12.06.2023)", "https://www.umweltbundesamt.de/en/press/pressinformation/spree-faces-increased-water-shortage-after-coal", "Die Studie, aus der die Prozentangaben dieser Stunde stammen."], ["Cottbuser Ostsee erreicht Zielwasserstand (LEAG, 23.12.2024)", "https://www.leag.de/de/news/details/cottbuser-ostsee-erreicht-zielwasserstand/", "170 Mio. m&sup3; Spreewasser in zehn Flutungsphasen."]], "zahlen": [["Anteil der Sümpfungswässer am Spreeabfluss bei Cottbus", "rund die Hälfte", "UBA PM 19/2023"], ["derselbe Anteil in heißen Sommermonaten", "bis zu 75 %", "UBA PM 19/2023"], ["Abflussminderung nach dem Kohleausstieg, oertlich im trockenen Sommer", "bis zu 75 % weniger", "UBA PM 19/2023"], ["jährliches Abflussdefizit am brandenburgischen Unterlauf", "rund 126 Mio. m3", "UBA PM 19/2023"], ["heutiges Speichervolumen in der Lausitz", "rund 99 Mio. m3", "UBA PM 19/2023"], ["geplante Erweiterung des Speichervolumens", "+ 27 Mio. m3", "UBA PM 19/2023"], ["Wasserbedarf zum Füllen der Tagebaurestlöcher", "rund 6 Mrd. m3", "UBA PM 19/2023"], ["Trinkwasser-Grenzwert für Sulfat in Deutschland", "250 mg/l", "LBGR FAQ"], ["sichtbare Verockerung ab", "2 bis 3 mg/l Eisen(II)", "LBGR FAQ"], ["Eisenrückhalt der Talsperre Spremberg unter optimalen Bedingungen", "70 bis 80 %", "LBGR FAQ"], ["Spreewasser im Cottbuser Ostsee bis Dezember 2024 (10 Flutungsphasen)", "rund 170 Mio. m3", "LEAG 23.12.2024"], ["noch nötig für die Porenräume der Innenkippe", "rund 50 Mio. m3", "LEAG 23.12.2024"], ["Zielwasserstand des Cottbuser Ostsees", "+ 62,5 m NHN", "LEAG 23.12.2024"], ["Wasserdefizit im LMBV-Bereich 1990 / 2024", "7 Mrd. m3 / 0,6 Mrd. m3", "MLEUV"], ["Fläche mit abgesenktem Grundwasser", "mehr als 2.000 km2", "MLEUV"]], "url": "https://dk-hgc.github.io/ek9/Std-10_Interaktiv_Wirkungsgefuege-Werkstatt.html", "loop": ["W", "S", "B", "F", "W"], "loopSigns": [-1, -1, 1, -1]};
+</script>
+<script>
+(function(){
+"use strict";
+var D = DATA, NODE = {};
+D.nodes.forEach(function(n){ NODE[n.id] = n; });
+var HAN = {}; D.haNodes.forEach(function(n){ HAN[n.id] = n; });
+/* ---------------------------------------------------- Navigation */
+var PARTS = [["t1","1 Widerspruch"],["t2","2 Pfeil-Schule"],["t3","3 Pfeile setzen"],
+["t4","4 Zwei Wege"],["t5","5 Der Kreis"],["t6","6 Zählregel"],
+["t7","7 Hebelpunkte"],["t8","8 Quiz & Zahlen"]];
+var nav = document.getElementById("nav");
+PARTS.forEach(function(p){
+var b = document.createElement("button");
+b.textContent = p[1]; b.setAttribute("aria-label","Zu Teil "+p[1]);
+b.onclick = function(){
+var el = document.getElementById(p[0]);
+el.scrollIntoView({behavior:"smooth", block:"start"});
+};
+nav.appendChild(b);
+});
+var secs = PARTS.map(function(p){ return document.getElementById(p[0]); });
+function markNav(){
+var best = 0, bd = 1e9;
+secs.forEach(function(s,i){ var d = Math.abs(s.getBoundingClientRect().top - 80);
+if (d < bd){ bd = d; best = i; } });
+for (var i=0;i<nav.children.length;i++) nav.children[i].className = (i===best?"on":"");
+}
+window.addEventListener("scroll", markNav, {passive:true}); markNav();
+/* ---------------------------------------------------- SVG-Zeichnung */
+var NS = "http://www.w3.org/2000/svg";
+var C = {navy:"#1F3B57", teal:"#2E7D6B", amber:"#C97A2B", coral:"#C05A5A",
+line:"#D7E2DD", light:"#E8F0ED", grey:"#6B7B86"};
+var BW = 204, LH = 19;
+function el(t, a){ var e = document.createElementNS(NS,t);
+for (var k in a) e.setAttribute(k, a[k]); return e; }
+function mapMain(n){ return { x: 70 + n.x/100*860, y: 600 - (n.y-6)/82*540 }; }
+function boxH(n){ return n.label.length*LH + 24; }
+/* Schnittpunkt der Mittellinie mit dem Rechteck um (cx,cy) */
+function border(cx, cy, w, h, tx, ty){
+var dx = tx-cx, dy = ty-cy;
+if (dx === 0 && dy === 0) return {x:cx, y:cy};
+var sx = dx === 0 ? Infinity : (w/2)/Math.abs(dx);
+var sy = dy === 0 ? Infinity : (h/2)/Math.abs(dy);
+var s = Math.min(sx, sy);
+return { x: cx + dx*s, y: cy + dy*s };
+}
+function drawNode(g, n, pos, opts){
+opts = opts || {};
+var h = boxH(n), x = pos.x - BW/2, y = pos.y - h/2;
+var fill = opts.fill || "#FFFFFF", stroke = opts.stroke || C.navy;
+var r = el("rect",{x:x, y:y, width:BW, height:h, rx:11, fill:fill,
+stroke:stroke, "stroke-width":opts.sw || 2});
+if (opts.dash) r.setAttribute("stroke-dasharray","6 5");
+g.appendChild(r);
+var t0 = y + 15 + LH*0.55;
+n.label.forEach(function(ln,i){
+var t = el("text",{x:pos.x, y:t0 + i*LH, "text-anchor":"middle",
+"font-size":14.5, "font-weight":(i===0?"700":"500"),
+fill: opts.text || C.navy, "font-family":"Helvetica, Arial, sans-serif"});
+t.textContent = ln; g.appendChild(t);
+});
+if (n.kurz){
+var bg = el("circle",{cx:x+3, cy:y+3, r:12, fill:opts.badge || C.navy, stroke:"#FBFDFC", "stroke-width":2});
+var bt = el("text",{x:x+3, y:y+7.5, "text-anchor":"middle","font-size":12,
+"font-weight":"700", fill:"#fff","font-family":"Helvetica, Arial, sans-serif"});
+bt.textContent = n.kurz; g.appendChild(bg); g.appendChild(bt);
+}
+}
+function drawEdge(g, p1, h1, p2, h2, sign, opts){
+opts = opts || {};
+var a = border(p1.x, p1.y, BW, h1, p2.x, p2.y);
+var b = border(p2.x, p2.y, BW, h2, p1.x, p1.y);
+var col = opts.color || (sign > 0 ? C.teal : C.coral);
+var w = opts.width || 3.2;
+var dx = b.x-a.x, dy = b.y-a.y, L = Math.hypot(dx,dy) || 1;
+var ex = b.x - dx/L*13, ey = b.y - dy/L*13;        /* Platz fuer Spitze */
+var ln = el("line",{x1:a.x, y1:a.y, x2:ex, y2:ey, stroke:col, "stroke-width":w,
+"stroke-linecap":"round"});
+if (sign < 0) ln.setAttribute("stroke-dasharray","9 6");
+if (opts.cls) ln.setAttribute("class", opts.cls);
+g.appendChild(ln);
+/* Pfeilspitze */
+var ang = Math.atan2(dy,dx), s = 13;
+var p = el("polygon",{fill:col, points:[
+b.x+","+b.y,
+(b.x - s*Math.cos(ang-0.42))+","+(b.y - s*Math.sin(ang-0.42)),
+(b.x - s*Math.cos(ang+0.42))+","+(b.y - s*Math.sin(ang+0.42))].join(" ")});
+if (opts.cls) p.setAttribute("class", opts.cls);
+g.appendChild(p);
+/* Vorzeichen */
+if (sign !== 0 && !opts.noSign){
+var mx = a.x + dx*0.5, my = a.y + dy*0.5;
+g.appendChild(el("circle",{cx:mx, cy:my, r:14, fill:"#fff", stroke:col, "stroke-width":2.4}));
+var tt = el("text",{x:mx, y:my+6.5, "text-anchor":"middle","font-size":21,
+"font-weight":"700", fill:col, "font-family":"Helvetica, Arial, sans-serif"});
+tt.textContent = sign > 0 ? "+" : "–"; g.appendChild(tt);
+}
+return {a:a, b:b};
+}
+function clear(svg){ while (svg.firstChild) svg.removeChild(svg.firstChild); }
+/* Haupt-Gefuege zeichnen: ids = sichtbare Knoten, eids = sichtbare Pfeile */
+function renderMain(svg, ids, eids, opt){
+opt = opt || {};
+clear(svg);
+svg.setAttribute("viewBox", "0 0 1000 " + (opt.vb || 650));
+var g = el("g",{}); svg.appendChild(g);
+D.edges.forEach(function(e,i){
+var key = e.a+e.b;
+if (eids.indexOf(key) < 0) return;
+var n1 = NODE[e.a], n2 = NODE[e.b];
+drawEdge(g, mapMain(n1), boxH(n1), mapMain(n2), boxH(n2), e.s,
+{ cls: "ed-"+key,
+color: (opt.hi && opt.hi.indexOf(key) >= 0) ? C.amber : null,
+width: (opt.hi && opt.hi.indexOf(key) >= 0) ? 5 : 3.2,
+noSign: opt.noSign });
+});
+ids.forEach(function(id){
+var n = NODE[id];
+drawNode(g, n, mapMain(n), {
+fill: (opt.mark && opt.mark.indexOf(id) >= 0) ? "#FDF6EE" : "#FFFFFF",
+stroke: (opt.mark && opt.mark.indexOf(id) >= 0) ? C.amber : C.navy,
+badge: (opt.mark && opt.mark.indexOf(id) >= 0) ? C.amber : C.navy
+});
+});
+}
+/* ---------------------------------------------------- Teil 1 */
+Array.prototype.forEach.call(document.querySelectorAll("[data-rev]"), function(b){
+b.onclick = function(){
+var f = document.getElementById(b.getAttribute("data-rev"));
+f.classList.add("show"); b.disabled = true;
+};
+});
+/* ---------------------------------------------------- Teil 2 Pfeil-Schule */
+var psWrap = document.getElementById("ps"), psDone = [], psScore = 0;
+function buildPS(){
+psWrap.innerHTML = ""; psDone = []; psScore = 0;
+document.getElementById("psScore").textContent = "0";
+D.pfeilschule.forEach(function(it, i){
+var d = document.createElement("div"); d.className = "q";
+d.innerHTML = '<div class="qt">' + (i+1) + '. ' + it[0] + '</div>' +
+'<div class="row"><button class="btn ghost" data-v="1">+ gleichsinnig</button>' +
+'<button class="btn ghost" data-v="-1">– gegensinnig</button></div>' +
+'<div class="fb" id="psf' + i + '"></div>';
+Array.prototype.forEach.call(d.querySelectorAll("button"), function(b){
+b.onclick = function(){
+if (psDone[i]) return;
+psDone[i] = true;
+var v = parseInt(b.getAttribute("data-v"), 10), ok = (v === it[1]);
+var f = document.getElementById("psf"+i);
+f.className = "fb show" + (ok ? "" : " bad");
+f.innerHTML = '<span class="' + (ok?"ok-line":"no-line") + '">' +
+(ok ? "Richtig" : "Nicht richtig") + '.</span> Es muss heißen: „&hellip; desto <b>' +
+it[2] + '</b>“ &ndash; also ein ' + (it[1]>0?"Pluspfeil":"Minuspfeil") + '. ' + it[3];
+Array.prototype.forEach.call(d.querySelectorAll("button"), function(x){
+x.disabled = true;
+if (parseInt(x.getAttribute("data-v"),10) === it[1]) x.className = "btn teal";
+});
+if (ok){ psScore++; document.getElementById("psScore").textContent = psScore; }
+};
+});
+psWrap.appendChild(d);
+});
+}
+buildPS();
+document.getElementById("psReset").onclick = buildPS;
+/* ---------------------------------------------------- Teil 3 Pfeile setzen */
+var BASE_N = ["K","A","E","W","S"];
+var placed = [], kandState = [];
+function drawT3(){
+renderMain(document.getElementById("svg3"), BASE_N, placed, {vb:500, noSign:false});
+}
+function buildKand(){
+var wrap = document.getElementById("kand"); wrap.innerHTML = "";
+placed = []; kandState = [];
+document.getElementById("kandFb").className = "fb";
+document.getElementById("kandDone").className = "fb";
+D.kandidaten.forEach(function(k, i){
+var b = document.createElement("button");
+b.className = "pill";
+b.innerHTML = NODE[k.a].kurz + " &rarr; " + NODE[k.b].kurz +
+'<span class="small" style="font-weight:400"> &nbsp;' +
+NODE[k.a].label.join(" ").replace(/-\s/,"") + " wirkt auf " +
+NODE[k.b].label.join(" ").replace(/-\s/,"") + "</span>";
+b.onclick = function(){
+if (kandState[i]) return;
+kandState[i] = true;
+var f = document.getElementById("kandFb");
+f.className = "fb show" + (k.ok ? "" : " bad");
+f.innerHTML = k.why;
+if (k.ok){ b.className = "pill done"; placed.push(k.a+k.b); drawT3(); }
+else { b.className = "pill dead"; }
+var n = placed.length;
+if (n === 4){
+var dd = document.getElementById("kandDone");
+dd.className = "fb show";
+dd.innerHTML = "<b>Alle vier Pfeile stehen.</b> Und jetzt sieh genau hin: Das ist eine " +
+"<b>Kette</b> – sie läuft von K nach S und endet dort. Kein Pfeil führt zurück, " +
+"keine Größe wird von zwei Seiten beeinflusst. Ein Wirkungsgefüge ist das noch nicht. " +
+"Die Teile 4 und 5 machen daraus eines.";
+}
+};
+wrap.appendChild(b);
+});
+drawT3();
+}
+buildKand();
+/* ---------------------------------------------------- Teil 4 Erweiterung A */
+var A_N = BASE_N.concat(["P","X"]);
+var A_E = ["KA","AE","EW","WS","AP","PX","XS"];
+var aOn = false;
+function drawT4(hi, mark){
+renderMain(document.getElementById("svg4"),
+aOn ? A_N : BASE_N, aOn ? A_E : ["KA","AE","EW","WS"],
+{vb:500, hi:hi || [], mark: mark || (aOn ? ["P","X"] : [])});
+}
+drawT4();
+document.getElementById("addA").onclick = function(){
+aOn = true; drawT4();
+document.getElementById("wayUp").disabled = false;
+document.getElementById("wayDown").disabled = false;
+this.disabled = true;
+var f = document.getElementById("fbA"); f.className = "fb show";
+f.innerHTML = "Zwei neue Elemente: <b>Belüftung des Kippenbodens</b> und <b>Sulfataustrag</b>. " +
+"Von der Grundwasserabsenkung (A) führen jetzt <b>zwei Wege</b> zur Sulfatkonzentration (S). " +
+"Vergleiche sie mit den beiden Schaltflächen.";
+};
+document.getElementById("wayUp").onclick = function(){
+drawT4(["AP","PX","XS"], ["P","X"]);
+var f = document.getElementById("fbA"); f.className = "fb show";
+f.innerHTML = "<b>Weg 1: A → P → X → S.</b> Drei Pluspfeile, kein Minus. " +
+"Mehr Absenkung → mehr Luft am Pyrit → mehr Sulfat im Grundwasser → " +
+"<b>höhere</b> Sulfatkonzentration in der Spree. Null Minuspfeile ist eine gerade Zahl: " +
+"Der Weg wirkt insgesamt gleichsinnig.";
+};
+document.getElementById("wayDown").onclick = function(){
+drawT4(["AE","EW","WS"], ["E","W"]);
+var f = document.getElementById("fbA"); f.className = "fb show";
+f.innerHTML = "<b>Weg 2: A → E → W → S.</b> Zwei Pluspfeile und ein Minuspfeil. " +
+"Mehr Absenkung → mehr eingeleitetes Wasser → höherer Abfluss → " +
+"<b>niedrigere</b> Sulfatkonzentration. Ein Minuspfeil ist eine ungerade Zahl: " +
+"Der Weg wirkt insgesamt gegensinnig. <b>Das ist die Antwort auf die Leitfrage:</b> " +
+"Derselbe Eingriff drückt dieselbe Größe in zwei Richtungen. " +
+"Welcher Weg stärker wirkt, verrät das Gefüge nicht – das muss gemessen werden.";
+};
+/* ---------------------------------------------------- Teil 5 Erweiterung B */
+var ALL_N = A_N.concat(["B","F"]);
+var ALL_E = A_E.concat(["SB","BF","FW"]);
+var bOn = false;
+function drawT5(hi, mark){
+renderMain(document.getElementById("svg5"),
+bOn ? ALL_N : BASE_N, bOn ? ALL_E : ["KA","AE","EW","WS"],
+{vb:650, hi:hi || [], mark: mark || (bOn ? ["B","F"] : [])});
+}
+drawT5();
+document.getElementById("addB").onclick = function(){
+bOn = true; drawT5();
+document.getElementById("runLoop").disabled = false;
+document.getElementById("showAll").disabled = false;
+this.disabled = true;
+var f = document.getElementById("fbB"); f.className = "fb show";
+f.innerHTML = "Zwei neue Elemente: <b>Freigabe von Spreewasser für die Flutung</b> und " +
+"<b>Wasserentnahme</b>. Folge dem Weg: W → S → B → F → <b>W</b>. " +
+"Der letzte Pfeil führt zum Ausgangspunkt zurück. Das ist eine <b>Rückkopplung</b>.";
+};
+var loopKeys = ["WS","SB","BF","FW"];
+document.getElementById("runLoop").onclick = function(){
+var i = 0, btn = this; btn.disabled = true;
+var steps = [
+"W → S: Die Spree führt viel Wasser, das Sulfat wird verdünnt – die Konzentration sinkt.",
+"S → B: Weil die Sulfatwerte niedrig sind, wird mehr Spreewasser für die Flutung freigegeben.",
+"B → F: Das freigegebene Wasser wird dem Fluss entnommen und in das Restloch geleitet.",
+"F → W: Das entnommene Wasser fehlt im Fluss – die Wasserführung sinkt wieder."];
+var f = document.getElementById("fbB"); f.className = "fb show";
+var tick = setInterval(function(){
+drawT5(loopKeys.slice(0, i+1), ["B","F"]);
+f.innerHTML = "<b>Schritt " + (i+1) + " von 4.</b> " + steps[i];
+i++;
+if (i >= 4){
+clearInterval(tick);
+setTimeout(function(){
+drawT5(loopKeys, ["B","F"]);
+f.innerHTML = "<b>Der Kreis ist geschlossen.</b> Wird die Spree wasserreicher, wird mehr " +
+"entnommen – und sie wird wieder wasserärmer. Wird sie wasserärmer, steigt das Sulfat, " +
+"die Freigabe wird zurückgenommen, und sie erholt sich. Ein Kreis, der eine Größe in " +
+"einem Bereich hält, heißt <b>ausgleichende Rückkopplung</b> oder Regelkreis. " +
+"In Teil 6 prüfst du das mit der Zählregel nach.";
+btn.disabled = false;
+}, 1100);
+}
+}, 1500);
+};
+document.getElementById("showAll").onclick = function(){
+drawT5([], []);
+var f = document.getElementById("fbB"); f.className = "fb show";
+f.innerHTML = "Das vollständige Gefüge: neun Elemente, zehn Pfeile, ein geschlossener Kreis " +
+"und zwei gegenläufige Wege von A nach S. So viel steckt hinter der Frage, warum der " +
+"Spree nach dem Kohleausstieg Wasser fehlt.";
+};
+/* ---------------------------------------------------- Teil 6 Zaehlregel */
+var LOOPS = {
+water: {
+name: "Wasser in der Spree",
+pos: {W:[22,74], S:[78,74], B:[78,24], F:[22,24]},
+lab: {W:["Wasserführung","der Spree"], S:["Sulfatkonzentration","in der Spree"],
+B:["Freigabe von","Spreewasser"], F:["Wasserentnahme für","die Flutung"]},
+seq: [["W","S",-1],["S","B",-1],["B","F",+1],["F","W",-1]],
+txt: ["Mehr Wasser verdünnt das Sulfat.","Hohe Sulfatwerte bremsen die Freigabe.",
+"Freigegebenes Wasser wird entnommen.","Entnommenes Wasser fehlt im Fluss."]
+},
+village: {
+name: "Das Dorf ist weg",
+pos: {Z:[50,88], U:[86,56], G:[70,16], T:[30,16], W2:[14,56]},
+lab: {Z:["Zahl der Einwohner","im Ort"], U:["Auslastung von","Laden, Schule, Bus"],
+G:["Angebot an","Einrichtungen"], T:["Attraktivität","des Ortes"],
+W2:["Wegzug aus","dem Ort"]},
+seq: [["Z","U",+1],["U","G",+1],["G","T",+1],["T","W2",-1],["W2","Z",-1]],
+txt: ["Weniger Menschen, weniger Kundschaft.","Schlecht ausgelastete Angebote schließen.",
+"Ohne Angebote wird der Ort unattraktiv.","Wer es unattraktiv findet, zieht weg.",
+"Jeder Wegzug senkt die Einwohnerzahl."]
+}
+};
+var curLoop = "water", loopAns = [];
+function mapLoop(p){ return { x: 90 + p[0]/100*820, y: 420 - (p[1]-10)/82*340 }; }
+function drawT6(){
+var L = LOOPS[curLoop], svg = document.getElementById("svg6");
+clear(svg); svg.setAttribute("viewBox","0 0 1000 450");
+var g = el("g",{}); svg.appendChild(g);
+L.seq.forEach(function(e, i){
+var n1 = {label:L.lab[e[0]]}, n2 = {label:L.lab[e[1]]};
+var p1 = mapLoop(L.pos[e[0]]), p2 = mapLoop(L.pos[e[1]]);
+var ans = loopAns[i];
+drawEdge(g, p1, boxH(n1), p2, boxH(n2), ans === undefined ? 0 : ans,
+{ color: ans === undefined ? C.grey : (ans === e[2] ? (ans>0?C.teal:C.coral) : C.amber),
+width: 3.2, noSign: ans === undefined });
+});
+Object.keys(L.pos).forEach(function(k){
+drawNode(g, {kurz:null, label:L.lab[k]}, mapLoop(L.pos[k]), {});
+});
+}
+function buildLoopCtrl(){
+var L = LOOPS[curLoop], wrap = document.getElementById("loopCtrl");
+wrap.innerHTML = ""; loopAns = [];
+document.getElementById("minusN").textContent = "0";
+document.getElementById("judge").disabled = true;
+document.getElementById("verdict").className = "verdict";
+L.seq.forEach(function(e, i){
+var d = document.createElement("div"); d.className = "q";
+d.innerHTML = '<div class="qt">Pfeil ' + (i+1) + ': ' + L.lab[e[0]].join(" ") +
+' &rarr; ' + L.lab[e[1]].join(" ") + '</div>' +
+'<div class="row"><button class="btn ghost" data-v="1">+</button>' +
+'<button class="btn ghost" data-v="-1">–</button>' +
+'<span class="small">' + L.txt[i] + '</span></div>' +
+'<div class="fb" id="lf' + i + '"></div>';
+Array.prototype.forEach.call(d.querySelectorAll("button"), function(b){
+b.onclick = function(){
+var v = parseInt(b.getAttribute("data-v"), 10);
+loopAns[i] = v;
+var ok = (v === e[2]), f = document.getElementById("lf"+i);
+f.className = "fb show" + (ok ? "" : " bad");
+f.innerHTML = ok ? '<span class="ok-line">Stimmt.</span> ' + L.txt[i]
+: '<span class="no-line">Nicht richtig.</span> ' + L.txt[i] +
+' Also ein ' + (e[2]>0 ? "Plus" : "Minus") + 'pfeil.';
+Array.prototype.forEach.call(d.querySelectorAll("button"), function(x){
+x.className = "btn ghost";
+if (parseInt(x.getAttribute("data-v"),10) === v) x.className = "btn" + (ok ? " teal" : " amber");
+});
+var m = 0, full = true;
+L.seq.forEach(function(ee, j){
+if (loopAns[j] === undefined) full = false;
+else if (loopAns[j] < 0) m++;
+});
+document.getElementById("minusN").textContent = m;
+document.getElementById("judge").disabled = !full;
+drawT6();
+};
+});
+wrap.appendChild(d);
+});
+drawT6();
+}
+document.getElementById("loopWater").onclick = function(){
+curLoop = "water"; this.className = "btn ghost on";
+document.getElementById("loopVillage").className = "btn ghost"; buildLoopCtrl();
+};
+document.getElementById("loopVillage").onclick = function(){
+curLoop = "village"; this.className = "btn ghost on";
+document.getElementById("loopWater").className = "btn ghost"; buildLoopCtrl();
+};
+document.getElementById("judge").onclick = function(){
+var L = LOOPS[curLoop], m = 0, wrong = 0;
+L.seq.forEach(function(e, j){ if (loopAns[j] < 0) m++; if (loopAns[j] !== e[2]) wrong++; });
+var even = (m % 2 === 0);
+var v = document.getElementById("verdict");
+v.className = "verdict show " + (even ? "ver" : "aus");
+v.innerHTML = "<b>" + m + " Minuspfeil" + (m===1?"":"e") + " – " +
+(even ? "gerade" : "ungerade") + ".</b> Nach der Zählregel ist das " +
+(even ? "ein <b>verstärkender</b> Kreis, ein Teufelskreis: Wer einmal anstößt, " +
+"treibt die Entwicklung immer weiter in dieselbe Richtung."
+: "ein <b>ausgleichender</b> Kreis, ein Regelkreis: Er bremst jede Veränderung ab " +
+"und hält die Größe in einem Bereich.") +
+(wrong ? " <br><span class='no-line'>Achtung:</span> " + wrong +
+" Vorzeichen stimmt bzw. stimmen noch nicht – prüfe sie, bevor du das Ergebnis übernimmst."
+: " <br>Alle Vorzeichen stimmen.");
+};
+buildLoopCtrl();
+/* ---------------------------------------------------- Teil 7 Hebelpunkte */
+var hebSel = null, hebScore = 0, hebLeft = 0;
+function buildHeb(){
+var pool = document.getElementById("hebPool");
+pool.innerHTML = ""; hebSel = null; hebScore = 0; hebLeft = D.hebel.length;
+document.getElementById("hebScore").textContent = "0";
+document.getElementById("hebFb").className = "fb";
+Array.prototype.forEach.call(document.querySelectorAll(".bucket .list"), function(l){ l.innerHTML = ""; });
+D.hebel.forEach(function(h, i){
+var b = document.createElement("button");
+b.className = "pill"; b.style.cssText = "display:block;width:100%;text-align:left;line-height:1.4;min-height:44px;padding:10px 14px;border-radius:11px";
+b.innerHTML = h.t; b.setAttribute("data-i", i);
+b.onclick = function(){
+Array.prototype.forEach.call(pool.children, function(c){ c.className = "pill"; c.style.cssText = b.style.cssText; });
+b.className = "pill sel"; hebSel = i;
+};
+pool.appendChild(b);
+});
+}
+Array.prototype.forEach.call(document.querySelectorAll(".bucket"), function(bk){
+bk.onclick = function(){
+if (hebSel === null) return;
+var h = D.hebel[hebSel], want = bk.getAttribute("data-b"), ok = (h.b === want);
+var f = document.getElementById("hebFb");
+f.className = "fb show" + (ok ? "" : " bad");
+f.innerHTML = '<span class="' + (ok?"ok-line":"no-line") + '">' +
+(ok ? "Richtig eingeordnet." : "Nicht hier.") + '</span> ' + h.why +
+(ok ? "" : " Richtig ist: <b>" + ({ursache:"greift an der Ursache an",
+folge:"mildert die Folge", verschiebt:"verschiebt das Problem"})[h.b] + "</b>.");
+var tgt = document.querySelector('.bucket[data-b="' + h.b + '"] .list');
+var it = document.createElement("div"); it.className = "it"; it.innerHTML = h.t;
+tgt.appendChild(it);
+var btn = document.querySelector('#hebPool [data-i="' + hebSel + '"]');
+if (btn) btn.parentNode.removeChild(btn);
+if (ok){ hebScore++; document.getElementById("hebScore").textContent = hebScore; }
+hebSel = null; hebLeft--;
+};
+});
+document.getElementById("hebReset").onclick = buildHeb;
+buildHeb();
+/* ---------------------------------------------------- Teil 8 Quiz */
+var qScore = 0;
+function buildQuiz(){
+var w = document.getElementById("quiz"); w.innerHTML = ""; qScore = 0;
+document.getElementById("qScore").textContent = "0";
+D.quiz.forEach(function(q, i){
+var d = document.createElement("div"); d.className = "q";
+var h = '<div class="qt">' + (i+1) + '. ' + q.q + '</div>';
+q.o.forEach(function(o, j){ h += '<button class="opt" data-j="' + j + '">' + o + '</button>'; });
+h += '<div class="fb" id="qf' + i + '"></div>';
+d.innerHTML = h;
+var answered = false;
+Array.prototype.forEach.call(d.querySelectorAll(".opt"), function(b){
+b.onclick = function(){
+if (answered) return; answered = true;
+var j = parseInt(b.getAttribute("data-j"), 10), ok = (j === q.r);
+Array.prototype.forEach.call(d.querySelectorAll(".opt"), function(x, k){
+x.disabled = true;
+if (k === q.r) x.className = "opt ok";
+else if (k === j) x.className = "opt no";
+});
+var f = document.getElementById("qf"+i);
+f.className = "fb show" + (ok ? "" : " bad");
+f.innerHTML = '<span class="' + (ok?"ok-line":"no-line") + '">' +
+(ok ? "Richtig." : "Leider nicht.") + '</span> ' + q.e;
+if (ok){ qScore++; document.getElementById("qScore").textContent = qScore; }
+};
+});
+w.appendChild(d);
+});
+}
+buildQuiz();
+document.getElementById("qReset").onclick = buildQuiz;
+/* Zahlen + Links */
+var tb = document.querySelector("#zt tbody");
+D.zahlen.forEach(function(z){
+var tr = document.createElement("tr");
+tr.innerHTML = "<td>" + z[0] + "</td><td class='v'>" + z[1] + "</td><td class='small'>" + z[2] + "</td>";
+tb.appendChild(tr);
+});
+var lk = document.getElementById("lk");
+D.links.forEach(function(l){
+var d = document.createElement("div"); d.className = "card2"; d.style.marginBottom = "9px";
+d.innerHTML = '<h3><a href="' + l[1] + '" target="_blank" rel="noopener">' + l[0] + '</a></h3><p>' + l[2] + '</p>';
+lk.appendChild(d);
+});
+})();
+</script>
+</body>
+</html>
