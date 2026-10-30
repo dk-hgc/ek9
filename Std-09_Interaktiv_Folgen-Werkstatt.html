@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Folgen-Werkstatt – Eingriffe und Folgen des Bergbaus</title>
+<style>
+:root{
+  --navy:#1F3B57; --teal:#2E7D6B; --amber:#C97A2B; --coral:#C05A5A;
+  --bg:#F4F7F6; --ink:#22303C; --card:#FFFFFF; --line:#D7E0DD; --muted:#5B6B72;
+  --ok:#2E7D6B; --bad:#C05A5A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:17px;line-height:1.55;padding-bottom:48px}
+header{background:var(--navy);color:#fff;padding:18px 16px 16px}
+header .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+header h1{margin:4px 0 6px;font-size:25px;line-height:1.2}
+header p{margin:0;font-size:15px;opacity:.9}
+nav{position:sticky;top:0;z-index:20;background:#17304a;display:flex;gap:4px;overflow-x:auto;
+  padding:8px 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:0 0 auto;min-height:44px;padding:8px 14px;border:0;border-radius:22px;
+  background:rgba(255,255,255,.12);color:#fff;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap}
+nav button[aria-current="true"]{background:#fff;color:var(--navy)}
+main{max-width:980px;margin:0 auto;padding:16px}
+section{display:none}
+section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:0 0 14px}
+h2{font-size:21px;margin:2px 0 10px;color:var(--navy);line-height:1.25}
+h3{font-size:17px;margin:14px 0 6px;color:var(--teal)}
+p{margin:8px 0}
+ul{margin:8px 0 8px 20px;padding:0}
+li{margin:5px 0}
+.lead{font-size:16px;color:var(--muted);margin:0 0 12px}
+.q{background:#EAF1EF;border-left:4px solid var(--teal);padding:10px 12px;border-radius:0 10px 10px 0;
+  font-weight:600;margin:10px 0}
+.warn{background:#FBF1E6;border-left:4px solid var(--amber);padding:10px 12px;border-radius:0 10px 10px 0;margin:10px 0;font-size:15px}
+.num{display:inline-block;background:var(--navy);color:#fff;border-radius:8px;padding:1px 8px;font-weight:700;font-variant-numeric:tabular-nums}
+.chipline{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{background:#EAF1EF;border:1px solid var(--line);border-radius:18px;padding:6px 12px;font-size:14px;font-weight:600;color:var(--navy)}
+button.act{min-height:44px;padding:10px 16px;border:0;border-radius:10px;background:var(--teal);color:#fff;
+  font-size:16px;font-weight:600;cursor:pointer;margin:4px 6px 4px 0}
+button.act.sec{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+button.act:active{transform:translateY(1px)}
+svg{display:block;max-width:100%;height:auto}
+.slider{display:flex;align-items:center;gap:12px;margin:12px 0 4px;flex-wrap:wrap}
+.slider label{font-weight:600;min-width:150px}
+input[type=range]{flex:1 1 200px;min-width:160px;height:44px;accent-color:var(--teal)}
+.readout{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);min-width:120px}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:10px 0;display:block;overflow-x:auto;white-space:nowrap}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left}
+th{background:#EAF1EF;color:var(--navy)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button{min-height:44px;padding:8px 14px;border:2px solid var(--line);border-radius:10px;background:#fff;
+  color:var(--navy);font-weight:700;font-size:15px;cursor:pointer}
+.tabs button[aria-current="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.station{display:none}
+.station.on{display:block}
+.stA{border-top:5px solid #2F6FA8} .stB{border-top:5px solid var(--amber)}
+.stC{border-top:5px solid var(--coral)} .stD{border-top:5px solid var(--teal)}
+.opt{display:block;width:100%;text-align:left;min-height:44px;padding:11px 14px;margin:6px 0;
+  border:2px solid var(--line);border-radius:10px;background:#fff;font-size:16px;cursor:pointer;color:var(--ink);line-height:1.4}
+.opt.sel{border-color:var(--navy)}
+.opt.ok{border-color:var(--ok);background:#E9F3F0}
+.opt.bad{border-color:var(--bad);background:#FAEDED}
+.fb{margin:8px 0 0;padding:10px 12px;border-radius:10px;font-size:15px;display:none}
+.fb.on{display:block}
+.fb.good{background:#E9F3F0;border-left:4px solid var(--ok)}
+.fb.poor{background:#FAEDED;border-left:4px solid var(--bad)}
+.score{font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums}
+.pairgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pairgrid .col{min-width:0}
+@media(max-width:560px){.pairgrid{grid-template-columns:1fr}}
+.pairgrid .col h4{margin:4px 0 8px;font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.pbtn{display:block;width:100%;text-align:left;min-height:44px;padding:10px 12px;margin:6px 0;border:2px solid var(--line);
+  border-radius:10px;background:#fff;font-size:15px;cursor:pointer;color:var(--ink);line-height:1.35;overflow-wrap:anywhere}
+.pbtn.sel{border-color:var(--navy);background:#EAF1EF}
+.pbtn.done{border-color:var(--ok);background:#E9F3F0;opacity:.65;cursor:default}
+.scale{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+@media(max-width:620px){.scale{grid-template-columns:1fr}}
+.bin{border:2px dashed var(--line);border-radius:12px;padding:10px;min-width:0;background:#fff;cursor:pointer}
+.binc{min-height:58px}
+.bin h4{margin:0 0 8px;font-size:14px;color:var(--navy);text-align:center;line-height:1.3;overflow-wrap:anywhere}
+.bin .drop{display:block;text-align:center;font-size:13px;color:var(--muted);padding:8px 4px;border-top:1px dashed var(--line);margin-top:6px}
+.bin.hit{border-color:var(--teal);background:#E9F3F0}
+.tok{display:block;width:100%;min-height:44px;padding:9px 11px;margin:5px 0;border:2px solid var(--line);border-radius:9px;
+  background:#fff;font-size:14px;text-align:left;cursor:pointer;line-height:1.3;overflow-wrap:anywhere}
+.tok.sel{border-color:var(--navy);background:#EAF1EF}
+.tok.ok{border-color:var(--ok);background:#E9F3F0}
+.tok.bad{border-color:var(--bad);background:#FAEDED}
+.steps{counter-reset:s}
+.step{border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:10px 0}
+.step.on{border-left-color:var(--amber)}
+.step b{color:var(--navy)}
+a{color:var(--teal);font-weight:600}
+.linkbox{display:block;border:2px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0;
+  text-decoration:none;color:var(--ink);min-height:44px}
+.linkbox b{display:block;color:var(--navy);font-size:16px}
+.linkbox span{font-size:14px;color:var(--muted)}
+.vid{background:var(--navy);color:#fff;border-radius:12px;padding:14px;margin:10px 0;display:block;text-decoration:none}
+.vid b{display:block;font-size:16px;color:#fff}
+.vid span{font-size:14px;opacity:.85;color:#fff}
+footer{max-width:980px;margin:0 auto;padding:4px 16px 24px;font-size:13px;color:var(--muted)}
+.hint{font-size:14px;color:var(--muted);font-style:italic}
+</style>
+</head>
+<body>
+<header>
+  <div class="kicker">Geografie · Klasse 9 · Stunde 9</div>
+  <h1>Folgen-Werkstatt: Eingriffe und Folgen des Bergbaus</h1>
+  <p>Der Bagger ist längst weg – warum ist der Eingriff immer noch da?</p>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+
+<!-- 1 TRICHTER -->
+<section id="s1">
+  <div class="card">
+    <h2>1 · Der Trichter unter der Landschaft</h2>
+    <p class="lead">In Stunde 8 war im Schnitt eine gestrichelte blaue Linie zu sehen: der abgesenkte Grundwasserspiegel. Hier ist sie das Thema.</p>
+    <p>Damit die Bagger im Trockenen arbeiten können, wird das Grundwasser mit Brunnen abgepumpt. Das nennt man <b>Sümpfung</b>. Dabei sinkt der Grundwasserspiegel nicht nur in der Grube, sondern in einem weiten Trichter ringsherum – dem <b>Absenkungstrichter</b>.</p>
+    <div class="slider">
+      <label for="rPump">Abgepumpte Wassermenge</label>
+      <input type="range" id="rPump" min="0" max="100" value="55" step="1">
+      <span class="readout" id="oPump"></span>
+    </div>
+    <svg viewBox="0 0 700 392" role="img" aria-label="Schematischer Schnitt durch einen Tagebau mit dem Absenkungstrichter des Grundwassers">
+      <defs>
+        <linearGradient id="gwg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#8FBBDE"/><stop offset="100%" stop-color="#5E93BF"/>
+        </linearGradient>
+        <marker id="ar2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+          <path d="M0 0 L9 4.5 L0 9 Z" fill="#1F3B57"/></marker>
+        <marker id="ar2s" markerWidth="9" markerHeight="9" refX="1" refY="4.5" orient="auto">
+          <path d="M9 0 L0 4.5 L9 9 Z" fill="#1F3B57"/></marker>
+        <clipPath id="outsidePit" clipPathUnits="userSpaceOnUse">
+          <path clip-rule="evenodd" d="M0 0 H700 V300 H0 Z M250 70 L300 250 L420 250 L470 70 Z"/>
+        </clipPath>
+      </defs>
+
+      <rect x="0" y="0" width="700" height="392" fill="#EAF1EF"/>
+      <rect x="0" y="70" width="700" height="170" fill="#D9CDB8"/>
+      <rect x="0" y="262" width="700" height="38" fill="#BDB49F"/>
+
+      <!-- Grundwasserkoerper unterhalb der abgesenkten Linie -->
+      <path id="gwPath" d="" fill="url(#gwg)" opacity="0.5"/>
+
+      <!-- Floez liegt ueber dem Wasser-Overlay, damit die Kohle dunkel bleibt -->
+      <rect x="0" y="240" width="700" height="22" fill="#4A3A2A"/>
+
+      <!-- Grube: trocken, daher ueber allem -->
+      <path d="M250 70 L300 250 L420 250 L470 70 Z" fill="#EAF1EF"/>
+      <path d="M250 70 L300 250 L420 250 L470 70" fill="none" stroke="#8A7B63" stroke-width="2"/>
+      <line x1="300" y1="250" x2="420" y2="250" stroke="#4A3A2A" stroke-width="6"/>
+      <line x1="0" y1="70" x2="250" y2="70" stroke="#8A7B63" stroke-width="2"/>
+      <line x1="470" y1="70" x2="700" y2="70" stroke="#8A7B63" stroke-width="2"/>
+
+      <line x1="0" y1="125" x2="700" y2="125" stroke="#2F6FA8" stroke-width="2" stroke-dasharray="7 5"/>
+      <path id="dropLine" d="" fill="none" stroke="#1F3B57" stroke-width="3" clip-path="url(#outsidePit)"/>
+
+      <g stroke="#C05A5A" stroke-width="5">
+        <line x1="222" y1="70" x2="222" y2="246"/><line x1="498" y1="70" x2="498" y2="246"/>
+      </g>
+      <text x="216" y="62" font-size="13" fill="#C05A5A" font-weight="700" text-anchor="end">Brunnen</text>
+      <text x="504" y="62" font-size="13" fill="#C05A5A" font-weight="700">Brunnen</text>
+      <text x="360" y="104" font-size="13" fill="#5B6B72" font-weight="700" text-anchor="middle">Grube (trocken)</text>
+      <text x="690" y="234" font-size="13" fill="#5A4F3C" font-weight="700" text-anchor="end">Deckgebirge</text>
+      <text x="690" y="257" font-size="13" fill="#F2E9DA" font-weight="700" text-anchor="end">Braunkohlenflöz</text>
+      <text x="690" y="292" font-size="12" fill="#2F4450" text-anchor="end">Schema, nicht maßstäblich</text>
+
+      <!-- Legende und Maßband -->
+      <rect x="0" y="300" width="700" height="92" fill="#FFFFFF"/>
+      <line x1="0" y1="300" x2="700" y2="300" stroke="#D7E0DD" stroke-width="2"/>
+      <line x1="14" y1="320" x2="48" y2="320" stroke="#2F6FA8" stroke-width="3" stroke-dasharray="7 5"/>
+      <text x="56" y="325" font-size="13" fill="#2F6FA8" font-weight="700">natürlicher Grundwasserspiegel</text>
+      <line x1="330" y1="320" x2="364" y2="320" stroke="#1F3B57" stroke-width="3"/>
+      <text x="372" y="325" font-size="13" fill="#1F3B57" font-weight="700">abgesenkter Grundwasserspiegel</text>
+      <g id="widthMark">
+        <line id="wLine" y1="352" x1="0" x2="0" y2="352" stroke="#1F3B57" stroke-width="2"
+              marker-start="url(#ar2s)" marker-end="url(#ar2)"/>
+        <text id="wTxt" x="350" y="378" font-size="15" fill="#1F3B57" font-weight="700" text-anchor="middle"></text>
+      </g>
+    </svg>
+    <div class="q" id="trichterQ"></div>
+    <div class="warn"><b>Merke:</b> Der Eingriff reicht weit über die Grube hinaus. In der Lausitz sind <span class="num">über 2.000 km²</span> von der Grundwasserabsenkung betroffen – stellenweise bis <span class="num">150 m</span> unter den natürlichen Stand. Der Tagebau Jänschwalde selbst ist 60,15 km² groß. Das Betroffenheitsgebiet ist also rund <b>33-mal so groß wie der Tagebau</b>.</div>
+  </div>
+</section>
+
+<!-- 2 STATIONEN -->
+<section id="s2">
+  <div class="card">
+    <h2>2 · Vier Expertenstationen</h2>
+    <p class="lead">Ihr arbeitet in vier Gruppen. Jede Gruppe bearbeitet <b>nur eine</b> Station und füllt dazu die Eingriffs-Karte auf dem Arbeitsblatt (Aufgabe 2) aus. Danach stellt ihr euer Ergebnis den anderen vor.</p>
+    <div class="tabs" id="stTabs"></div>
+
+    <div class="station stA on" id="stA">
+      <h3>Station A · Das Wasser muss weg</h3>
+      <p><b>Der Eingriff:</b> Sümpfung. Rings um den Tagebau stehen Brunnen, die das Grundwasser abpumpen – so lange, wie der Tagebau läuft, also jahrzehntelang.</p>
+      <p><b>Die Folgen:</b></p>
+      <ul>
+        <li>Der Absenkungstrichter reicht viele Kilometer über den Tagebau hinaus: in der Lausitz <b>mehr als 2.000 km²</b>, stellenweise bis <b>150 m</b> tief.</li>
+        <li>Moore, Feuchtwiesen und Bruchwälder trocknen aus – auch im <b>Spreewald</b>. Bäume mit flachen Wurzeln erreichen das Wasser nicht mehr.</li>
+        <li>Private Brunnen fallen trocken, Hausfundamente können sich setzen.</li>
+        <li>Es entsteht ein riesiges <b>Wasserdefizit</b>: 1990 rund <b>7 Milliarden m³</b> (4,5 Mrd. m³ fehlendes Grundwasser + 2,5 Mrd. m³ leere Restlöcher).</li>
+      </ul>
+      <p><b>Wie lange?</b> Bis 2024 wurde das Defizit im Sanierungsbereich der LMBV auf rund <b>0,6 Milliarden m³</b> verringert – das hat 34 Jahre gedauert. Die noch aktiven Tagebaue sind dabei <i>nicht</i> mitgerechnet.</p>
+      <div class="chipline"><span class="chip">Sümpfung</span><span class="chip">Absenkungstrichter</span><span class="chip">Wasserdefizit</span></div>
+    </div>
+
+    <div class="station stB" id="stB">
+      <h3>Station B · Die braune Spree</h3>
+      <p><b>Der Eingriff:</b> Derselbe wie bei A – die Absenkung des Grundwassers. Diesmal geht es aber nicht um das Wasser, sondern um das, was im trockengefallenen Boden passiert.</p>
+      <p><b>Die Kettenreaktion:</b></p>
+      <ul>
+        <li>Im Boden steckt <b>Pyrit</b> (Schwefelkies, FeS<sub>2</sub>). Unter Wasser liegt er seit Jahrmillionen unverändert.</li>
+        <li>Sinkt das Grundwasser, kommt <b>Luft</b> an den Pyrit. Er verwittert: Es entstehen gelöstes <b>Eisen</b> und <b>Sulfat</b>.</li>
+        <li>Steigt das Grundwasser nach dem Bergbau wieder an, spült es beide Stoffe in Gräben, Bäche und die <b>Spree</b>.</li>
+        <li>An der Luft wird das Eisen zu <b>Eisenhydroxid</b> („Eisenocker“) – rostbrauner Schlamm, der sich auf den Gewässergrund legt. Sichtbar wird das schon ab <b>2–3 mg/l</b> Eisen.</li>
+        <li><b>Sulfat</b> bleibt gelöst und wandert weit flussabwärts.</li>
+      </ul>
+      <p><b>Warum das Trinkwasser betroffen ist:</b> Für Sulfat im Trinkwasser gilt in Deutschland ein Grenzwert von <b>250 mg/l</b>. Das Wasserwerk Briesen – gut 60 km Luftlinie nördlich von Cottbus – gewinnt Trinkwasser aus dem Spreegebiet und versorgt unter anderem Frankfurt (Oder). Am Pegel Neubrück davor gilt deshalb ein Richtwert von <b>280 mg/l</b>. Im Jahr 2020 wurde er mehrfach überschritten, der Höchstwert lag am 12.09.2020 bei <b>284 mg/l</b>.</p>
+      <p><b>Was dagegen getan wird (seit 2013):</b> Wasserbehandlungsanlagen (z. B. Ruhlmühle), eine Konditionierungsanlage an der Vorsperre Bühlow vor der Talsperre Spremberg, Dichtwände, Beräumung von Ockerschlamm. Im August 2026 musste am Stadtmühlenwehr Spremberg verfestigter Eisenocker beräumt werden, weil er den Abfluss der Spree behinderte.</p>
+      <div class="chipline"><span class="chip">Pyritverwitterung</span><span class="chip">Eisenocker</span><span class="chip">Sulfat</span><span class="chip">Fernwirkung</span></div>
+    </div>
+
+    <div class="station stC" id="stC">
+      <h3>Station C · Das Dorf muss weg</h3>
+      <p><b>Der Eingriff:</b> Liegt ein Dorf über dem Flöz, wird es abgerissen. Der Fachbegriff heißt <b>Devastierung</b>; die Menschen werden <b>umgesiedelt</b>.</p>
+      <p><b>Die Zahlen:</b></p>
+      <ul>
+        <li>Im Lausitzer Revier wurden seit den 1960er-Jahren <b>mehr als 80 Dörfer</b> abgebaggert.</li>
+        <li>Rund <b>26.000 Menschen</b> mussten ihren Wohnort verlassen.</li>
+        <li>Allein für den Tagebau Cottbus-Nord verschwanden vier Orte – Groß Lieskow, Klein Lieskow, Lakoma und Tranitz – mit <b>906 Menschen</b> (aus Stunde 8).</li>
+      </ul>
+      <p><b>Was mitverschwindet:</b> Viele der Dörfer waren sorbisch/wendisch geprägt. Mit dem Ort gehen auch Sprache, Bräuche, Vereine, Kirchen und Friedhöfe verloren. Die Menschen ziehen in neue Siedlungen, die Nachbarschaft von früher gibt es nicht mehr.</p>
+      <p><b>Besonderheit dieser Folge:</b> Sie ist die einzige, die <b>nicht</b> aus der Grundwasserabsenkung folgt – sie folgt direkt daraus, dass die Kohle unter dem Dorf liegt. Und sie ist <b>nicht umkehrbar</b>: Aus einem Restloch kann ein See werden, aus einem See aber kein Dorf.</p>
+      <div class="chipline"><span class="chip">Devastierung</span><span class="chip">Umsiedlung</span><span class="chip">sorbisch/wendisch</span></div>
+    </div>
+
+    <div class="station stD" id="stD">
+      <h3>Station D · Die neue Landschaft</h3>
+      <p><b>Der Eingriff:</b> Der Abraum wird hinter der Grube wieder verkippt (Stunde 8). Was zurückbleibt, ist eine <b>Kippe</b>: lockerer, durchmischter Boden ohne gewachsene Bodenschichten – und am Ende ein tiefes <b>Restloch</b>.</p>
+      <p><b>Was daraus gemacht wird:</b> Die <b>Wiedernutzbarmachung</b> ist gesetzlich vorgeschrieben. Aus Kippenflächen werden Wald, Acker oder Naturschutzgebiete; das Restloch wird geflutet.</p>
+      <ul>
+        <li>So entstand das <b>Lausitzer Seenland</b>: <b>23 Seen über 100 ha</b> mit zusammen rund <b>13.600 ha</b> (= 136 km²) Wasserfläche – mehr als doppelt so viel Fläche wie der gesamte Tagebau Jänschwalde. Fünf Seen sind durch schiffbare Kanäle verbunden. Es ist Europas größte von Menschen geschaffene Wasserlandschaft.</li>
+        <li><b>Cottbuser Ostsee</b>: 18,8 km², rund 126 Mio. m³ Wasser. Flutung ab dem 12.04.2019, der Zielwasserstand von +62,5 m NHN wurde erstmals im <b>Dezember 2024</b> erreicht.</li>
+      </ul>
+      <p><b>Der Haken:</b> Das Flutungswasser stammt aus der Spree. In trockenen Jahren fehlt es – dann wird die Flutung gestoppt, und der Wasserstand sinkt wieder. Und: Wasserbehandlung und Messungen laufen unbefristet weiter. Man spricht von <b>Ewigkeitslasten</b>.</p>
+      <div class="chipline"><span class="chip">Kippe</span><span class="chip">Wiedernutzbarmachung</span><span class="chip">Flutung</span><span class="chip">Ewigkeitslasten</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 PYRIT -->
+<section id="s3">
+  <div class="card">
+    <h2>3 · Pyrit-Labor: Woher die braune Spree kommt</h2>
+    <p class="lead">Tippe dich Schritt für Schritt durch die Kettenreaktion.</p>
+    <svg viewBox="0 0 700 220" role="img" aria-label="Schema der Pyritverwitterung in vier Schritten">
+      <rect x="0" y="0" width="700" height="220" fill="#FBF6EE"/>
+      <g id="pg1" opacity="1">
+        <rect x="20" y="40" width="150" height="130" rx="10" fill="#6FA3CC"/>
+        <circle cx="95" cy="105" r="22" fill="#5A4A33"/>
+        <text x="95" y="111" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">FeS₂</text>
+        <text x="95" y="30" font-size="14" fill="#1F3B57" text-anchor="middle" font-weight="700">unter Wasser</text>
+      </g>
+      <g id="pg2" opacity="0.25">
+        <rect x="195" y="40" width="150" height="130" rx="10" fill="#E8DCC4"/>
+        <circle cx="270" cy="105" r="22" fill="#5A4A33"/>
+        <text x="270" y="111" font-size="13" fill="#fff" text-anchor="middle" font-weight="700">FeS₂</text>
+        <text x="270" y="30" font-size="14" fill="#C97A2B" text-anchor="middle" font-weight="700">Luft kommt dran</text>
+        <text x="270" y="152" font-size="13" fill="#C97A2B" text-anchor="middle" font-weight="700">+ O₂</text>
+      </g>
+      <g id="pg3" opacity="0.25">
+        <rect x="370" y="40" width="150" height="130" rx="10" fill="#E8DCC4"/>
+        <circle cx="440" cy="92" r="17" fill="#B06A2E"/>
+        <text x="440" y="97" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">Fe</text>
+        <circle cx="440" cy="134" r="17" fill="#6E8A96"/>
+        <text x="440" y="139" font-size="11" fill="#fff" text-anchor="middle" font-weight="700">SO₄</text>
+        <text x="445" y="30" font-size="14" fill="#C97A2B" text-anchor="middle" font-weight="700">gelöst im Wasser</text>
+      </g>
+      <g id="pg4" opacity="0.25">
+        <rect x="545" y="40" width="135" height="130" rx="10" fill="#A0714A"/>
+        <path d="M555 140 Q612 118 670 140 L670 162 Q612 142 555 162 Z" fill="#7A4A22"/>
+        <text x="612" y="30" font-size="14" fill="#C05A5A" text-anchor="middle" font-weight="700">Spree</text>
+        <text x="612" y="95" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">Eisenocker</text>
+        <text x="612" y="112" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">+ Sulfat</text>
+      </g>
+      <g stroke="#C97A2B" stroke-width="3" fill="none">
+        <path d="M172 105 L192 105" marker-end="url(#ar)"/>
+        <path d="M347 105 L367 105" marker-end="url(#ar)"/>
+        <path d="M522 105 L542 105" marker-end="url(#ar)"/>
+      </g>
+      <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0 0 L8 4 L0 8 Z" fill="#C97A2B"/></marker></defs>
+    </svg>
+    <div class="steps" id="pSteps"></div>
+    <button class="act" id="pNext">Nächster Schritt</button>
+    <button class="act sec" id="pReset">Zurück zum Anfang</button>
+    <div class="warn"><b>Fachlich wichtig:</b> Pyrit ist nicht giftig und war Millionen Jahre lang harmlos. Gefährlich wird er erst durch den <b>Sauerstoff</b>, den der Bergbau in den Boden bringt. Der Stoff war vorher da – der Mensch hat nur die Bedingungen verändert.</div>
+  </div>
+</section>
+
+<!-- 4 RECHNER -->
+<section id="s4">
+  <div class="card">
+    <h2>4 · Rechnen hilft beim Begreifen</h2>
+    <p class="lead">Drei Größen, die man sich sonst nicht vorstellen kann.</p>
+
+    <h3>a) Wie groß ist der Absenkungstrichter wirklich?</h3>
+    <div class="slider">
+      <label for="rArea">Betroffene Fläche (km²)</label>
+      <input type="range" id="rArea" min="200" max="3000" value="2000" step="50">
+      <span class="readout" id="oArea"></span>
+    </div>
+    <p id="resArea"></p>
+
+    <h3>b) Wie viel Wasser fehlt?</h3>
+    <div class="slider">
+      <label for="rDef">Wasserdefizit (Mrd. m³)</label>
+      <input type="range" id="rDef" min="0.2" max="7" value="7" step="0.1">
+      <span class="readout" id="oDef"></span>
+    </div>
+    <p id="resDef"></p>
+
+    <h3>c) Wie schnell geht die Sanierung voran?</h3>
+    <p>1990: 7,0 Mrd. m³ Defizit · 2024: noch 0,6 Mrd. m³ (nur Sanierungsbereich der LMBV).</p>
+    <button class="act" id="bRate">Rechnung anzeigen</button>
+    <div class="fb" id="fbRate"></div>
+    <div class="warn"><b>Vorsicht beim Deuten:</b> 91 Prozent klingt nach „fast geschafft“. Die Zahl gilt aber nur für die stillgelegten Tagebaue der LMBV. Für Welzow-Süd wird bis zum Förderende weiter gepumpt – dort wächst das Defizit noch.</div>
+  </div>
+</section>
+
+<!-- 5 ZUORDNUNG -->
+<section id="s5">
+  <div class="card">
+    <h2>5 · Eingriff und Folge zusammenbringen</h2>
+    <p class="lead">Tippe links einen Eingriff an, dann rechts die passende Folge. <span class="hint">8 Paare.</span></p>
+    <div class="pairgrid">
+      <div class="col"><h4>Eingriff</h4><div id="colL"></div></div>
+      <div class="col"><h4>Folge</h4><div id="colR"></div></div>
+    </div>
+    <p>Richtig zugeordnet: <span class="score" id="pairScore">0 / 8</span></p>
+    <div class="fb" id="pairFb"></div>
+    <button class="act sec" id="pairReset">Neu mischen</button>
+  </div>
+</section>
+
+<!-- 6 UMKEHRBAR -->
+<section id="s6">
+  <div class="card">
+    <h2>6 · Wie lange bleibt die Folge?</h2>
+    <p class="lead">Tippe eine Folge an und dann auf ein Zeitfach. Eine bereits abgelegte Karte holst du mit einem Tipp wieder zurück in den Vorrat.</p>
+    <div id="tokPool"></div>
+    <div class="scale">
+      <div class="bin" data-bin="0"><h4>Jahre<br><span style="font-weight:400;font-size:12px">umkehrbar</span></h4><div class="binc"></div><span class="drop">hier ablegen</span></div>
+      <div class="bin" data-bin="1"><h4>Jahrzehnte<br><span style="font-weight:400;font-size:12px">mit großem Aufwand</span></h4><div class="binc"></div><span class="drop">hier ablegen</span></div>
+      <div class="bin" data-bin="2"><h4>dauerhaft<br><span style="font-weight:400;font-size:12px">nicht umkehrbar</span></h4><div class="binc"></div><span class="drop">hier ablegen</span></div>
+    </div>
+    <button class="act" id="binCheck">Prüfen</button>
+    <button class="act sec" id="binReset">Zurücksetzen</button>
+    <div class="fb" id="binFb"></div>
+    <div class="warn"><b>Begriff:</b> Folgen, die auch nach dem Bergbau dauerhaft überwacht und behandelt werden müssen – Wasserbehandlung, Grundwassermessungen, Kippenstabilität – nennt man <b>Ewigkeitslasten</b>. Sie kosten Geld, solange es die Landschaft gibt.</div>
+  </div>
+</section>
+
+<!-- 7 QUIZ -->
+<section id="s7">
+  <div class="card">
+    <h2>7 · Quiz</h2>
+    <p class="lead">Acht Fragen. Nach jeder Antwort bekommst du eine Erklärung.</p>
+    <div id="quiz"></div>
+    <p>Punktestand: <span class="score" id="qScore">0 / 8</span></p>
+    <button class="act sec" id="qReset">Quiz neu starten</button>
+  </div>
+</section>
+
+<!-- 8 ZAHLEN -->
+<section id="s8">
+  <div class="card">
+    <h2>8 · Zahlen, Video, Links, Hausaufgabe</h2>
+
+    <h3>Die Zahlen der Stunde</h3>
+    <table>
+      <tr><th>Angabe</th><th>Wert</th><th>gilt für</th></tr>
+      <tr><td>Fläche mit Grundwasserabsenkung</td><td>über 2.000 km²</td><td>Lausitz</td></tr>
+      <tr><td>größte Absenkung</td><td>bis 150 m</td><td>Lausitz</td></tr>
+      <tr><td>Wasserdefizit 1990</td><td>rund 7 Mrd. m³</td><td>Lausitz, Sanierungsbereich</td></tr>
+      <tr><td>Wasserdefizit 2024</td><td>rund 0,6 Mrd. m³</td><td>nur LMBV-Bereich</td></tr>
+      <tr><td>Eisen: sichtbare Verockerung ab</td><td>2–3 mg/l</td><td>Fließgewässer</td></tr>
+      <tr><td>Sulfat: Trinkwasser-Grenzwert</td><td>250 mg/l</td><td>Deutschland</td></tr>
+      <tr><td>Sulfat: Richtwert Pegel Neubrück</td><td>280 mg/l</td><td>Wasserwerk Briesen</td></tr>
+      <tr><td>abgebaggerte Dörfer</td><td>mehr als 80</td><td>Lausitz, seit den 1960ern</td></tr>
+      <tr><td>Umgesiedelte</td><td>rund 26.000</td><td>Lausitz</td></tr>
+      <tr><td>Seen über 100 ha</td><td>23</td><td>Lausitzer Seenland</td></tr>
+      <tr><td>Wasserfläche Seenland</td><td>13.600 ha = 136 km²</td><td>Lausitzer Seenland</td></tr>
+      <tr><td>Cottbuser Ostsee</td><td>18,8 km², 126 Mio. m³</td><td>Zielstand Dezember 2024</td></tr>
+    </table>
+
+    <h3>Video</h3>
+    <a class="vid" href="https://www.youtube.com/watch?v=evbvOBDXgv8" target="_blank" rel="noopener">
+      <b>Das LAUSITZER SEENLAND erklärt – Wo kommt das Wasser her?</b>
+      <span>Kanal „Lausitzer Seenland“ · passt zu Station D · zu Hause ansehen</span>
+    </a>
+
+    <h3>Weiterlesen (seriöse Quellen)</h3>
+    <a class="linkbox" href="https://mleuv.brandenburg.de/mleuv/de/umwelt/wasser/bergbaufolgen-fuer-den-wasserhaushalt/wassermenge/" target="_blank" rel="noopener">
+      <b>Ministerium für Landwirtschaft, Umwelt und Klimaschutz Brandenburg</b><span>Bergbaufolgen für den Wasserhaushalt – Wassermenge</span></a>
+    <a class="linkbox" href="https://lbgr.brandenburg.de/lbgr/de/aktuell/buergerinformationen/bergbaubedingte-stoffeintraege-in-die-spree/stoffeintraege-spree-faq/" target="_blank" rel="noopener">
+      <b>Landesamt für Bergbau, Geologie und Rohstoffe</b><span>Häufige Fragen zu Sulfat und Eisen in der Spree</span></a>
+    <a class="linkbox" href="https://www.lmbv.de/bergbaufolgen/verockerung-versalzung/loesungen-fuer-die-spree/" target="_blank" rel="noopener">
+      <b>LMBV</b><span>Lösungen für die Spree – was gegen Verockerung getan wird</span></a>
+    <a class="linkbox" href="https://www.lausitzerseenland.de/de/service/presse/basistexte/artikel-zahlen-daten-fakten-zum-lausitzer-seenland.html" target="_blank" rel="noopener">
+      <b>Lausitzer Seenland</b><span>Zahlen, Daten, Fakten</span></a>
+
+    <h3>Hausaufgabe</h3>
+    <p>Schreibe in fünf bis acht Sätzen eine Antwort auf die Leitfrage der Stunde: <b>„Der Bagger ist längst weg – warum ist der Eingriff immer noch da?“</b> Verwende dabei mindestens drei Fachbegriffe aus der Stunde (Sümpfung, Absenkungstrichter, Pyritverwitterung, Eisenocker, Sulfat, Devastierung, Wiedernutzbarmachung, Ewigkeitslasten).</p>
+    <p class="hint">Freiwillig: Sieh dir das Video oben an und notiere, woher das Wasser für die Flutung kommt.</p>
+  </div>
+</section>
+
+</main>
+<footer>Humboldt-Gymnasium Cottbus · Geografie Klasse 9 · Stunde 9 „Eingriffe und Folgen des Bergbaus“ · Stand 05.10.2026 · funktioniert ohne Internet (nur Links und Video brauchen Netz)</footer>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+
+/* ---------- Navigation ---------- */
+var TABS=[["s1","1 Trichter"],["s2","2 Stationen"],["s3","3 Pyrit"],["s4","4 Rechnen"],
+          ["s5","5 Zuordnen"],["s6","6 Wie lange?"],["s7","7 Quiz"],["s8","8 Zahlen"]];
+var nav=$("#nav");
+TABS.forEach(function(t,i){
+  var b=document.createElement("button");
+  b.textContent=t[1]; b.setAttribute("data-t",t[0]);
+  if(i===0)b.setAttribute("aria-current","true");
+  b.onclick=function(){
+    $$("#nav button").forEach(function(x){x.removeAttribute("aria-current")});
+    b.setAttribute("aria-current","true");
+    $$("main section").forEach(function(s){s.classList.remove("on")});
+    $("#"+t[0]).classList.add("on");
+    window.scrollTo(0,0);
+  };
+  nav.appendChild(b);
+});
+$("#s1").classList.add("on");
+
+/* ---------- 1 Trichter ---------- */
+var rP=$("#rPump"), oP=$("#oPump");
+function drawTrichter(){
+  var v=+rP.value;                      // 0..100
+  var depth=125+(v/100)*125;            // y der abgesenkten Linie in der Grubenmitte (125..250)
+  var halfW=70+(v/100)*275;             // halbe Trichterbreite in px (70..345)
+  var cx=360;
+  var L=Math.max(4,cx-halfW), R=Math.min(696,cx+halfW);
+  var mid=125+(depth-125)*0.72;
+  var d="M0 125 L"+L.toFixed(1)+" 125 Q"+(cx-halfW*0.45).toFixed(1)+" "+mid.toFixed(1)+" "+cx+" "+depth.toFixed(1)+
+        " Q"+(cx+halfW*0.45).toFixed(1)+" "+mid.toFixed(1)+" "+R.toFixed(1)+" 125 L700 125";
+  $("#dropLine").setAttribute("d",d);
+  $("#gwPath").setAttribute("d",d+" L700 300 L0 300 Z");
+  $("#wLine").setAttribute("x1",L.toFixed(1)); $("#wLine").setAttribute("x2",R.toFixed(1));
+  var km=Math.round((halfW/345)*15)*2;
+  $("#wTxt").textContent="Breite des Absenkungstrichters: rund "+km+" km";
+  var m=Math.round((depth-125)/125*150);
+  oP.textContent=v+" % \u00b7 \u2212"+m+" m";
+  var q;
+  if(v<25)      q="Wenig gepumpt: Der Trichter ist flach \u2013 aber schon jetzt breiter als die Grube.";
+  else if(v<60) q="Je mehr gepumpt wird, desto tiefer UND breiter wird der Trichter. Warum wächst er zur Seite?";
+  else          q="Jetzt wird es deutlich: Der Eingriff ist viel größer als das Loch. Wer außerhalb des Tagebaus wohnt, merkt ihn trotzdem.";
+  $("#trichterQ").textContent=q;
+}
+rP.addEventListener("input",drawTrichter); drawTrichter();
+
+/* ---------- 2 Stationen ---------- */
+var ST=[["stA","A · Wasser weg"],["stB","B · Braune Spree"],["stC","C · Dorf weg"],["stD","D · Neue Landschaft"]];
+var st=$("#stTabs");
+ST.forEach(function(t,i){
+  var b=document.createElement("button"); b.textContent=t[1];
+  if(i===0)b.setAttribute("aria-current","true");
+  b.onclick=function(){
+    $$("#stTabs button").forEach(function(x){x.removeAttribute("aria-current")});
+    b.setAttribute("aria-current","true");
+    $$(".station").forEach(function(s){s.classList.remove("on")});
+    $("#"+t[0]).classList.add("on");
+  };
+  st.appendChild(b);
+});
+
+/* ---------- 3 Pyrit ---------- */
+var PSTEP=[
+ ["Jahrmillionen lang: alles unter Wasser","Im Boden steckt <b>Pyrit (FeS₂)</b>. Weil kein Sauerstoff an ihn herankommt, passiert nichts. Der Stoff ist harmlos."],
+ ["Der Bergbau pumpt das Wasser ab","Der Porenraum füllt sich mit <b>Luft</b>. Jetzt trifft Sauerstoff auf Pyrit."],
+ ["Pyrit verwittert","Aus Pyrit, Sauerstoff und Wasser entstehen gelöstes <b>Eisen</b> und <b>Sulfat</b>. Beide bleiben im Boden liegen – vorerst."],
+ ["Das Grundwasser steigt wieder","Es spült Eisen und Sulfat in Gräben und in die <b>Spree</b>. An der Luft wird aus dem Eisen rostbrauner <b>Eisenocker</b>; das Sulfat wandert gelöst weiter – bis zu Wasserwerken weit flussabwärts."]
+];
+var pIdx=0;
+function renderP(){
+  var c=$("#pSteps"); c.innerHTML="";
+  PSTEP.forEach(function(s,i){
+    var d=document.createElement("div");
+    d.className="step"+(i<=pIdx?" on":"");
+    d.innerHTML="<b>Schritt "+(i+1)+": "+s[0]+"</b><br>"+(i<=pIdx?s[1]:"<span class='hint'>noch verdeckt</span>");
+    c.appendChild(d);
+  });
+  for(var k=1;k<=4;k++){ $("#pg"+k).setAttribute("opacity", (k-1)<=pIdx ? "1":"0.25"); }
+  $("#pNext").textContent = pIdx>=3 ? "Fertig" : "Nächster Schritt";
+  $("#pNext").disabled = pIdx>=3;
+}
+$("#pNext").onclick=function(){ if(pIdx<3){pIdx++; renderP();} };
+$("#pReset").onclick=function(){ pIdx=0; renderP(); };
+renderP();
+
+/* ---------- 4 Rechner ---------- */
+var JAE=60.15, OSTSEE=126; // km2 Jaenschwalde, Mio m3 Cottbuser Ostsee
+function fmt(n,d){return n.toFixed(d===undefined?1:d).replace(".",",")}
+var rA=$("#rArea");
+function calcA(){
+  var a=+rA.value;
+  $("#oArea").textContent=a.toLocaleString("de-DE")+" km²";
+  $("#resArea").innerHTML="Das sind <b>"+fmt(a/JAE)+"-mal</b> die Fläche des Tagebaus Jänschwalde (60,15 km²) "+
+    "und entspricht einem Quadrat von rund <b>"+fmt(Math.sqrt(a),0)+" km</b> Kantenlänge."+
+    (a>=2000?" <b>Der amtliche Wert für die Lausitz liegt bei über 2.000 km².</b>":"");
+}
+rA.addEventListener("input",calcA); calcA();
+
+var rD=$("#rDef");
+function calcD(){
+  var d=+rD.value;
+  $("#oDef").textContent=fmt(d)+" Mrd. m³";
+  var n=(d*1000)/OSTSEE;
+  $("#resDef").innerHTML="Um so viel Wasser zu ersetzen, bräuchte man <b>"+fmt(n,0)+" Cottbuser Ostseen</b> "+
+    "(je 126 Mio. m³)."+(d>=6.9?" <b>So groß war das Defizit 1990.</b>":"")+(d<=0.7?" <b>So groß war es 2024 noch.</b>":"");
+}
+rD.addEventListener("input",calcD); calcD();
+
+$("#bRate").onclick=function(){
+  var f=$("#fbRate"); f.className="fb on good";
+  f.innerHTML="7,0 − 0,6 = <b>6,4 Mrd. m³</b> aufgefüllt.<br>"+
+    "6,4 : 7,0 = 0,914 → <b>rund 91 %</b> des Defizits sind beseitigt.<br>"+
+    "2024 − 1990 = <b>34 Jahre</b> → im Schnitt rund <b>0,19 Mrd. m³ pro Jahr</b>, also etwa 1,5 Cottbuser Ostseen jedes Jahr.";
+};
+
+/* ---------- 5 Zuordnung ---------- */
+var PAIRS=[
+ ["Grundwasser wird abgepumpt (Sümpfung)","Absenkungstrichter von über 2.000 km²"],
+ ["Luft kommt an den Pyrit im Boden","Eisen und Sulfat lösen sich im Wasser"],
+ ["Eisen gelangt an die Luft im Bach","rostbrauner Eisenocker legt sich auf den Grund"],
+ ["Sulfat wandert flussabwärts","Richtwert am Pegel Neubrück wird überschritten"],
+ ["Die Kohle liegt unter einem Dorf","Devastierung und Umsiedlung von Menschen"],
+ ["Abraum wird hinter der Grube verkippt","Kippe: lockerer Boden ohne Bodenschichten"],
+ ["Das Restloch bleibt übrig","Flutung – es entsteht ein Bergbaufolgesee"],
+ ["Moore liegen im Absenkungstrichter","Feuchtgebiete im Spreewald trocknen aus"]
+];
+var selL=null, pairDone=0, mapR=[];
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t}return b}
+function buildPairs(){
+  pairDone=0; selL=null;
+  var L=$("#colL"), R=$("#colR"); L.innerHTML=""; R.innerHTML="";
+  mapR=shuffle(PAIRS.map(function(p,i){return i}));
+  PAIRS.forEach(function(p,i){
+    var b=document.createElement("button"); b.className="pbtn"; b.textContent=p[0]; b.setAttribute("data-i",i);
+    b.onclick=function(){ if(b.classList.contains("done"))return;
+      $$("#colL .pbtn").forEach(function(x){x.classList.remove("sel")}); b.classList.add("sel"); selL=i;
+      $("#pairFb").className="fb"; };
+    L.appendChild(b);
+  });
+  mapR.forEach(function(idx){
+    var b=document.createElement("button"); b.className="pbtn"; b.textContent=PAIRS[idx][1]; b.setAttribute("data-i",idx);
+    b.onclick=function(){ if(b.classList.contains("done"))return;
+      var f=$("#pairFb");
+      if(selL===null){ f.className="fb on poor"; f.textContent="Wähle zuerst links einen Eingriff aus."; return; }
+      if(selL===idx){
+        b.classList.add("done");
+        var lb=$("#colL .pbtn[data-i='"+idx+"']"); lb.classList.remove("sel"); lb.classList.add("done");
+        pairDone++; selL=null;
+        f.className="fb on good"; f.textContent="Richtig.";
+        $("#pairScore").textContent=pairDone+" / 8";
+        if(pairDone===8){ f.textContent="Alle acht Paare stimmen. Sieh dir jetzt an, welche Folgen alle denselben Eingriff haben – das sind die Pfeile für das Wirkungsgefüge in Stunde 10."; }
+      } else {
+        f.className="fb on poor"; f.textContent="Das passt noch nicht zusammen. Lies den Eingriff links noch einmal genau.";
+      }
+    };
+    R.appendChild(b);
+  });
+  $("#pairScore").textContent="0 / 8";
+  $("#pairFb").className="fb";
+}
+$("#pairReset").onclick=buildPairs; buildPairs();
+
+/* ---------- 6 Umkehrbar ---------- */
+var TOKS=[
+ ["Baggerlärm und Staub im Nachbarort",0],
+ ["Ein abgebaggertes Dorf",2],
+ ["Trockengefallene Hausbrunnen nach dem Pumpende",1],
+ ["Das Wasserdefizit im Grundwasser",1],
+ ["Sulfat und Eisenocker in der Spree",2],
+ ["Ein Restloch wird zum See",1],
+ ["Die sorbische Dorfgemeinschaft",2],
+ ["Staubbelastung der Luft nach Tagebauende",0]
+];
+var selTok=null;
+function buildBins(){
+  selTok=null;
+  var pool=$("#tokPool"); pool.innerHTML="";
+  $$(".bin .binc").forEach(function(c){c.innerHTML=""});
+  $$(".bin").forEach(function(b){b.classList.remove("hit")});
+  shuffle(TOKS.map(function(t,i){return i})).forEach(function(i){
+    var b=document.createElement("button"); b.className="tok"; b.textContent=TOKS[i][0]; b.setAttribute("data-i",i);
+    b.onclick=function(ev){
+      ev.stopPropagation();
+      $("#binFb").className="fb";
+      if(b.hasAttribute("data-bin")){                 // zurueck in den Vorrat
+        b.removeAttribute("data-bin"); b.classList.remove("ok","bad","sel");
+        $("#tokPool").appendChild(b); if(selTok===b)selTok=null; return;
+      }
+      if(selTok===b){ b.classList.remove("sel"); selTok=null; return; }
+      $$(".tok").forEach(function(x){x.classList.remove("sel")}); b.classList.add("sel"); selTok=b;
+    };
+    pool.appendChild(b);
+  });
+  $("#binFb").className="fb";
+}
+$$(".bin").forEach(function(bin){
+  bin.onclick=function(){
+    if(!selTok){ var f0=$("#binFb"); f0.className="fb on poor"; f0.textContent="Tippe zuerst eine Karte im Vorrat an."; return; }
+    selTok.classList.remove("sel","ok","bad");
+    selTok.setAttribute("data-bin",bin.getAttribute("data-bin"));
+    $(".binc",bin).appendChild(selTok);
+    selTok=null; $("#binFb").className="fb";
+  };
+});
+$("#binCheck").onclick=function(){
+  var ok=0,tot=TOKS.length,placed=0;
+  $$(".tok").forEach(function(t){
+    t.classList.remove("ok","bad");
+    var b=t.getAttribute("data-bin");
+    if(b===null)return;
+    placed++;
+    if(+b===TOKS[+t.getAttribute("data-i")][1]){t.classList.add("ok");ok++}else{t.classList.add("bad")}
+  });
+  var f=$("#binFb");
+  if(placed<tot){ f.className="fb on poor"; f.textContent="Es liegen noch "+(tot-placed)+" Karten im Vorrat."; return; }
+  f.className="fb on "+(ok===tot?"good":"poor");
+  f.innerHTML="<b>"+ok+" von "+tot+" richtig.</b><br>"+
+    "Rote Karten noch einmal überdenken. Faustregel: Was nur während des Betriebs stört (Lärm, Staub), hört mit dem Tagebau auf. "+
+    "Was am Wasser hängt, braucht Jahrzehnte. Was Menschen und Gemeinschaften betrifft – und die Stoffe, die dauerhaft nachgeliefert werden –, kommt nicht zurück bzw. bleibt: das sind die <b>Ewigkeitslasten</b>.";
+};
+$("#binReset").onclick=buildBins;
+buildBins();
+
+/* ---------- 7 Quiz ---------- */
+var Q=[
+ ["Was bedeutet „Sümpfung“?",
+  ["Das Abpumpen des Grundwassers, damit der Tagebau trocken bleibt",
+   "Das Anlegen eines Sumpfes als Naturschutzgebiet",
+   "Das Fluten des Restlochs nach dem Bergbau",
+   "Das Verkippen des Abraums hinter der Grube"],0,
+  "Sümpfung heißt: Brunnen pumpen das Grundwasser ab, damit die Bagger im Trockenen arbeiten können."],
+ ["Wie groß ist in der Lausitz die Fläche, auf der das Grundwasser abgesenkt ist?",
+  ["rund 60 km²","rund 200 km²","über 2.000 km²","über 20.000 km²"],2,
+  "Über 2.000 km² – das ist rund 33-mal die Fläche des Tagebaus Jänschwalde (60,15 km²). Der Eingriff reicht also weit über die Grube hinaus."],
+ ["Warum verwittert Pyrit im Bergbaugebiet, aber nicht vorher?",
+  ["Weil der Bagger ihn zerkleinert","Weil durch die Grundwasserabsenkung Sauerstoff an ihn herankommt",
+   "Weil das Grundwasser saurer wird","Weil er an der Oberfläche von der Sonne erwärmt wird"],1,
+  "Unter Wasser fehlt der Sauerstoff – da bleibt Pyrit jahrmillionenlang unverändert. Erst die Luft im trockengelegten Boden setzt die Reaktion in Gang."],
+ ["Welche beiden Stoffe entstehen bei der Pyritverwitterung?",
+  ["Kohlenstoffdioxid und Methan","Eisen und Sulfat","Kalk und Gips","Nitrat und Phosphat"],1,
+  "Eisen und Sulfat. Das Eisen wird an der Luft zu Eisenocker, das Sulfat bleibt gelöst und wandert weit."],
+ ["Ab welchem Eisengehalt wird ein Gewässer sichtbar braun?",
+  ["ab 0,02 mg/l","ab 2–3 mg/l","ab 25 mg/l","ab 250 mg/l"],1,
+  "Schon 2 bis 3 mg/l reichen für die sichtbare Verockerung. 250 mg/l ist dagegen der Trinkwasser-Grenzwert für Sulfat – nicht verwechseln."],
+ ["Warum ist das Wasserwerk Briesen weit nördlich von Cottbus betroffen?",
+  ["Weil dort ein Tagebau liegt","Weil Sulfat gelöst bleibt und mit der Spree flussabwärts wandert",
+   "Weil dort Eisenocker abgebaut wird","Weil das Grundwasser dorthin zurückfließt"],1,
+  "Sulfat fällt nicht aus, sondern wandert mit dem Flusswasser. Deshalb gilt am Pegel Neubrück davor ein Richtwert von 280 mg/l."],
+ ["Wie viele Menschen mussten im Lausitzer Revier seit den 1960er-Jahren umgesiedelt werden?",
+  ["rund 900","rund 2.600","rund 26.000","rund 260.000"],2,
+  "Rund 26.000 Menschen, mehr als 80 Dörfer. Allein für den Tagebau Cottbus-Nord waren es 906 Menschen in vier Orten."],
+ ["Was meint der Begriff „Ewigkeitslasten“?",
+  ["Die Schulden der Bergbaufirmen","Folgen, die dauerhaft überwacht und behandelt werden müssen",
+   "Die Kohle, die im Boden bleibt","Die Kosten der Umsiedlungen"],1,
+  "Wasserbehandlung, Grundwassermessungen und die Sicherung der Kippen laufen ohne Enddatum weiter – deshalb „Ewigkeit“."]
+];
+var qState=[];
+function buildQuiz(){
+  qState=Q.map(function(){return null});
+  var c=$("#quiz"); c.innerHTML="";
+  Q.forEach(function(q,i){
+    var w=document.createElement("div"); w.style.margin="0 0 20px";
+    var h=document.createElement("p"); h.innerHTML="<b>"+(i+1)+". "+q[0]+"</b>"; w.appendChild(h);
+    q[1].forEach(function(o,j){
+      var b=document.createElement("button"); b.className="opt"; b.textContent=o;
+      b.onclick=function(){
+        if(qState[i]!==null)return;
+        qState[i]=j;
+        $$(".opt",w).forEach(function(x,k){ if(k===q[2])x.classList.add("ok"); else if(k===j)x.classList.add("bad"); x.disabled=true; });
+        var f=$(".fb",w); f.className="fb on "+(j===q[2]?"good":"poor");
+        f.innerHTML=(j===q[2]?"<b>Richtig.</b> ":"<b>Nicht richtig.</b> ")+q[3];
+        var pts=qState.filter(function(v,k){return v===Q[k][2]}).length;
+        $("#qScore").textContent=pts+" / "+Q.length;
+      };
+      w.appendChild(b);
+    });
+    var f=document.createElement("div"); f.className="fb"; w.appendChild(f);
+    c.appendChild(w);
+  });
+  $("#qScore").textContent="0 / "+Q.length;
+}
+$("#qReset").onclick=buildQuiz; buildQuiz();
+})();
+</script>
+</body>
+</html>
