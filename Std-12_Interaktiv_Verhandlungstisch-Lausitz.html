@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="de"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Verhandlungstisch Lausitz · Geografie 9 · Stunde 12</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%}
+:root{--navy:#1F3B57;--teal:#2E7D6B;--amber:#C97A2B;--coral:#C05A5A;--gruen:#4A7C2F;
+--violet:#6B4E8C;--bg:#F4F7F6;--line:#D5DEDC;--ink:#1A1A1A;--grey:#5B6B6B}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px}
+header{background:var(--navy);color:#fff;padding:22px 18px 18px}
+header h1{font-size:1.5rem;line-height:1.2;margin-bottom:6px}
+header p{color:#AFC6C0;font-size:.92rem}
+nav{position:sticky;top:0;z-index:20;background:var(--navy);border-top:1px solid #35546f;
+overflow-x:auto;-webkit-overflow-scrolling:touch;display:flex;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:0 0 auto;min-height:48px;padding:0 16px;background:none;border:none;color:#AFC6C0;
+font:inherit;font-size:.88rem;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+nav button.on{color:#fff;border-bottom-color:var(--teal);font-weight:600}
+main{max-width:1024px;margin:0 auto;padding:18px 16px 60px}
+section{display:none}section.on{display:block}
+h2{font-size:1.25rem;color:var(--navy);margin:4px 0 6px;line-height:1.25}
+h3{font-size:1.02rem;color:var(--teal);margin:20px 0 8px}
+.lead{color:var(--grey);font-size:.94rem;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.card.l{border-left:5px solid var(--navy)}
+.grid{display:grid;gap:12px}
+@media(min-width:720px){.grid.c2{grid-template-columns:1fr 1fr}.grid.c3{grid-template-columns:repeat(3,1fr)}}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+padding:3px 8px;border-radius:5px;color:#fff;margin-bottom:8px}
+.feld{margin:9px 0}
+.feld b{display:block;font-size:.73rem;text-transform:uppercase;letter-spacing:.04em;color:var(--grey);margin-bottom:2px}
+.feld span{font-size:.93rem}
+.rl{color:var(--coral);font-weight:600}
+button.act{min-height:48px;padding:12px 16px;border-radius:9px;border:2px solid var(--line);
+background:#fff;font:inherit;font-size:.93rem;cursor:pointer;text-align:left;width:100%}
+button.act:hover{border-color:var(--teal)}
+button.act.sel{border-color:var(--navy);background:#EEF3F2}
+button.act.ok{border-color:var(--teal);background:#E8F2EF}
+button.act.no{border-color:var(--coral);background:#F8ECEC}
+.pill{display:inline-flex;align-items:center;justify-content:center;min-width:48px;min-height:48px;
+border-radius:9px;border:2px solid var(--line);background:#fff;font:inherit;font-weight:700;cursor:pointer}
+.pill.sel{background:var(--navy);color:#fff;border-color:var(--navy)}
+details{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:.9rem;
+font-weight:600;color:var(--teal);list-style:none}
+summary::-webkit-details-marker{display:none}
+summary:before{content:"＋ ";margin-right:6px;font-weight:700}
+details[open] summary:before{content:"－ "}
+details p{font-size:.9rem;color:var(--grey);padding:6px 0 2px}
+.fb{margin-top:8px;padding:10px 12px;border-radius:8px;font-size:.89rem;display:none}
+.fb.show{display:block}
+.fb.good{background:#E8F2EF;color:#1d5b4c;border-left:4px solid var(--teal)}
+.fb.bad{background:#F8ECEC;color:#8e3b3b;border-left:4px solid var(--coral)}
+.votes{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:12px}
+.vote{border:1px solid var(--line);border-radius:8px;padding:9px;background:#fff;font-size:.85rem}
+.vote .n{font-weight:700;font-size:.8rem}
+.vote.ja{border-left:4px solid var(--teal)}
+.vote.nein{border-left:4px solid var(--coral)}
+.vote .g{color:var(--grey);font-size:.8rem;margin-top:3px;display:block}
+.score{font-size:1.5rem;font-weight:700;margin:10px 0 2px}
+.bar{height:12px;background:#E3EAE8;border-radius:6px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:var(--teal);transition:width .3s}
+.warn{background:#FBF3E7;border-left:4px solid var(--amber);padding:10px 12px;border-radius:8px;
+font-size:.89rem;margin-top:10px}
+.danger{background:#F8ECEC;border-left:4px solid var(--coral);padding:10px 12px;border-radius:8px;
+font-size:.89rem;margin-top:10px}
+.ok{background:#E8F2EF;border-left:4px solid var(--teal);padding:10px 12px;border-radius:8px;
+font-size:.89rem;margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--navy);color:#fff;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em}
+.wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px}
+.timer{font-size:3.4rem;font-weight:700;text-align:center;color:var(--navy);
+font-variant-numeric:tabular-nums;margin:10px 0}
+.timer.go{color:var(--teal)}.timer.end{color:var(--coral)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>*{flex:1 1 auto}
+a{color:var(--teal)}
+#links-box .card{padding:0}
+#links-box a{display:flex;align-items:center;min-height:52px;padding:12px 14px;
+text-decoration:none;font-weight:600;font-size:.93rem}
+#links-box a:hover{background:#EEF3F2;border-radius:10px}
+.q{font-weight:600;margin-bottom:10px}
+.opts{display:grid;gap:8px}
+footer{color:var(--grey);font-size:.8rem;padding:18px 16px 40px;max-width:1024px;margin:0 auto;
+border-top:1px solid var(--line)}
+.prog{font-size:.85rem;color:var(--grey);margin-bottom:10px}
+</style>
+</head><body>
+<header>
+  <h1>Verhandlungstisch Lausitz</h1>
+  <p>Wie weiter mit der Kohle? · Geografie Jahrgangsstufe 9 · Stunde 12</p>
+</header>
+<nav>
+  <button data-t="t1" class="on">1 Die Vorlage</button>
+  <button data-t="t2">2 Rollenkarten</button>
+  <button data-t="t3">3 Angebot oder rote Linie?</button>
+  <button data-t="t4">4 Der Verhandlungstisch</button>
+  <button data-t="t5">5 Timer</button>
+  <button data-t="t6">6 Quiz</button>
+  <button data-t="t7">7 Zahlen &amp; Links</button>
+</nav>
+<main>
+
+<section id="t1" class="on">
+  <h2>Die Cottbuser Vereinbarung</h2>
+  <p class="lead">Der Braunkohlenausschuss hört die Beteiligten an. Auf dem Tisch liegt eine Vereinbarung
+  mit drei leeren Zeilen. Jede Zeile wird einzeln abgestimmt – angenommen ist sie, wenn
+  <b>4 von 6</b> Akteuren zustimmen.</p>
+  <div id="vorlage-liste" class="grid"></div>
+  <div class="card" style="border-left:5px solid var(--amber)">
+    <b>Ihre Aufgabe</b>
+    <p style="font-size:.92rem;margin-top:6px">Sie vertreten Ihren Akteur aus Stunde 11 – nicht Ihre
+    eigene Meinung. Am Ende der Stunde steigen Sie wieder aus der Rolle aus.</p>
+    <p style="font-size:.84rem;color:var(--grey);margin-top:8px"><i>Die Anhörung ist nachgestellt.
+    Positionen und Interessen der Akteure sind belegt; die Angebote und roten Linien sind für den
+    Unterricht zugespitzt und keine Zitate.</i></p>
+  </div>
+</section>
+
+<section id="t2">
+  <h2>Die sechs Rollenkarten</h2>
+  <p class="lead">Position und Interesse kennen Sie aus Stunde 11. Neu sind <b>Angebot</b> und
+  <b>rote Linie</b>. Klappen Sie das Zusatzmaterial auf – darin stehen Zahlen, die Sie in der
+  Diskussion brauchen.</p>
+  <div id="rollen-liste" class="grid c2"></div>
+</section>
+
+<section id="t3">
+  <h2>Angebot oder rote Linie?</h2>
+  <p class="lead">Prüffrage: Gibt es etwas, das die andere Seite anbieten könnte, damit der Akteur
+  davon abrückt? <b>Ja</b> → Angebot. <b>Nein</b> → rote Linie.</p>
+  <p class="prog" id="zprog">Bearbeitet: 0 von 10</p>
+  <div id="zuordnung-liste"></div>
+</section>
+
+<section id="t4">
+  <h2>Der Verhandlungstisch</h2>
+  <p class="lead">Wählen Sie für jede Zeile einen Vorschlag. Das Werkzeug rechnet aus, wer zustimmt –
+  und warum. Suchen Sie eine Kombination, bei der alle drei Zeilen stehen, ohne dass jemand
+  überfahren wird.</p>
+  <div id="tisch-liste"></div>
+  <div class="card" id="tisch-gesamt"></div>
+</section>
+
+<section id="t5">
+  <h2>Timer</h2>
+  <p class="lead">Ohne harte Zeitwacht zerfällt die Diskussion. 30 Sekunden für das Eingangsstatement,
+  45 Sekunden für einen Redebeitrag, 90 Sekunden für die Teamberatung.</p>
+  <div class="card">
+    <div class="timer" id="timer">0:30</div>
+    <div class="row" style="margin-bottom:10px">
+      <button class="pill" style="flex:1" onclick="tSet(30)">30 s</button>
+      <button class="pill" style="flex:1" onclick="tSet(45)">45 s</button>
+      <button class="pill" style="flex:1" onclick="tSet(90)">90 s</button>
+      <button class="pill" style="flex:1" onclick="tSet(300)">5 min</button>
+    </div>
+    <div class="row">
+      <button class="act" style="text-align:center;font-weight:600" onclick="tStart()">Start</button>
+      <button class="act" style="text-align:center;font-weight:600" onclick="tStop()">Stopp</button>
+    </div>
+  </div>
+  <h3>Der leere Stuhl</h3>
+  <p class="lead">Ein Stuhl am Tisch bleibt die ganze Stunde leer. Diese Gruppen saßen nicht mit
+  am Tisch – erst am Ende der Stunde aufdecken.</p>
+  <div id="leer-box" class="grid c2"></div>
+</section>
+
+<section id="t6">
+  <h2>Quiz</h2>
+  <p class="lead">Acht Fragen zur Stunde. Nach jeder Antwort kommt die Erklärung.</p>
+  <div id="quiz-box"></div>
+</section>
+
+<section id="t7">
+  <h2>Zahlen der Stunde</h2>
+  <p class="lead">Jede Zahl mit Quelle. Beobachtungsauftrag 4 prüft, ob die Zahlen in der Diskussion
+  richtig genannt werden.</p>
+  <div id="zahlen-box"></div>
+  <h3>Zwei Rechenfallen</h3>
+  <div class="card" style="border-left:5px solid var(--amber)">
+    <p style="font-size:.92rem"><b>Leistung ist nicht Strommenge.</b> 1.500 MW : 105 MW ≈ 14 Windparks
+    ergeben die gleiche <i>Leistung</i>, nicht die gleiche <i>Jahresstrommenge</i>: Ein Braunkohleblock
+    läuft rund um die Uhr, ein Windpark nicht. Das rechnen wir in Stunde 13 nach.</p>
+  </div>
+  <div class="card" style="border-left:5px solid var(--amber)">
+    <p style="font-size:.92rem"><b>Gleiche Größenordnung ist keine Lösung.</b> 99 + 27 = 126 Mio. m³
+    Speicher entsprechen zwar der Größenordnung des Jahresdefizits von rund 126 Mio. m³ – aber Wasser
+    fehlt im <i>Sommer</i>, und ein Speicher hilft nur, wenn er im Winter gefüllt wurde.</p>
+  </div>
+  <h3>Weiterlesen</h3>
+  <div id="links-box"></div>
+  <h3>Hausaufgabe</h3>
+  <div class="card" style="border-left:5px solid var(--teal)">
+    <p style="font-size:.93rem">Fünf Sätze: Trägt diese Vereinbarung? Jetzt in Ihrer eigenen Meinung,
+    nicht mehr in der Rolle. Mindestens eine Zahl aus der Stunde muss darin vorkommen – und ein Satz
+    dazu, was die Vereinbarung <b>nicht</b> regelt.</p>
+  </div>
+</section>
+
+</main>
+<footer>
+Humboldt-Gymnasium Cottbus · Geografie Jahrgangsstufe 9 · Stunde 12 · Stand 26.10.2026.<br>
+Läuft ohne Internetverbindung, sobald die Seite einmal geladen ist. Die Links unter „Weiterlesen“
+brauchen eine Verbindung.
+</footer>
+<script>
+const D = {"akteure": [{"k": "A", "name": "LEAG", "kurz": "LEAG", "farbe": "#1F3B57", "position": "Die Förderung in Welzow-Süd endet Ende 2030, das Restfeld Süd entfällt. Wir bauen stattdessen die GigawattFactory.", "interesse": "Wirtschaftlichkeit – Kohle nur so lange, wie sie sich bei schwankenden Strompreisen rechnet.", "angebot": "Wir legen das Kraftwerk Jänschwalde Ende 2028 still und bauen am selben Standort den Großspeicher – wenn die Genehmigungen für Wind und Solar zügig kommen.", "rote_linie": "Kein Ausstiegstermin, der uns zu Strom verpflichtet, der sich nicht rechnet.", "zahl": "rund 6.500 Mitarbeitende", "zusatz": "Die LEAG hat bereits über 1 Mrd. Euro in Wind, Solar und Speicher investiert. Am Standort Jänschwalde sieht sie ein Potenzial von mehr als 2 Gigawatt."}, {"k": "B", "name": "Beschäftigte / IG BCE", "kurz": "Beschäftigte", "farbe": "#C97A2B", "position": "Der Ausstieg muss sozialverträglich sein: verlässliche Termine und ein Anschluss für jede Stelle.", "interesse": "Einkommen und berufliche Zukunft – die Familien hängen an diesen Stellen.", "angebot": "Wir tragen den früheren Ausstieg 2030 mit – wenn für jede Stelle ein Anschluss vereinbart wird.", "rote_linie": "Keine betriebsbedingte Kündigung.", "zahl": "Tarifvertrag bis Ende 2043", "zusatz": "Der Tarifvertrag sichert Beschäftigung bis Ende 2043 und stockt das Anpassungsgeld auf 85 % des letzten Nettoentgelts auf. Bei Abschluss galt er für knapp 8.000 Beschäftigte."}, {"k": "C", "name": "Stadt Cottbus und Anliegerkommunen", "kurz": "Stadt Cottbus", "farbe": "#2E7D6B", "position": "Die Bergbaufolgelandschaft ist unsere Stadtentwicklung – der Ostsee muss nutzbar werden.", "interesse": "Einwohner halten und Steuereinnahmen sichern.", "angebot": "Wir stellen Flächen für Speicher und Solar bereit und beschleunigen die Verfahren – wenn das Ufer des Ostsees sicher nutzbar wird.", "rote_linie": "Keine Freigabe von Uferflächen, bevor die Rutschungsgefahr beseitigt ist.", "zahl": "35 MW Seewasser-Wärmepumpe geplant", "zusatz": "Der Cottbuser Ostsee hat 18,8 km² und rund 126 Mio. m³ Wasservolumen. Der Zielwasserstand von +62,5 m NHN wurde zum Jahreswechsel 2024/25 erstmals erreicht. Die touristische Nutzung wird erst Anfang der 2030er Jahre erwartet."}, {"k": "D", "name": "Umweltverbände", "kurz": "Umweltverbände", "farbe": "#4A7C2F", "position": "Der Wasserhaushalt muss Vorrang haben – kein Liter mehr als unbedingt nötig in die Flutung.", "interesse": "Wasser, Natur und die Lebensgrundlagen späterer Generationen.", "angebot": "Wir ziehen Einwendungen gegen Wind- und Solarprojekte auf Bergbaufolgeflächen zurück – wenn die Wasserbilanz der Spree verbindlich abgesichert wird.", "rote_linie": "Keine weitere Flutung ohne gesicherten Ausgleich für den Unterlauf der Spree.", "zahl": "bis zu 75 % weniger Wasser im Sommer", "zusatz": "Rund die Hälfte des Spreeabflusses bei Cottbus stammt heute aus der Sümpfung des Bergbaus, im Hochsommer bis zu 75 %. Nach dem Ausstieg können in trockenen Sommermonaten örtlich bis zu 75 % des Wassers fehlen."}, {"k": "E", "name": "Anwohner und Domowina", "kurz": "Anwohner", "farbe": "#C05A5A", "position": "Kein weiteres Dorf – und endlich schriftliche Gewissheit.", "interesse": "Heimat, Nachbarschaft und die sorbisch-wendische Kultur.", "angebot": "Wir unterstützen die Umnutzung der Tagebauflächen – wenn der Verzicht auf weitere Ortsteile schriftlich festgehalten wird.", "rote_linie": "Kein weiteres Dorf. Keine Umsiedlung. Keine Bedingung, die das wieder öffnet.", "zahl": "137 devastierte Orte seit 1924", "zusatz": "Seit 1924 sind in der Lausitz 137 Orte und Ortsteile dem Bergbau gewichen, über 25.000 Menschen wurden umgesiedelt. Im Durchschnitt sind das rund 182 Menschen je Ort."}, {"k": "F", "name": "Land Brandenburg und Bund", "kurz": "Land und Bund", "farbe": "#6B4E8C", "position": "Ausstieg bis 2038 und einen Strukturwandel, der die Region trägt.", "interesse": "Die Region soll den Wandel aus eigener Kraft schaffen – ohne dauerhafte Zuschüsse.", "angebot": "Wir sichern Mittel für Wasserspeicher und Qualifizierung zu – wenn die Projekte innerhalb der Laufzeit des Strukturstärkungsgesetzes fertig geplant sind.", "rote_linie": "Keine Zusage, die über die Laufzeit des Strukturstärkungsgesetzes bis 2038 hinausreicht.", "zahl": "10,3 Mrd. Euro Strukturmittel", "zusatz": "Für die brandenburgische Lausitz stehen 10,3 Mrd. Euro bereit (Arm 1 Land 3,6 Mrd., Arm 2 Bund über 6,7 Mrd.). Im August 2025 waren davon 8,7 Mrd. Euro gebunden – also 84 %."}], "fragen": [{"nr": 1, "titel": "Ausstieg und Arbeit", "frage": "Wann endet die Förderung – und wer sorgt dafür, dass die Menschen hier bleiben können?", "herkunft": "Paar 2 (Beschäftigte – Umweltverbände) und Paar 6 (Beschäftigte – Stadt Cottbus)", "schnittmenge": "Beschäftigte und Umweltverbände wollen beide einen verlässlichen Fahrplan; Beschäftigte und Stadt wollen beide, dass Menschen in der Region bleiben können."}, {"nr": 2, "titel": "Wasser für die Spree", "frage": "Woher kommt das Wasser, wenn die Pumpen des Bergbaus abgestellt werden?", "herkunft": "Paar 5 (Land und Bund – Umweltverbände)", "schnittmenge": "Land und Bund und die Umweltverbände wollen beide eine dauerhaft gesicherte Wasserversorgung – aus unterschiedlichen Gründen, aber mit demselben Ziel."}, {"nr": 3, "titel": "Dörfer und Gewissheit", "frage": "Darf noch ein Ortsteil in Anspruch genommen werden?", "herkunft": "Paar 3 (LEAG – Anwohner und Domowina)", "schnittmenge": "Hier gibt es keine Schnittmenge – Paar 3 war in Stunde 11 der einzige echte Konflikt. Genau deshalb steht diese Frage auf der Vorlage."}], "varianten": [{"zeile": 1, "kennung": "1A", "staerke": "früher Ausstieg ohne Zusage", "text": "Die Förderung endet schon 2028. Einen Anschluss für jede Stelle gibt es nicht.", "stimmen": {"A": {"votum": "nein", "grund": "Zwei Jahre weniger als geplant – die Anlagen sind noch nicht ersetzt.", "rl": false}, "B": {"votum": "nein", "grund": "Ohne Anschluss drohen betriebsbedingte Kündigungen – unsere rote Linie.", "rl": true}, "C": {"votum": "nein", "grund": "Wer keine Stelle mehr hat, zieht weg. Dann verlieren wir Einwohner und Steuern.", "rl": false}, "D": {"votum": "ja", "grund": "Jedes Jahr früher entlastet den Wasserhaushalt.", "rl": false}, "E": {"votum": "ja", "grund": "Je früher Schluss ist, desto früher haben wir Gewissheit.", "rl": false}, "F": {"votum": "nein", "grund": "Der Ausstieg muss sozialverträglich sein – das ist gesetzlich vorgegeben.", "rl": false}}}, {"zeile": 1, "kennung": "1B", "staerke": "Ausstieg 2030 mit Anschlusszusage", "text": "Die Förderung in Welzow-Süd endet Ende 2030. Für jede Stelle wird ein Anschluss vereinbart, bezahlt aus Strukturmitteln. Das Kraftwerk Jänschwalde geht Ende 2028 vom Netz.", "stimmen": {"A": {"votum": "ja", "grund": "Das ist genau unsere eigene Planung vom Januar 2026.", "rl": false}, "B": {"votum": "ja", "grund": "Verlässlicher Termin und ein Anschluss für jede Stelle – genau unser Angebot.", "rl": false}, "C": {"votum": "ja", "grund": "Die Menschen bleiben, und wir wissen, ab wann wir die Flächen planen können.", "rl": false}, "D": {"votum": "ja", "grund": "Drei Jahre früher als der alte Plan – das nehmen wir.", "rl": false}, "E": {"votum": "ja", "grund": "Ein festes Datum ist die halbe Gewissheit.", "rl": false}, "F": {"votum": "ja", "grund": "Sozialverträglich und innerhalb der Laufzeit bis 2038 – finanzierbar.", "rl": false}}}, {"zeile": 1, "kennung": "1C", "staerke": "Förderung wie früher geplant bis 2033", "text": "Die Förderung läuft wie im alten Plan bis 2033 weiter.", "stimmen": {"A": {"votum": "nein", "grund": "Wir haben selbst auf drei Jahre verzichtet, weil sich diese Kohle nicht rechnet.", "rl": false}, "B": {"votum": "ja", "grund": "Drei Jahre mehr Zeit für den Übergang.", "rl": false}, "C": {"votum": "nein", "grund": "Dann verschiebt sich die Seelandschaft – und mit ihr unsere Stadtentwicklung.", "rl": false}, "D": {"votum": "nein", "grund": "Drei Jahre länger pumpen heißt drei Jahre länger Grundwasser absenken.", "rl": false}, "E": {"votum": "nein", "grund": "Jedes Jahr länger ist ein Jahr länger Unsicherheit.", "rl": false}, "F": {"votum": "nein", "grund": "Der Strukturwandel ist bis 2038 finanziert – danach wird es eng.", "rl": false}}}, {"zeile": 2, "kennung": "2A", "staerke": "Flutung weiter, Wasserfrage später", "text": "Die Flutung des Cottbuser Ostsees wird wie geplant fortgesetzt. Über die Wasserversorgung der Spree wird später entschieden.", "stimmen": {"A": {"votum": "ja", "grund": "Keine neuen Auflagen, der Zeitplan hält.", "rl": false}, "B": {"votum": "ja", "grund": "Die Sanierung sichert Arbeit – und unsere Stellen hängen nicht daran.", "rl": false}, "C": {"votum": "ja", "grund": "Je schneller der See fertig ist, desto schneller können wir ihn nutzen.", "rl": false}, "D": {"votum": "nein", "grund": "Flutung ohne gesicherten Ausgleich für den Unterlauf – unsere rote Linie.", "rl": true}, "E": {"votum": "ja", "grund": "Der See ist da. Uns geht es um die Dörfer, nicht um den Wasserstand.", "rl": false}, "F": {"votum": "nein", "grund": "Das Problem wird nur verschoben, nicht gelöst.", "rl": false}}}, {"zeile": 2, "kennung": "2B", "staerke": "Ausgleich verbindlich festschreiben", "text": "Für den Unterlauf der Spree wird ein Ausgleich festgeschrieben: zusätzliche Speicher von 27 Mio. m³ und ein Mindestabfluss im Sommer.", "stimmen": {"A": {"votum": "ja", "grund": "Wir können damit planen – wenn die Genehmigungen zügig kommen.", "rl": false}, "B": {"votum": "ja", "grund": "Speicherbau ist Arbeit in der Region.", "rl": false}, "C": {"votum": "ja", "grund": "Ein gesicherter Abfluss schützt auch unsere Trinkwasserversorgung.", "rl": false}, "D": {"votum": "ja", "grund": "Verbindlich abgesicherte Wasserbilanz – genau unser Angebot.", "rl": false}, "E": {"votum": "ja", "grund": "Betrifft uns kaum, aber es schadet niemandem.", "rl": false}, "F": {"votum": "ja", "grund": "Finanzierbar aus den Strukturmitteln, fertig geplant bis 2038.", "rl": false}}}, {"zeile": 2, "kennung": "2C", "staerke": "Flutung sofort stoppen", "text": "Die Flutung wird sofort gestoppt, bis die Wasserbilanz der Spree gesichert ist.", "stimmen": {"A": {"votum": "nein", "grund": "Ein halb gefluteter Tagebau ist unsicher – die Innenkippe braucht das Wasser.", "rl": false}, "B": {"votum": "nein", "grund": "Ein Stopp mitten in der Sanierung kostet Stellen.", "rl": false}, "C": {"votum": "nein", "grund": "Dann bleibt am Ostsee auf unbestimmte Zeit eine Baustelle.", "rl": true}, "D": {"votum": "ja", "grund": "Erst die Wasserbilanz, dann der See.", "rl": false}, "E": {"votum": "nein", "grund": "Noch mehr Jahre ohne klare Lage – davon hatten wir genug.", "rl": false}, "F": {"votum": "nein", "grund": "Ein Stopp ohne Ersatzplan löst das Sommerproblem nicht.", "rl": false}}}, {"zeile": 3, "kennung": "3A", "staerke": "Entscheidung ans Verfahren verschieben", "text": "Über die Inanspruchnahme weiterer Ortsteile wird erst nach Abschluss des Braunkohlenplanverfahrens entschieden.", "stimmen": {"A": {"votum": "ja", "grund": "Formal korrekt – dafür ist das Verfahren da.", "rl": false}, "B": {"votum": "ja", "grund": "Das Verfahren läuft ohnehin, unsere Stellen hängen nicht daran.", "rl": false}, "C": {"votum": "nein", "grund": "Bis Mitte 2029 nichts zu wissen heißt, bis Mitte 2029 nicht planen zu können.", "rl": false}, "D": {"votum": "nein", "grund": "Eine offene Frage ist eine offene Tür.", "rl": false}, "E": {"votum": "nein", "grund": "Noch drei Jahre Unsicherheit – das ist unsere rote Linie.", "rl": true}, "F": {"votum": "ja", "grund": "Das Verfahren ist gesetzlich vorgeschrieben, wir können es nicht abkürzen.", "rl": false}}}, {"zeile": 3, "kennung": "3B", "staerke": "Verzicht schriftlich festhalten", "text": "Der Verzicht auf das Restfeld Süd und auf weitere Ortsteile wird schriftlich festgehalten.", "stimmen": {"A": {"votum": "ja", "grund": "Wir haben diesen Verzicht im Januar 2026 selbst erklärt.", "rl": false}, "B": {"votum": "ja", "grund": "Klare Lage ist auch für unsere Planung besser.", "rl": false}, "C": {"votum": "ja", "grund": "Endlich können wir die Flächen überplanen.", "rl": false}, "D": {"votum": "ja", "grund": "Weniger Eingriff, weniger Wasserbedarf.", "rl": false}, "E": {"votum": "ja", "grund": "Genau das ist unsere Forderung – und unser Angebot hängt daran.", "rl": false}, "F": {"votum": "ja", "grund": "Eine Festlegung schafft Planungssicherheit für den Strukturwandel.", "rl": false}}}, {"zeile": 3, "kennung": "3C", "staerke": "Verzicht nur befristet", "text": "Der Verzicht gilt bis 2030. Danach wird neu geprüft.", "stimmen": {"A": {"votum": "ja", "grund": "Hält uns eine Möglichkeit offen, ohne uns zu binden.", "rl": false}, "B": {"votum": "nein", "grund": "Eine Frist ist keine Sicherheit – auch nicht für uns.", "rl": false}, "C": {"votum": "nein", "grund": "Mit einem Vorbehalt kann man keine Fläche überplanen.", "rl": false}, "D": {"votum": "nein", "grund": "2030 steht alles wieder zur Debatte.", "rl": false}, "E": {"votum": "nein", "grund": "Eine Bedingung, die das wieder öffnet – unsere rote Linie.", "rl": true}, "F": {"votum": "nein", "grund": "Ein befristeter Verzicht bremst Investitionen.", "rl": false}}}], "zuordnung": [{"text": "Wir können den Ausstieg 2030 mittragen, wenn jede Stelle einen Anschluss hat.", "typ": "angebot", "erkl": "Es steht ein „wenn“ darin: eine Gegenleistung. Das ist ein Angebot."}, {"text": "Kein weiteres Dorf. Punkt.", "typ": "rote", "erkl": "Keine Bedingung, keine Gegenleistung – eine Grenze."}, {"text": "Wir stellen Flächen für Solar bereit, wenn das Ufer sicher ist.", "typ": "angebot", "erkl": "Leistung gegen Gegenleistung – ein Angebot."}, {"text": "Ohne gesicherten Ausgleich für die Spree stimmen wir keiner Flutung zu.", "typ": "rote", "erkl": "„Ohne … nicht“ ist die typische Form einer roten Linie."}, {"text": "Wir ziehen unsere Einwendungen gegen Windparks zurück, wenn die Wasserbilanz steht.", "typ": "angebot", "erkl": "Ein Verzicht gegen eine Zusage – ein Angebot."}, {"text": "Betriebsbedingte Kündigungen kommen für uns nicht in Frage.", "typ": "rote", "erkl": "Nicht verhandelbar, also eine rote Linie."}, {"text": "Wir legen Jänschwalde Ende 2028 still, wenn die Genehmigungen zügig kommen.", "typ": "angebot", "erkl": "Wieder ein „wenn“ – Angebot."}, {"text": "Wir sagen nichts zu, was über 2038 hinausreicht.", "typ": "rote", "erkl": "Eine Grenze der eigenen Zuständigkeit – rote Linie."}, {"text": "Wir beschleunigen die Genehmigungsverfahren, wenn dafür Personal finanziert wird.", "typ": "angebot", "erkl": "Gegenleistung genannt – Angebot."}, {"text": "Uferflächen geben wir erst frei, wenn die Rutschungsgefahr beseitigt ist.", "typ": "rote", "erkl": "„Erst wenn“ klingt wie ein Angebot, ist aber eine Bedingung, hinter die niemand zurück darf – rote Linie. Prüffrage: Gibt es etwas, das die andere Seite anbieten könnte, um das zu ändern? Nein."}], "quiz": [{"f": "Wie viele Akteure müssen einer Beschlusszeile zustimmen, damit sie angenommen ist?", "o": ["3 von 6", "4 von 6", "5 von 6", "alle 6"], "r": 1, "e": "4 von 6 – das sind zwei Drittel. Eine Zeile kann also angenommen werden, obwohl zwei Akteure dagegen sind."}, {"f": "Was unterscheidet ein Angebot von einer roten Linie?", "o": ["Ein Angebot ist höflicher formuliert.", "Ein Angebot nennt eine Gegenleistung („wenn …“), eine rote Linie nicht.", "Eine rote Linie wird laut vorgetragen.", "Ein Angebot kommt immer von der schwächeren Seite."], "r": 1, "e": "Prüffrage: Gibt es etwas, das die andere Seite anbieten könnte, um das zu ändern? Ja – dann Angebot. Nein – dann rote Linie."}, {"f": "Woraus folgt ein gutes Angebot?", "o": ["Aus der Position", "Aus dem Interesse", "Aus der Lautstärke", "Aus der Größe des Akteurs"], "r": 1, "e": "Aus dem Interesse. Wer nur seine Position wiederholt, kann nichts anbieten – er hätte ja nichts mehr übrig."}, {"f": "Welche Leistung hat das Kraftwerk Jänschwalde heute noch?", "o": ["3.000 MW", "1.500 MW", "1.000 MW", "500 MW"], "r": 1, "e": "1.500 MW in drei Blöcken. Ursprünglich waren es sechs Blöcke mit je 500 MW, also 3.000 MW – die Hälfte ist schon vom Netz."}, {"f": "Wann soll das Kraftwerk Jänschwalde vollständig stillgelegt sein?", "o": ["Ende 2026", "Ende 2028", "Ende 2030", "2038"], "r": 1, "e": "Ende 2028. Am selben Standort soll 2028 der Großspeicher mit 1.000 MW in Betrieb gehen."}, {"f": "Wie lange kann der geplante Großspeicher Gigabattery Jänschwalde 1000 mit voller Leistung liefern?", "o": ["1 Stunde", "4 Stunden", "24 Stunden", "eine Woche"], "r": 1, "e": "4.000 MWh : 1.000 MW = 4 Stunden. Ein Speicher ersetzt deshalb kein Kraftwerk, er verschiebt Strom innerhalb des Tages."}, {"f": "Wann wird im Braunkohlenplanverfahren Welzow-Süd die Öffentlichkeit beteiligt?", "o": ["sie wurde 2023 beteiligt", "voraussichtlich ab Herbst 2027", "erst 2038", "gar nicht"], "r": 1, "e": "Voraussichtlich ab Herbst 2027; der Abschluss des Verfahrens ist für Mitte 2029 geplant (Stand der Gemeinsamen Landesplanung vom 13.07.2026)."}, {"f": "Eine Zeile erreicht 4 von 6 Stimmen, verletzt aber die rote Linie eines Akteurs. Was folgt daraus?", "o": ["Die Zeile ist ungültig.", "Die Zeile ist angenommen – der überstimmte Akteur trägt sie aber nicht mit.", "Es muss neu abgestimmt werden.", "Die rote Linie zählt doppelt."], "r": 1, "e": "Nach der Regel dieser Stunde ist die Zeile angenommen. Genau das ist der Preis einer Mehrheitsregel – und der Grund, warum solche Beschlüsse später vor Gericht landen können."}], "zahlen": [{"a": "Förderende Welzow-Süd (neu / alt)", "w": "Ende 2030 / 2033", "q": "LEAG, dem Braunkohlenausschuss am 19.01.2026 mitgeteilt"}, {"a": "Kraftwerk Jänschwalde heute", "w": "1.500 MW in drei Blöcken", "q": "leag.de, Kraftwerk Jänschwalde"}, {"a": "Jänschwalde ursprünglich", "w": "6 Blöcke × 500 MW = 3.000 MW (Netz 1981–1989)", "q": "leag.de, Kraftwerk Jänschwalde"}, {"a": "Vollständige Stilllegung Jänschwalde", "w": "Ende 2028 (KVBG)", "q": "leag.de, Kraftwerk Jänschwalde"}, {"a": "EU-Beihilfe für die LEAG", "w": "bis 1,75 Mrd. Euro, genehmigt 18.11.2025 (SA.53625)", "q": "Europäische Kommission"}, {"a": "Stilllegungstermine im Beihilfebeschluss", "w": "2028, 2029, 2035, 2038", "q": "Europäische Kommission, 18.11.2025"}, {"a": "Gigabattery Jänschwalde 1000", "w": "1.000 MW / 4.000 MWh, Inbetriebnahme 2028", "q": "LEAG-Projektstart, gemeldet 21.09.2026"}, {"a": "Windpark Forst-Briesnig II", "w": "105 MW, 17 Anlagen", "q": "LEAG-Projektstart, gemeldet 21.09.2026"}, {"a": "Energiepark Bohrau, 1. Bauabschnitt", "w": "rund 133 MWp, rund 130 ha, rund 230.000 Module, rund 130 GWh/Jahr", "q": "leag.de 11.09.2025 / Projektstart 21.09.2026"}, {"a": "Investitionen der LEAG bisher", "w": "über 1 Mrd. Euro", "q": "LEAG, gemeldet 21.09.2026"}, {"a": "Braunkohlenplan Welzow-Süd: Gutachten", "w": "bis Ende 2026 zu erstellen", "q": "Gemeinsame Landesplanung, Stand 13.07.2026"}, {"a": "Öffentliches Beteiligungsverfahren", "w": "voraussichtlich ab Herbst 2027", "q": "Gemeinsame Landesplanung, Stand 13.07.2026"}, {"a": "Abschluss des Planverfahrens geplant", "w": "Mitte 2029", "q": "Gemeinsame Landesplanung, Stand 13.07.2026"}, {"a": "Speichervolumen Spree heute / Erweiterung", "w": "rund 99 Mio. m³ / 27 Mio. m³ geplant", "q": "UBA-Pressemitteilung 19/2023"}, {"a": "Jahresdefizit am brandenburgischen Unterlauf", "w": "rund 126 Mio. m³", "q": "UBA-Pressemitteilung 19/2023"}, {"a": "Fehlendes Wasser in trockenen Sommermonaten", "w": "örtlich bis zu 75 %", "q": "UBA-Pressemitteilung 19/2023"}, {"a": "Strukturmittel brandenburgische Lausitz / gebunden", "w": "10,3 Mrd. Euro / 8,7 Mrd. Euro", "q": "Land Brandenburg, 15.08.2025"}, {"a": "Tarifvertrag IG BCE – LEAG", "w": "bis Ende 2043, Anpassungsgeld auf 85 % des letzten Netto", "q": "IG BCE"}, {"a": "Mitarbeitende der LEAG", "w": "rund 6.500", "q": "leag.de (ohne Stichtag)"}, {"a": "Devastierte Orte seit 1924 / Umgesiedelte", "w": "137 / über 25.000", "q": "Archiv verschwundener Orte, Forst"}, {"a": "Quorum in dieser Stunde", "w": "4 von 6 Akteuren = 2/3 ≈ 66,7 %", "q": "didaktisch gesetzt"}], "links": [{"t": "Braunkohlenplanverfahren Welzow-Süd (Gemeinsame Landesplanung)", "u": "https://gl.berlin-brandenburg.de/landesplanung/braunkohlen-und-sanierungsplanung/braunkohlenplanung/braunkohlenplanverfahren-tagebau-welzow-sued/"}, {"t": "Kraftwerk Jänschwalde (LEAG)", "u": "https://www.leag.de/de/technologien/kraftwerke/kraftwerk-jaenschwalde/"}, {"t": "GigawattFactory (LEAG)", "u": "https://www.leag.de/de/news/details/gigawattfactory-wächst-weiter/"}, {"t": "EU-Kommission: Beihilfe für die LEAG, 18.11.2025", "u": "https://germany.representation.ec.europa.eu/news/vorzeitige-stilllegung-von-braunkohlekraftwerken-kommission-genehmigt-leag-beihilfe-2025-11-18_de"}, {"t": "Cottbuser Ostsee – Projektseite", "u": "https://www.cottbuser-ostsee.de/"}, {"t": "Archiv verschwundener Orte, Forst", "u": "https://www.archiv-verschwundener-orte.de/"}], "leer": [{"g": "Künftige Generationen", "i": "Sie tragen die Ewigkeitslasten – Wasserreinigung und Kippensicherung laufen nach 2038 weiter."}, {"g": "Beschäftigte in Zulieferbetrieben", "i": "Werkstatt, Spedition, Kantine: Ihre Stellen sind in keinem Tarifvertrag abgesichert."}, {"g": "Stromkunden in ganz Deutschland", "i": "Sie zahlen über Netzentgelte und Steuern mit, sitzen aber nicht am Tisch."}, {"g": "Nachbarn im Spreewald und in Berlin", "i": "Das Wasser der Spree fließt weiter – Sulfat und Niedrigwasser kommen bei ihnen an."}], "quorum": 4};
+const AK = {}; D.akteure.forEach(a=>AK[a.k]=a);
+const $ = (s,r)=> (r||document).querySelector(s);
+const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
+const el=(t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!==undefined)e.innerHTML=h; return e;};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+/* ---- Navigation ---- */
+function nav(id){
+  $$('section').forEach(s=>s.classList.toggle('on', s.id===id));
+  $$('nav button').forEach(b=>b.classList.toggle('on', b.dataset.t===id));
+  window.scrollTo(0,0);
+}
+
+/* ---- Teil 1: Vorlage ---- */
+function buildVorlage(){
+  const w=$('#vorlage-liste');
+  D.fragen.forEach((f,i)=>{
+    const col=['var(--navy)','var(--teal)','var(--coral)'][i];
+    const c=el('div','card l'); c.style.borderLeftColor=col;
+    c.innerHTML='<span class="tag" style="background:'+col+'">Zeile '+f.nr+'</span>'+
+      '<h3 style="margin:0 0 4px;color:'+col+'">'+esc(f.titel)+'</h3>'+
+      '<p style="font-size:.95rem">„'+esc(f.frage)+'“</p>'+
+      '<details><summary>Woher kommt diese Frage?</summary><p><b>'+esc(f.herkunft)+'</b><br>'+
+      esc(f.schnittmenge)+'</p></details>';
+    w.appendChild(c);
+  });
+}
+
+/* ---- Teil 2: Rollenkarten ---- */
+function buildRollen(){
+  const w=$('#rollen-liste');
+  D.akteure.forEach(a=>{
+    const c=el('div','card l'); c.style.borderLeftColor=a.farbe;
+    c.innerHTML='<span class="tag" style="background:'+a.farbe+'">Akteur '+a.k+'</span>'+
+      '<h3 style="margin:0 0 6px;color:'+a.farbe+'">'+esc(a.name)+'</h3>'+
+      '<div class="feld"><b>Position</b><span>'+esc(a.position)+'</span></div>'+
+      '<div class="feld"><b>Interesse</b><span>'+esc(a.interesse)+'</span></div>'+
+      '<div class="feld"><b>Angebot</b><span>'+esc(a.angebot)+'</span></div>'+
+      '<div class="feld"><b>Rote Linie</b><span class="rl">'+esc(a.rote_linie)+'</span></div>'+
+      '<div class="feld"><b>Zahl, die zählt</b><span><b>'+esc(a.zahl)+'</b></span></div>'+
+      '<details><summary>Zusatzmaterial für mein Team</summary><p>'+esc(a.zusatz)+'</p></details>';
+    w.appendChild(c);
+  });
+}
+
+/* ---- Teil 3: Angebot oder rote Linie ---- */
+let zState=[];
+function buildZuordnung(){
+  const w=$('#zuordnung-liste'); zState=D.zuordnung.map(()=>null);
+  D.zuordnung.forEach((z,i)=>{
+    const c=el('div','card');
+    c.innerHTML='<p class="q">'+(i+1)+'. „'+esc(z.text)+'“</p>'+
+      '<div class="row"><button class="act" data-i="'+i+'" data-v="angebot">Angebot</button>'+
+      '<button class="act" data-i="'+i+'" data-v="rote">Rote Linie</button></div>'+
+      '<div class="fb" id="zfb'+i+'"></div>';
+    w.appendChild(c);
+  });
+  w.addEventListener('click',e=>{
+    const b=e.target.closest('button.act'); if(!b) return;
+    const i=+b.dataset.i, v=b.dataset.v, z=D.zuordnung[i];
+    const grp=$$('button.act[data-i="'+i+'"]',w);
+    grp.forEach(x=>x.classList.remove('ok','no','sel'));
+    const richtig = v===z.typ;
+    b.classList.add(richtig?'ok':'no');
+    if(!richtig) grp.find(x=>x.dataset.v===z.typ).classList.add('ok');
+    const fb=$('#zfb'+i);
+    fb.className='fb show '+(richtig?'good':'bad');
+    fb.innerHTML=(richtig?'<b>Richtig.</b> ':'<b>Noch nicht.</b> Es ist '+
+      (z.typ==='angebot'?'ein Angebot':'eine rote Linie')+'. ')+esc(z.erkl);
+    zState[i]=richtig;
+    const fertig=zState.filter(x=>x!==null).length, gut=zState.filter(x=>x===true).length;
+    $('#zprog').textContent='Bearbeitet: '+fertig+' von '+D.zuordnung.length+' · richtig im ersten Versuch: '+gut;
+  });
+}
+
+/* ---- Teil 4: Verhandlungstisch ---- */
+const wahl={1:null,2:null,3:null};
+function buildTisch(){
+  const w=$('#tisch-liste');
+  D.fragen.forEach((f,i)=>{
+    const col=['var(--navy)','var(--teal)','var(--coral)'][i];
+    const c=el('div','card l'); c.style.borderLeftColor=col;
+    let h='<span class="tag" style="background:'+col+'">Zeile '+f.nr+'</span>'+
+      '<h3 style="margin:0 0 4px;color:'+col+'">'+esc(f.titel)+'</h3>'+
+      '<p class="lead" style="margin-bottom:10px">„'+esc(f.frage)+'“</p><div class="opts">';
+    D.varianten.filter(v=>v.zeile===f.nr).forEach(v=>{
+      h+='<button class="act" data-z="'+f.nr+'" data-k="'+v.kennung+'"><b>'+v.kennung+'</b> &nbsp;'+
+         esc(v.text)+'</button>';
+    });
+    h+='</div><div id="erg'+f.nr+'"></div>';
+    c.innerHTML=h; w.appendChild(c);
+  });
+  w.addEventListener('click',e=>{
+    const b=e.target.closest('button.act'); if(!b) return;
+    const z=+b.dataset.z, k=b.dataset.k;
+    $$('button.act[data-z="'+z+'"]',w).forEach(x=>x.classList.remove('sel'));
+    b.classList.add('sel'); wahl[z]=k; zeigeErgebnis(z,k); gesamt();
+  });
+}
+function zeigeErgebnis(z,k){
+  const v=D.varianten.find(x=>x.kennung===k);
+  const ja=['A','B','C','D','E','F'].filter(a=>v.stimmen[a].votum==='ja');
+  const rl=['A','B','C','D','E','F'].filter(a=>v.stimmen[a].rl);
+  const an=ja.length>=D.quorum;
+  let h='<div class="score" style="color:'+(an?'var(--teal)':'var(--coral)')+'">'+
+    ja.length+' von 6 – '+(an?'angenommen':'abgelehnt')+'</div>'+
+    '<div class="bar"><i style="width:'+(ja.length/6*100)+'%;background:'+
+    (an?'var(--teal)':'var(--coral)')+'"></i></div>'+
+    '<p style="font-size:.84rem;color:var(--grey)">Nötig sind '+D.quorum+' Stimmen.</p><div class="votes">';
+  ['A','B','C','D','E','F'].forEach(a=>{
+    const s=v.stimmen[a];
+    h+='<div class="vote '+s.votum+'"><span class="n" style="color:'+AK[a].farbe+'">'+a+' '+
+       esc(AK[a].kurz)+'</span> – <b>'+(s.votum==='ja'?'ja':'nein')+'</b>'+
+       (s.rl?' <span class="rl">· rote Linie!</span>':'')+
+       '<span class="g">'+esc(s.grund)+'</span></div>';
+  });
+  h+='</div>';
+  if(an && rl.length) h+='<div class="danger"><b>Achtung.</b> Diese Zeile hat das Quorum erreicht und '+
+    'überschreitet die rote Linie von Akteur '+rl.join(', ')+' ('+rl.map(a=>AK[a].kurz).join(', ')+'). '+
+    'Der Beschluss gilt – aber der überstimmte Akteur trägt ihn nicht mit. Gibt es eine Variante, '+
+    'die dasselbe erreicht, ohne jemanden zu überfahren?</div>';
+  else if(an) h+='<div class="ok"><b>Tragfähig.</b> Angenommen, ohne dass eine rote Linie überschritten wurde.</div>';
+  else if(rl.length) h+='<div class="warn">Abgelehnt – und dabei wäre auch noch die rote Linie von Akteur '+
+    rl.join(', ')+' überschritten worden.</div>';
+  else h+='<div class="warn">Abgelehnt. Welches Interesse wird hier zu wenig bedient?</div>';
+  $('#erg'+z).innerHTML=h;
+}
+function gesamt(){
+  const g=$('#tisch-gesamt');
+  const gewaehlt=[1,2,3].filter(z=>wahl[z]);
+  if(gewaehlt.length<3){ g.innerHTML='<p class="lead">Wählen Sie für jede der drei Zeilen einen Vorschlag. '+
+    'Noch offen: '+(3-gewaehlt.length)+'</p>'; return; }
+  let an=0, rl=0;
+  [1,2,3].forEach(z=>{
+    const v=D.varianten.find(x=>x.kennung===wahl[z]);
+    const ja=['A','B','C','D','E','F'].filter(a=>v.stimmen[a].votum==='ja').length;
+    if(ja>=D.quorum){ an++; if(['A','B','C','D','E','F'].some(a=>v.stimmen[a].rl)) rl++; }
+  });
+  let t='<h3 style="margin-top:4px">Ihre Vereinbarung</h3><div class="score">'+an+' von 3 Zeilen beschlossen</div>';
+  if(an===3 && rl===0) t+='<div class="ok"><b>Vollständig und tragfähig.</b> Alle drei Zeilen stehen, '+
+    'und keine rote Linie wurde überschritten. Das ist der beste erreichbare Stand – und in der '+
+    'Wirklichkeit selten.</div>';
+  else if(an===3) t+='<div class="danger"><b>Vollständig, aber nicht tragfähig.</b> Alle drei Zeilen '+
+    'stehen; bei '+rl+' davon wurde eine rote Linie überfahren. Suchen Sie eine Variante, die dasselbe '+
+    'Ziel ohne Überstimmen erreicht.</div>';
+  else t+='<div class="warn">'+(3-an)+' Zeile(n) sind leer geblieben. Prüfen Sie, welches Interesse '+
+    'der abgelehnte Vorschlag übergeht.</div>';
+  t+='<button class="act" style="margin-top:12px;text-align:center;font-weight:600" onclick="reset()">'+
+     'Noch einmal verhandeln</button>';
+  g.innerHTML=t;
+}
+function reset(){
+  [1,2,3].forEach(z=>{wahl[z]=null; $('#erg'+z).innerHTML='';});
+  $$('#tisch-liste button.act').forEach(b=>b.classList.remove('sel'));
+  gesamt(); window.scrollTo(0,0);
+}
+
+/* ---- Teil 5: Timer ---- */
+let tI=null, tRest=0;
+function tSet(s){ tStop(); tRest=s; tShow(); }
+function tShow(){
+  const m=Math.floor(tRest/60), s=tRest%60;
+  const e=$('#timer'); e.textContent=m+':'+String(s).padStart(2,'0');
+  e.className='timer'+(tI?(tRest<=5?' end':' go'):'');
+}
+function tStart(){
+  if(tI||tRest<=0) return;
+  tI=setInterval(()=>{ tRest--; tShow(); if(tRest<=0){ tStop(); $('#timer').className='timer end'; } },1000);
+  tShow();
+}
+function tStop(){ if(tI){clearInterval(tI); tI=null;} tShow(); }
+
+/* ---- Teil 6: Quiz ---- */
+let qIdx=0, qRichtig=0, qOffen=true;
+function buildQuiz(){
+  const q=D.quiz[qIdx];
+  let h='<p class="prog">Frage '+(qIdx+1)+' von '+D.quiz.length+' · richtig: '+qRichtig+'</p>'+
+    '<div class="card"><p class="q">'+esc(q.f)+'</p><div class="opts">';
+  q.o.forEach((o,i)=>{ h+='<button class="act" data-i="'+i+'">'+esc(o)+'</button>'; });
+  h+='</div><div class="fb" id="qfb"></div><div id="qnext"></div></div>';
+  $('#quiz-box').innerHTML=h; qOffen=true;
+}
+function quizKlick(e){
+  const b=e.target.closest('button.act[data-i]'); if(!b||!qOffen) return;
+  qOffen=false; const i=+b.dataset.i, q=D.quiz[qIdx];
+  $$('#quiz-box button.act').forEach((x,j)=>{ if(j===q.r) x.classList.add('ok'); else if(j===i) x.classList.add('no'); });
+  if(i===q.r) qRichtig++;
+  const fb=$('#qfb'); fb.className='fb show '+(i===q.r?'good':'bad');
+  fb.innerHTML=(i===q.r?'<b>Richtig.</b> ':'<b>Nicht ganz.</b> ')+esc(q.e);
+  $('#qnext').innerHTML= qIdx<D.quiz.length-1
+    ? '<button class="act" style="margin-top:12px;text-align:center;font-weight:600" onclick="qWeiter()">Weiter</button>'
+    : '<div class="ok" style="margin-top:12px"><b>Fertig: '+qRichtig+' von '+D.quiz.length+' richtig.</b></div>'+
+      '<button class="act" style="margin-top:12px;text-align:center;font-weight:600" onclick="qReset()">Noch einmal</button>';
+}
+function qWeiter(){ qIdx++; buildQuiz(); }
+function qReset(){ qIdx=0; qRichtig=0; buildQuiz(); }
+
+/* ---- Teil 7: Zahlen, Links ---- */
+function buildRest(){
+  let h='<div class="wrap"><table><tr><th>Angabe</th><th>Wert</th><th>Quelle</th></tr>';
+  D.zahlen.forEach(z=>{ h+='<tr><td>'+esc(z.a)+'</td><td><b>'+esc(z.w)+'</b></td><td>'+esc(z.q)+'</td></tr>'; });
+  h+='</table></div>'; $('#zahlen-box').innerHTML=h;
+  let l='';
+  D.links.forEach(x=>{ l+='<div class="card"><a href="'+x.u+'" target="_blank" rel="noopener">'+esc(x.t)+'</a></div>'; });
+  $('#links-box').innerHTML=l;
+  let s='';
+  D.leer.forEach(x=>{ s+='<div class="card l" style="border-left-color:var(--violet)"><b>'+esc(x.g)+
+    '</b><p style="font-size:.9rem;color:var(--grey);margin-top:4px">'+esc(x.i)+'</p></div>'; });
+  $('#leer-box').innerHTML=s;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  buildVorlage(); buildRollen(); buildZuordnung(); buildTisch(); buildQuiz(); buildRest();
+  gesamt(); tSet(30);
+  $$('nav button').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.t)));
+  $('#quiz-box').addEventListener('click',quizKlick);
+  nav('t1');
+});
+</script>
+</body></html>
