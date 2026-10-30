@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tagebau-Werkstatt &ndash; Der Tagebau vor der Haust&uuml;r</title>
+<style>
+:root{
+ --navy:#1F3B57; --teal:#2E7D6B; --amber:#C97A2B; --coral:#C05A5A;
+ --bg:#F4F7F6; --card:#FFFFFF; --ink:#22303C; --muted:#5E7180; --line:#D7E0DE;
+ --sand:#E8DCC8; --kohle:#3B322B;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+ font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px 64px}
+header{background:linear-gradient(135deg,var(--navy) 0%,#2c5675 60%,var(--teal) 100%);color:#fff;padding:22px 16px 26px;margin-bottom:18px}
+header .inner{max-width:1000px;margin:0 auto}
+.kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin:0 0 6px}
+h1{margin:0 0 8px;font-size:27px;line-height:1.18;font-weight:700}
+header p.lead{margin:0;font-size:16px;opacity:.94;max-width:62ch}
+nav.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 20px}
+nav.tabs button{flex:1 1 auto;min-width:118px;min-height:48px;padding:10px 12px;border:2px solid var(--line);
+ background:#fff;color:var(--navy);border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;line-height:1.25}
+nav.tabs button .n{display:block;font-size:11px;letter-spacing:.1em;color:var(--muted);font-weight:700}
+nav.tabs button[aria-selected="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+nav.tabs button[aria-selected="true"] .n{color:#bcd3e4}
+section.panel{display:none}
+section.panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+h2{margin:0 0 4px;font-size:21px;color:var(--navy);line-height:1.25}
+h3{margin:18px 0 8px;font-size:17px;color:var(--teal)}
+.sub{margin:0 0 14px;color:var(--muted);font-size:15px}
+.task{background:#FFF8EC;border-left:5px solid var(--amber);border-radius:0 10px 10px 0;padding:11px 14px;margin:0 0 16px;font-size:15px}
+.task b{color:#8a5215}
+button.primary{min-height:48px;padding:11px 18px;background:var(--teal);color:#fff;border:0;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer}
+button.ghost{min-height:48px;padding:11px 18px;background:#fff;color:var(--navy);border:2px solid var(--navy);border-radius:12px;font-size:15px;font-weight:600;cursor:pointer}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.svgbox{width:100%;overflow:hidden;border-radius:12px;background:#fff}
+svg{display:block;width:100%;height:auto}
+.hot{cursor:pointer}
+.hot:focus{outline:3px solid var(--amber);outline-offset:2px}
+.info{margin-top:12px;background:#EEF4F3;border:1px solid var(--line);border-radius:12px;padding:13px 15px;font-size:15px;min-height:76px}
+.info b{color:var(--navy)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+.tile{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px}
+.tile .lab{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.tile .val{font-size:25px;font-weight:700;color:var(--navy);line-height:1.15;margin-top:3px}
+.tile .unit{font-size:13px;color:var(--muted)}
+.tile.t2{border-color:#bcd8d0}.tile.t3{border-color:#eccfa8}.tile.t4{border-color:#e6bdbd}
+label.slab{display:block;font-size:14px;font-weight:600;color:var(--navy);margin:14px 0 4px}
+input[type=range]{width:100%;height:44px;accent-color:var(--teal)}
+.out{font-variant-numeric:tabular-nums}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;overflow-wrap:anywhere;word-break:normal}
+th{background:#EEF4F3;color:var(--navy);font-size:14px}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.steps{display:grid;gap:10px;margin:12px 0}
+.step{display:flex;gap:12px;align-items:flex-start;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;min-height:56px}
+.step .badge{flex:0 0 34px;height:34px;border-radius:10px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+.step.sel{border-color:var(--amber);background:#FFF8EC}
+.step.ok{border-color:var(--teal);background:#EFF6F4}
+.step .txt{flex:1 1 auto;font-size:15px}
+.step .txt small{display:block;color:var(--muted);margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{min-height:46px;padding:10px 14px;border:2px solid var(--line);background:#fff;border-radius:999px;font-size:14px;font-weight:600;color:var(--navy);cursor:pointer}
+.chip.used{opacity:.4}
+.chip.sel{border-color:var(--amber);background:#FFF8EC}
+.q{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+.q:first-of-type{border-top:0;padding-top:0;margin-top:0}
+.q p.qt{font-weight:600;margin:0 0 9px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;min-height:48px;padding:11px 13px;border:2px solid var(--line);background:#fff;border-radius:12px;font-size:15px;cursor:pointer;text-align:left}
+.opt .k{flex:0 0 26px;height:26px;border-radius:8px;background:#EEF4F3;color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.opt.right{border-color:var(--teal);background:#EFF6F4}
+.opt.wrong{border-color:var(--coral);background:#FBF0F0}
+.fb{margin-top:8px;font-size:14px;color:var(--muted)}
+.score{background:var(--navy);color:#fff;border-radius:14px;padding:14px 16px;font-size:16px;font-weight:600;margin-top:16px}
+.links{display:grid;gap:10px;margin-top:10px}
+.links a{display:block;background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--navy);text-decoration:none;font-size:15px;font-weight:600;min-height:48px}
+.links a small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
+.note{font-size:13px;color:var(--muted);margin-top:10px}
+.pill{display:inline-block;background:#EEF4F3;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;color:var(--teal);margin-right:6px}
+.pill.off{color:var(--coral);background:#FBF0F0;border-color:#e6bdbd}
+.pill.warn{color:#8a5215;background:#FFF8EC;border-color:#eccfa8}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media (max-width:480px){
+ h1{font-size:22px} header{padding:18px 16px 22px}
+ .tile .val{font-size:21px} nav.tabs button{min-width:104px;font-size:13px}
+ .wrap{padding:0 14px 56px}
+}
+</style>
+</head>
+<body>
+<header><div class="inner">
+<p class="kicker">Geografie 9 &middot; Stunde 8 &middot; Umgang mit Ressourcen</p>
+<h1>Der Tagebau vor der Haust&uuml;r</h1>
+<p class="lead">Das Fl&ouml;z ist 12 Meter dick &ndash; der Tagebau ist mehrere Kilometer gro&szlig;. Diese Werkstatt zeigt dir, warum das so sein muss.</p>
+</div></header>
+<div class="wrap">
+<nav class="tabs" role="tablist">
+<button role="tab" id="t1" aria-selected="true" onclick="show(1)"><span class="n">Teil 1</span>Schnitt</button>
+<button role="tab" id="t2" aria-selected="false" onclick="show(2)"><span class="n">Teil 2</span>Vier Schritte</button>
+<button role="tab" id="t3" aria-selected="false" onclick="show(3)"><span class="n">Teil 3</span>Rechner</button>
+<button role="tab" id="t4" aria-selected="false" onclick="show(4)"><span class="n">Teil 4</span>Riesen</button>
+<button role="tab" id="t5" aria-selected="false" onclick="show(5)"><span class="n">Teil 5</span>Drei Tagebaue</button>
+<button role="tab" id="t6" aria-selected="false" onclick="show(6)"><span class="n">Teil 6</span>Quiz</button>
+<button role="tab" id="t7" aria-selected="false" onclick="show(7)"><span class="n">Teil 7</span>Zahlen</button>
+</nav>
+<section class="panel active" id="p1">
+ <div class="card">
+  <h2>Teil 1 &middot; Schnitt durch einen Tagebau</h2>
+  <p class="sub">Tippe die Nummern oder die Bauteile an. Jedes Element erkl&auml;rt sich selbst.</p>
+  <div class="task"><b>Auftrag:</b> Finde heraus, welche vier Arbeitsschritte hier gleichzeitig laufen. Notiere sie auf dem Arbeitsblatt, Aufgabe&nbsp;1.</div>
+  <div class="svgbox">
+  <svg viewBox="0 0 1000 480" role="img" aria-label="Schematischer Schnitt durch einen Braunkohletagebau">
+   <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+     <stop offset="0" stop-color="#DCEAF3"/><stop offset="1" stop-color="#F1F6F8"/>
+    </linearGradient>
+    <pattern id="kippe" width="10" height="10" patternUnits="userSpaceOnUse">
+     <rect width="10" height="10" fill="#DFD2BB"/>
+     <circle cx="3" cy="3" r="1.3" fill="#C8B896"/><circle cx="8" cy="7" r="1.3" fill="#C8B896"/>
+    </pattern>
+   </defs>
+   <rect x="0" y="0" width="1000" height="480" fill="url(#sky)"/>
+
+   <!-- Liegendes -->
+   <rect x="0" y="308" width="1000" height="132" fill="#9AA6A2"/>
+   <text x="16" y="430" font-size="13" fill="#3d4a47" font-family="sans-serif">Liegendes &ndash; Ton und Sand unter der Kohle</text>
+
+   <!-- Floez -->
+   <rect x="420" y="290" width="580" height="18" fill="#3B322B"/>
+   <text x="730" y="304" font-size="14" font-weight="700" fill="#F4F7F6" font-family="sans-serif">Braunkohlefl&ouml;z 10&ndash;16 m</text>
+
+   <!-- Deckgebirge Vorfeld rechts -->
+   <rect x="700" y="140" width="300" height="150" fill="#E4D6B8"/>
+   <rect x="700" y="140" width="300" height="12" fill="#8FAE63"/>
+   <text x="712" y="278" font-size="13" font-weight="700" fill="#7a6a49" font-family="sans-serif">Deckgebirge 90&ndash;130 m</text>
+
+   <!-- Abbauwand mit Bermen -->
+   <path d="M700,140 L668,140 L668,178 L644,178 L644,216 L622,216 L622,254 L600,254 L600,290 L700,290 Z" fill="#EDE2C8"/>
+   <path d="M668,140 L668,178 L644,178 L644,216 L622,216 L622,254 L600,254 L600,290" stroke="#C6B58F" stroke-width="2" fill="none"/>
+
+   <!-- rekultivierte Flaeche links -->
+   <rect x="0" y="150" width="210" height="158" fill="url(#kippe)"/>
+   <rect x="0" y="150" width="210" height="12" fill="#7FA05A"/>
+   <path d="M28,152 C62,146 120,146 152,152 L152,216 C120,232 60,232 28,216 Z" fill="#7FB6CE"/>
+   <path d="M28,152 C62,146 120,146 152,152 L152,159 C120,153 60,153 28,159 Z" fill="#A8D2E4"/>
+   <g fill="#4E7A3E"><path d="M170,150 l9,-24 l9,24 z"/><path d="M190,150 l8,-20 l8,20 z"/></g>
+   <rect x="177" y="148" width="3" height="6" fill="#6B5333"/><rect x="196" y="148" width="3" height="6" fill="#6B5333"/>
+
+   <!-- Innenkippe -->
+   <path d="M210,150 H380 L420,308 H210 Z" fill="url(#kippe)"/>
+   <path d="M210,150 H380 L383,163 H210 Z" fill="#C2B190"/>
+
+   <!-- Grundwasserspiegel -->
+   <path d="M1000,232 H840 C772,232 700,256 640,296" stroke="#2E7D9B" stroke-width="3" stroke-dasharray="9 7" fill="none"/>
+   <path d="M212,300 C256,284 316,266 376,256" stroke="#2E7D9B" stroke-width="3" stroke-dasharray="9 7" fill="none"/>
+   <text x="214" y="244" font-size="13" font-weight="700" fill="#20617a" font-family="sans-serif">Grundwasser abgesenkt</text>
+
+   <!-- Filterbrunnen -->
+   <g stroke="#4A5A64" stroke-width="4">
+    <path d="M846,140 V236"/><path d="M898,140 V236"/><path d="M950,140 V236"/>
+   </g>
+   <g fill="#4A5A64"><rect x="838" y="124" width="16" height="16" rx="3"/><rect x="890" y="124" width="16" height="16" rx="3"/><rect x="942" y="124" width="16" height="16" rx="3"/></g>
+
+   <!-- Dorf im Vorfeld -->
+   <g>
+    <rect x="726" y="118" width="30" height="22" fill="#F2EDE2" stroke="#9B8F7D"/>
+    <path d="M722,118 L741,102 L760,118 Z" fill="#B4544C"/>
+    <rect x="768" y="124" width="24" height="16" fill="#F2EDE2" stroke="#9B8F7D"/>
+    <path d="M764,124 L780,110 L796,124 Z" fill="#B4544C"/>
+   </g>
+
+   <!-- F60 -->
+   <g>
+    <path d="M352,96 H724" stroke="#1F3B57" stroke-width="9" stroke-linecap="round"/>
+    <path d="M352,84 H724" stroke="#2E7D6B" stroke-width="5"/>
+    <path d="M362,96 V150 M712,96 V140" stroke="#1F3B57" stroke-width="8"/>
+    <path d="M362,96 L400,150 M712,96 L676,140 M382,96 L362,124 M692,96 L712,124" stroke="#1F3B57" stroke-width="4" fill="none"/>
+    <path d="M712,100 L668,176 L660,168 L704,92 Z" fill="#33586F"/>
+    <circle cx="666" cy="172" r="9" fill="#C97A2B"/>
+    <path d="M366,100 L342,146" stroke="#33586F" stroke-width="7"/>
+    <path d="M336,150 l-10,-6 l10,-6 z" fill="#C97A2B"/>
+   </g>
+   <text x="400" y="74" font-size="15" font-weight="700" fill="#1F3B57" font-family="sans-serif">Abraumf&ouml;rderbr&uuml;cke F60 &ndash; 502 m lang, knapp 80 m hoch</text>
+
+   <!-- Absetzer -->
+   <g>
+    <rect x="252" y="134" width="40" height="16" rx="3" fill="#33586F"/>
+    <path d="M256,134 L240,110 M288,134 L306,114" stroke="#33586F" stroke-width="6"/>
+    <path d="M240,110 H212" stroke="#2E7D6B" stroke-width="6"/>
+    <path d="M216,114 l-8,6 l8,6 z" fill="#C97A2B"/>
+   </g>
+
+   <!-- Schaufelradbagger, Band, Kohlebahn -->
+   <g>
+    <rect x="522" y="266" width="48" height="18" rx="3" fill="#33586F"/>
+    <path d="M566,272 L588,282" stroke="#33586F" stroke-width="6"/>
+    <circle cx="592" cy="284" r="12" fill="none" stroke="#C97A2B" stroke-width="5"/>
+    <path d="M522,274 H472" stroke="#2E7D6B" stroke-width="5"/>
+    <rect x="428" y="266" width="42" height="24" rx="3" fill="#4A5A64"/>
+    <rect x="428" y="262" width="42" height="6" rx="2" fill="#33586F"/>
+    <circle cx="438" cy="292" r="4" fill="#22303C"/><circle cx="460" cy="292" r="4" fill="#22303C"/>
+    <text x="424" y="254" font-size="12" font-weight="700" fill="#1F3B57" font-family="sans-serif">Kohlebahn</text>
+   </g>
+
+   <!-- Abbaurichtung -->
+   <g>
+    <path d="M566,400 H940" stroke="#C05A5A" stroke-width="6"/>
+    <path d="M940,400 l-16,-10 v20 z" fill="#C05A5A"/>
+    <text x="566" y="386" font-size="15" font-weight="700" fill="#C05A5A" font-family="sans-serif">Der Tagebau wandert &ndash; rund 1 km&sup2; im Jahr</text>
+   </g>
+
+   <!-- Nummern -->
+   <path d="M930,324 V312" stroke="#3B322B" stroke-width="3"/>
+   <g font-family="sans-serif" font-size="17" font-weight="700" text-anchor="middle">
+    <g class="hot" tabindex="0" role="button" aria-label="Entwaesserung" onclick="pick(1)"><circle cx="872" cy="176" r="17" fill="#1F3B57"/><text x="872" y="182" fill="#fff">1</text></g>
+    <g class="hot" tabindex="0" role="button" aria-label="Deckgebirge" onclick="pick(2)"><circle cx="740" cy="222" r="17" fill="#C97A2B"/><text x="740" y="228" fill="#fff">2</text></g>
+    <g class="hot" tabindex="0" role="button" aria-label="Foerderbruecke" onclick="pick(3)"><circle cx="540" cy="132" r="17" fill="#2E7D6B"/><text x="540" y="138" fill="#fff">3</text></g>
+    <g class="hot" tabindex="0" role="button" aria-label="Floez" onclick="pick(4)"><circle cx="930" cy="342" r="17" fill="#3B322B"/><text x="930" y="348" fill="#fff">4</text></g>
+    <g class="hot" tabindex="0" role="button" aria-label="Schaufelradbagger" onclick="pick(5)"><circle cx="556" cy="212" r="17" fill="#2E7D6B"/><text x="556" y="218" fill="#fff">5</text></g>
+    <g class="hot" tabindex="0" role="button" aria-label="Absetzer" onclick="pick(6)"><circle cx="272" cy="86" r="17" fill="#1F3B57"/><text x="272" y="92" fill="#fff">6</text></g>
+    <g class="hot" tabindex="0" role="button" aria-label="Rekultivierung" onclick="pick(7)"><circle cx="184" cy="216" r="17" fill="#4E7A3E"/><text x="184" y="222" fill="#fff">7</text></g>
+    <g class="hot" tabindex="0" role="button" aria-label="Restsee" onclick="pick(8)"><circle cx="90" cy="188" r="17" fill="#2E7D9B"/><text x="90" y="194" fill="#fff">8</text></g>
+   </g>
+   <text x="16" y="468" font-size="12" fill="#5E7180" font-family="sans-serif">Schema, nicht ma&szlig;st&auml;blich &ndash; senkrecht &uuml;berh&ouml;ht. Zahlenwerte: Tagebau Welzow-S&uuml;d.</text>
+  </svg>
+  </div>
+  <div class="chips" id="chips1"></div>
+  <div class="info" id="info1"><b>Tippe eine Nummer an.</b> Von rechts nach links l&auml;uft die Zeit: rechts liegt das noch unber&uuml;hrte Vorfeld, links die fertige Bergbaufolgelandschaft.</div>
+ </div>
+</section>
+<section class="panel" id="p2">
+ <div class="card">
+  <h2>Teil 2 &middot; Die vier Arbeitsschritte</h2>
+  <p class="sub">Bringe die Schritte in die richtige Reihenfolge. Tippe erst einen Schritt an, dann seinen Platz &ndash; oder benutze die Pfeile.</p>
+  <div class="task"><b>Auftrag:</b> Ein Schritt muss Jahre <i>vor</i> allen anderen beginnen. Welcher? Begr&uuml;nde ihn deiner Partnerin oder deinem Partner.</div>
+  <div class="steps" id="steplist"></div>
+  <div class="row">
+   <button class="primary" onclick="checkSteps()">Reihenfolge pr&uuml;fen</button>
+   <button class="ghost" onclick="shuffleSteps()">Neu mischen</button>
+  </div>
+  <div class="info" id="infoSteps">Noch nicht gepr&uuml;ft.</div>
+
+  <h3>Und welches Ger&auml;t geh&ouml;rt dazu?</h3>
+  <p class="sub">Ziehe jedem Schritt das passende Ger&auml;t zu: tippe ein Ger&auml;t an, dann den Schritt.</p>
+  <div class="chips" id="geraete"></div>
+  <div class="tw"><table id="zuordnung"></table></div>
+  <div class="row" style="margin-top:12px">
+   <button class="primary" onclick="checkGer()">Zuordnung pr&uuml;fen</button>
+   <button class="ghost" onclick="resetGer()">Zur&uuml;cksetzen</button>
+  </div>
+  <div class="info" id="infoGer">Noch keine Zuordnung gepr&uuml;ft.</div>
+ </div>
+</section>
+
+<section class="panel" id="p3">
+ <div class="card">
+  <h2>Teil 3 &middot; Der Tagebau-Rechner</h2>
+  <p class="sub">Stell ein, wie viel Kohle gef&ouml;rdert wird und wie dick das Deckgebirge ist. Der Rechner zeigt dir, was das an Abraum, Fl&auml;che, Zeit und Energie bedeutet.</p>
+  <div class="task"><b>Auftrag:</b> Stelle 15,8&nbsp;Mio.&nbsp;t und 110&nbsp;m ein &ndash; das sind die echten Werte von Welzow-S&uuml;d. Trage die vier Ergebnisse auf dem Arbeitsblatt, Aufgabe&nbsp;3, ein. Pr&uuml;fe danach: Was &auml;ndert sich, wenn das Deckgebirge nur 60&nbsp;m dick w&auml;re?</div>
+
+  <label class="slab" for="s_kohle">Jahresf&ouml;rderung: <span class="out" id="v_kohle">15,8</span> Mio. t Braunkohle</label>
+  <input type="range" id="s_kohle" min="4" max="20" step="0.2" value="15.8" oninput="calc()">
+  <label class="slab" for="s_deck">Deckgebirge: <span class="out" id="v_deck">110</span> m</label>
+  <input type="range" id="s_deck" min="40" max="140" step="5" value="110" oninput="calc()">
+
+  <div class="tiles">
+   <div class="tile"><div class="lab">Abraum im Jahr</div><div class="val out" id="r_abraum">111</div><div class="unit">Mio. Kubikmeter (7 Kubikmeter je Tonne Kohle)</div></div>
+   <div class="tile t2"><div class="lab">Neue Fl&auml;che im Jahr</div><div class="val out" id="r_flaeche">1,01</div><div class="unit">Quadratkilometer</div></div>
+   <div class="tile t3"><div class="lab">Das sind</div><div class="val out" id="r_felder">141</div><div class="unit">Fu&szlig;ballfelder (105 &times; 68 m) &ndash; alle <span class="out" id="r_takt">2,6</span> Tage eines</div></div>
+   <div class="tile t4"><div class="lab">Dauerbetrieb einer F60</div><div class="val out" id="r_zeit">159</div><div class="unit">Tage bei 29 000 Kubikmetern je Stunde</div></div>
+  </div>
+
+  <h3>Was kostet das Wegr&auml;umen an Energie?</h3>
+  <div class="tw">
+  <table>
+   <tr><th>Gr&ouml;&szlig;e</th><th>Wert</th><th>Verglichen mit</th></tr>
+   <tr><td>Strom nur f&uuml;r den Abraum<br><small>1,2 kWh je Kubikmeter</small></td><td class="num out" id="r_kwh">133</td><td>GWh &ndash; Jahresstrom von rund <b class="out" id="r_haus">44 000</b> Haushalten (3 000 kWh)</td></tr>
+   <tr><td>Energie in der gef&ouml;rderten Kohle<br><small>Heizwert 9 000 kJ/kg</small></td><td class="num out" id="r_koh">39 500</td><td>GWh</td></tr>
+   <tr><td>Anteil des Abraums am Energieinhalt</td><td class="num out" id="r_anteil">0,34</td><td>Prozent</td></tr>
+  </table>
+  </div>
+  <div class="note">Der Abraum frisst also nur einen kleinen Teil der Energie. Das Problem der Braunkohle liegt woanders &ndash; bei den Treibhausgasen, der Fl&auml;che und dem Wasser. Darum geht es in Stunde 9.</div>
+
+  <h3>Die Jahresfl&auml;che als Quadrat</h3>
+  <p class="sub">So gro&szlig; ist die Fl&auml;che, die der Tagebau in einem Jahr neu aufreisst &ndash; mit einem Fu&szlig;ballfeld im gleichen Ma&szlig;stab.</p>
+  <div class="svgbox">
+   <svg viewBox="0 0 640 330" role="img" aria-label="Jahresflaeche des Tagebaus als Quadrat mit einem Fussballfeld im gleichen Massstab">
+    <rect x="0" y="0" width="640" height="330" fill="#FBFDFC"/>
+    <rect id="q_area" x="40" y="40" width="260" height="260" fill="#EFE3CB" stroke="#C97A2B" stroke-width="3"/>
+    <rect id="q_field" x="48" y="284" width="27" height="18" fill="#7FA05A" stroke="#4E7A3E" stroke-width="2"/>
+    <line id="q_line" x1="40" y1="318" x2="300" y2="318" stroke="#1F3B57" stroke-width="2"/>
+    <text id="q_lab" x="170" y="336" font-size="0" fill="#1F3B57" font-family="sans-serif">.</text>
+    <text id="q_side" x="310" y="46" font-size="15" font-weight="700" fill="#1F3B57" font-family="sans-serif">Seitenl&auml;nge: 1 003 m</text>
+    <text x="310" y="70" font-size="14" fill="#5E7180" font-family="sans-serif">Ein Quadrat von einem Kilometer</text>
+    <text x="310" y="90" font-size="14" fill="#5E7180" font-family="sans-serif">Kantenl&auml;nge &ndash; jedes Jahr neu.</text>
+    <rect x="310" y="108" width="18" height="12" fill="#7FA05A" stroke="#4E7A3E" stroke-width="2"/>
+    <text x="336" y="119" font-size="14" fill="#3d4a47" font-family="sans-serif">Fu&szlig;ballfeld 105 &times; 68 m</text>
+    <rect x="310" y="134" width="18" height="12" fill="#EFE3CB" stroke="#C97A2B" stroke-width="2"/>
+    <text x="336" y="145" font-size="14" fill="#3d4a47" font-family="sans-serif">Jahresfl&auml;che des Tagebaus</text>
+    <text id="q_cnt" x="310" y="176" font-size="15" font-weight="700" fill="#C97A2B" font-family="sans-serif">Es passen 141 Felder hinein.</text>
+    <text x="310" y="200" font-size="13" fill="#5E7180" font-family="sans-serif">Ma&szlig;stab wird automatisch angepasst.</text>
+   </svg>
+  </div>
+  <div class="note">Nachrechnen kannst du das so: Abraum in Kubikmetern geteilt durch die Dicke des Deckgebirges ergibt die Fl&auml;che in Quadratmetern.</div>
+ </div>
+</section>
+<section class="panel" id="p4">
+ <div class="card">
+  <h2>Teil 4 &middot; Die Riesen im Ma&szlig;stab</h2>
+  <p class="sub">Alles in dieser Zeichnung ist im gleichen Ma&szlig;stab: 1 Meter entspricht 1,2 Bildpunkten.</p>
+  <div class="task"><b>Auftrag:</b> Sch&auml;tze zuerst, dann tippe. Ist die F60 l&auml;nger, als der Eiffelturm hoch ist?</div>
+  <div class="row" style="margin-bottom:10px">
+   <button class="ghost" id="btnUp" onclick="toggleUpright()">F60 aufrichten</button>
+  </div>
+  <div class="svgbox" id="laybox">
+   <svg viewBox="0 0 1000 470" role="img" aria-label="Groessenvergleich F60, Eiffelturm, Schaufelradbagger, Fussballfeld">
+    <rect x="0" y="0" width="1000" height="470" fill="#FBFDFC"/>
+    <line x1="0" y1="430" x2="1000" y2="430" stroke="#9AA6A2" stroke-width="3"/>
+    <text x="40" y="60" font-size="17" font-weight="700" fill="#1F3B57" font-family="sans-serif">Die F60 liegt &ndash; so steht sie im Tagebau.</text>
+    <text x="40" y="88" font-size="15" fill="#5E7180" font-family="sans-serif">Tippe oben auf &bdquo;F60 aufrichten&ldquo;, um sie neben den Eiffelturm zu stellen.</text>
+    <text x="40" y="126" font-size="15" fill="#5E7180" font-family="sans-serif">502 m sind ungef&auml;hr f&uuml;nf Fu&szlig;ballfelder hintereinander.</text>
+
+    <!-- Eiffelturm 330 m = 396 px -->
+    <g>
+     <path d="M725,430 C754,384 762,372 765,362 L765,356 L779,356 L781,292 L791,108 L795,34 L805,34 L809,108 L819,292 L821,356 L835,356 L835,362 C838,372 846,384 875,430 Z" fill="#8C7B63"/>
+     <path d="M760,356 H840" stroke="#8C7B63" stroke-width="9"/>
+     <path d="M776,292 H824" stroke="#8C7B63" stroke-width="7"/>
+     <path d="M789,108 H811" stroke="#8C7B63" stroke-width="5"/>
+     <path d="M745,430 C762,404 838,404 855,430" stroke="#8C7B63" stroke-width="6" fill="none"/>
+     <text x="556" y="30" font-size="15" font-weight="700" fill="#1F3B57" font-family="sans-serif">Eiffelturm</text>
+     <text x="556" y="50" font-size="14" fill="#5E7180" font-family="sans-serif">rund 330 m hoch</text>
+    </g>
+
+    <!-- F60 liegend: 502 m = 602 px, 80 m = 96 px -->
+    <g id="f60lay">
+     <path d="M40,334 H642" stroke="#1F3B57" stroke-width="11" stroke-linecap="round"/>
+     <path d="M40,320 H642" stroke="#2E7D6B" stroke-width="6"/>
+     <path d="M70,334 V430 M600,334 V430" stroke="#1F3B57" stroke-width="9"/>
+     <path d="M70,334 L120,430 M600,334 L550,430 M170,334 L120,392 M500,334 L550,392" stroke="#1F3B57" stroke-width="4" fill="none"/>
+     <path d="M600,338 L552,420 L544,410 L592,330 Z" fill="#33586F"/>
+     <circle cx="556" cy="414" r="10" fill="#C97A2B"/>
+     <text x="40" y="306" font-size="15" font-weight="700" fill="#1F3B57" font-family="sans-serif">Abraumf&ouml;rderbr&uuml;cke F60 &ndash; 502 m lang, knapp 80 m hoch, rund 11 000 t</text>
+    </g>
+
+    <!-- Schaufelradbagger SRs 6300: Abtragshoehe 50 m = 60 px -->
+    <g>
+     <rect x="678" y="394" width="46" height="20" rx="4" fill="#33586F"/>
+     <path d="M682,394 L660,374" stroke="#33586F" stroke-width="6"/>
+     <circle cx="656" cy="370" r="14" fill="none" stroke="#C97A2B" stroke-width="5"/>
+     <path d="M722,398 L744,386" stroke="#2E7D6B" stroke-width="5"/>
+     <text x="646" y="356" font-size="13" font-weight="700" fill="#1F3B57" font-family="sans-serif">SRs 6300</text>
+    </g>
+
+    <!-- Fussballfeld 105 m = 126 px -->
+    <g>
+     <rect x="40" y="440" width="126" height="18" rx="3" fill="#7FA05A" stroke="#4E7A3E" stroke-width="2"/>
+     <text x="176" y="454" font-size="14" fill="#3d4a47" font-family="sans-serif">Fu&szlig;ballfeld, 105 m lang</text>
+    </g>
+
+    <!-- Wohnhaus 15 m = 18 px -->
+    <g>
+     <rect x="932" y="412" width="42" height="18" fill="#F2EDE2" stroke="#9B8F7D" stroke-width="2"/>
+     <path d="M928,412 L953,398 L978,412 Z" fill="#B4544C"/>
+     <text x="856" y="452" font-size="13" fill="#3d4a47" font-family="sans-serif">Haus, 15 m hoch</text>
+    </g>
+   </svg>
+  </div>
+  <div class="svgbox" id="upbox" style="display:none">
+   <svg viewBox="0 0 640 560" role="img" aria-label="F60 aufgerichtet neben dem Eiffelturm">
+    <rect x="0" y="0" width="640" height="560" fill="#FBFDFC"/>
+    <line x1="0" y1="520" x2="640" y2="520" stroke="#9AA6A2" stroke-width="3"/>
+    <!-- Massstab: 1 m = 1 px -->
+    <g>
+     <rect x="96" y="18" width="52" height="502" fill="#D8E2EA" stroke="#1F3B57" stroke-width="3"/>
+     <path d="M96,120 H148 M96,240 H148 M96,360 H148 M96,450 H148" stroke="#1F3B57" stroke-width="2"/>
+     <text x="122" y="10" font-size="14" font-weight="700" fill="#1F3B57" font-family="sans-serif" text-anchor="middle">502 m</text>
+     <text x="122" y="544" font-size="14" font-weight="700" fill="#1F3B57" font-family="sans-serif" text-anchor="middle">F60 aufgerichtet</text>
+    </g>
+    <g>
+     <path d="M302,520 C326,482 333,472 336,463 L336,457 L348,457 L350,405 L359,246 L362,190 L370,190 L373,246 L382,405 L384,457 L396,457 L396,463 C399,472 406,482 430,520 Z" fill="#8C7B63"/>
+     <path d="M332,457 H400" stroke="#8C7B63" stroke-width="8"/>
+     <path d="M346,405 H386" stroke="#8C7B63" stroke-width="6"/>
+     <path d="M357,246 H375" stroke="#8C7B63" stroke-width="4"/>
+     <path d="M319,520 C334,498 398,498 413,520" stroke="#8C7B63" stroke-width="5" fill="none"/>
+     <text x="366" y="180" font-size="14" font-weight="700" fill="#1F3B57" font-family="sans-serif" text-anchor="middle">330 m</text>
+     <text x="364" y="544" font-size="14" font-weight="700" fill="#1F3B57" font-family="sans-serif" text-anchor="middle">Eiffelturm</text>
+    </g>
+    <g>
+     <rect x="470" y="502" width="126" height="18" rx="3" fill="#7FA05A" stroke="#4E7A3E" stroke-width="2"/>
+     <text x="533" y="544" font-size="14" fill="#3d4a47" font-family="sans-serif" text-anchor="middle">Fu&szlig;ballfeld 105 m</text>
+    </g>
+    <text x="16" y="36" font-size="13" fill="#5E7180" font-family="sans-serif">Ma&szlig;stab: 1 Meter = 1 Bildpunkt</text>
+    <text x="440" y="300" font-size="15" font-weight="700" fill="#C05A5A" font-family="sans-serif">Die F60 ist um</text>
+    <text x="440" y="322" font-size="15" font-weight="700" fill="#C05A5A" font-family="sans-serif">172 m l&auml;nger, als der</text>
+    <text x="440" y="344" font-size="15" font-weight="700" fill="#C05A5A" font-family="sans-serif">Eiffelturm hoch ist.</text>
+   </svg>
+  </div>
+  <div class="tw">
+  <table>
+   <tr><th>Ger&auml;t</th><th>Ma&szlig;e</th><th>Leistung</th></tr>
+   <tr><td>Abraumf&ouml;rderbr&uuml;cke F60</td><td>502 m lang, 204 m breit, knapp 80 m hoch, rund 11 000 t</td><td>29 000 Kubikmeter Abraum je Stunde; Abtragsh&ouml;he 60 m &ndash; daher der Name</td></tr>
+   <tr><td>Schaufelradbagger SRs 6300</td><td>rund 9 000 t</td><td>Abtragsh&ouml;he bis 50 m</td></tr>
+   <tr><td>Fahrwerk der F60</td><td>760 R&auml;der, davon 380 angetrieben</td><td>Arbeitsgeschwindigkeit 9 m je Minute &ndash; das sind 540 m in der Stunde</td></tr>
+  </table>
+  </div>
+  <div class="links" style="margin-top:14px">
+   <a href="https://www.youtube.com/watch?v=xFvYftDoGAc" target="_blank" rel="noopener">&#9654; Video: Die F60 im Tagebau J&auml;nschwalde, 360 Grad<small>WELT Nachrichtensender auf YouTube &ndash; drehe die Ansicht mit dem Finger: einmal hoch auf die Br&uuml;cke, einmal hinunter in die Grube. Wo wird abgegraben, wo abgeworfen?</small></a>
+  </div>
+  <div class="note">F&uuml;nf F60-Br&uuml;cken wurden zwischen 1969 und 1991 im Kombinat TAKRAF in Lauchhammer gebaut. Die f&uuml;nfte lief nur von Februar 1991 bis Juni 1992 und steht heute als Besucherbergwerk in Lichterfeld.</div>
+ </div>
+</section>
+<section class="panel" id="p5">
+ <div class="card">
+  <h2>Teil 5 &middot; Drei Tagebaue vor unserer Haust&uuml;r</h2>
+  <p class="sub">Cottbus liegt zwischen drei Tagebauen &ndash; einer ist zugesch&uuml;ttet und voll Wasser, einer ist gerade zu Ende gegangen, einer arbeitet noch.</p>
+  <div class="task"><b>Auftrag:</b> Tippe die drei Punkte auf der Karte an und f&uuml;lle die Tabelle M4 auf dem Arbeitsblatt, Aufgabe&nbsp;4, aus. Nimm zus&auml;tzlich den Diercke-Atlas zu Hilfe.</div>
+  <div class="svgbox">
+   <svg viewBox="0 0 640 420" role="img" aria-label="Schematische Lageskizze der Tagebaue um Cottbus">
+    <rect x="0" y="0" width="640" height="420" fill="#EAF1EE"/>
+    <!-- Spree -->
+    <path d="M232,0 C244,80 216,140 236,196 C256,252 232,330 250,420" stroke="#7FB6CE" stroke-width="9" fill="none"/>
+    <text x="196" y="30" font-size="13" fill="#20617a" font-family="sans-serif" transform="rotate(-8 196 30)">Spree</text>
+    <!-- Cottbus -->
+    <circle cx="300" cy="212" r="26" fill="#1F3B57"/>
+    <text x="300" y="218" font-size="14" font-weight="700" fill="#fff" font-family="sans-serif" text-anchor="middle">CB</text>
+    <text x="300" y="262" font-size="15" font-weight="700" fill="#1F3B57" font-family="sans-serif" text-anchor="middle">Cottbus</text>
+    <!-- Ostsee -->
+    <g class="hot" tabindex="0" role="button" aria-label="Cottbuser Ostsee" onclick="pickTB(0)">
+     <path d="M366,150 C420,134 484,146 490,178 C496,212 436,228 390,216 C352,206 344,164 366,150 Z" fill="#7FB6CE" stroke="#2E7D9B" stroke-width="3"/>
+     <text x="418" y="188" font-size="13" font-weight="700" fill="#14465c" font-family="sans-serif" text-anchor="middle">Cottbuser</text>
+     <text x="418" y="204" font-size="13" font-weight="700" fill="#14465c" font-family="sans-serif" text-anchor="middle">Ostsee</text>
+    </g>
+    <!-- Jaenschwalde -->
+    <g class="hot" tabindex="0" role="button" aria-label="Tagebau Jaenschwalde" onclick="pickTB(1)">
+     <path d="M372,36 H556 V116 H372 Z" fill="#C7BCA4" stroke="#8a7c5f" stroke-width="3"/>
+     <text x="464" y="70" font-size="13" font-weight="700" fill="#4a422f" font-family="sans-serif" text-anchor="middle">Tagebau</text>
+     <text x="464" y="88" font-size="13" font-weight="700" fill="#4a422f" font-family="sans-serif" text-anchor="middle">J&auml;nschwalde</text>
+     <text x="464" y="106" font-size="12" fill="#6b6047" font-family="sans-serif" text-anchor="middle">bis 2023</text>
+    </g>
+    <!-- Welzow-Sued -->
+    <g class="hot" tabindex="0" role="button" aria-label="Tagebau Welzow-Sued" onclick="pickTB(2)">
+     <path d="M52,286 H236 V382 H52 Z" fill="#E4D6B8" stroke="#C97A2B" stroke-width="4"/>
+     <path d="M72,300 H216 M72,320 H216 M72,340 H216" stroke="#C97A2B" stroke-width="2" stroke-dasharray="6 6"/>
+     <text x="144" y="316" font-size="13" font-weight="700" fill="#7a4d15" font-family="sans-serif" text-anchor="middle">Tagebau</text>
+     <text x="144" y="334" font-size="13" font-weight="700" fill="#7a4d15" font-family="sans-serif" text-anchor="middle">Welzow-S&uuml;d</text>
+     <text x="144" y="356" font-size="12" fill="#7a4d15" font-family="sans-serif" text-anchor="middle">in Betrieb</text>
+    </g>
+    <!-- Kraftwerke -->
+    <g fill="#5E7180">
+     <rect x="566" y="60" width="12" height="34"/><rect x="584" y="52" width="12" height="42"/>
+     <text x="580" y="112" font-size="12" fill="#4a5560" font-family="sans-serif" text-anchor="middle">Kraftwerk</text>
+     <text x="580" y="126" font-size="12" fill="#4a5560" font-family="sans-serif" text-anchor="middle">J&auml;nschwalde</text>
+     <rect x="238" y="392" width="12" height="28"/><rect x="256" y="386" width="12" height="34"/>
+     <text x="300" y="404" font-size="12" fill="#4a5560" font-family="sans-serif">Kraftwerk Schwarze Pumpe</text>
+    </g>
+    <!-- Entfernungen -->
+    <g stroke="#C05A5A" stroke-width="2" stroke-dasharray="7 6" fill="none">
+     <path d="M320,192 L400,120"/><path d="M322,222 L370,196"/><path d="M278,232 L200,290"/>
+    </g>
+    <g font-size="12" fill="#a23c3c" font-family="sans-serif">
+     <text x="344" y="150" transform="rotate(-42 344 150)">rund 15 km n&ouml;rdlich</text>
+     <text x="330" y="252">am Stadtrand</text>
+     <text x="206" y="268" transform="rotate(-38 206 268)">rund 25 km</text>
+    </g>
+    <!-- Nordpfeil -->
+    <g><path d="M604,388 V352" stroke="#1F3B57" stroke-width="3"/><path d="M604,346 l-7,12 h14 z" fill="#1F3B57"/>
+     <text x="604" y="406" font-size="13" font-weight="700" fill="#1F3B57" font-family="sans-serif" text-anchor="middle">N</text></g>
+    <text x="14" y="414" font-size="12" fill="#5E7180" font-family="sans-serif">Lageskizze, nicht ma&szlig;st&auml;blich. Entfernungen gerundet (Luftlinie ab Stadtmitte).</text>
+   </svg>
+  </div>
+  <div class="chips" id="chipsTB"></div>
+  <div class="info" id="infoTB"><b>Tippe einen Tagebau an.</b> Alle drei geh&ouml;ren zum selben Fl&ouml;z &ndash; dem 2. Lausitzer Fl&ouml;z aus Stunde 7.</div>
+ </div>
+</section>
+
+<section class="panel" id="p6">
+ <div class="card">
+  <h2>Teil 6 &middot; Quiz</h2>
+  <p class="sub">Acht Fragen. Eine Antwort ist jeweils richtig. Du bekommst sofort eine R&uuml;ckmeldung.</p>
+  <div id="quiz"></div>
+  <div class="score" id="score">Noch keine Frage beantwortet.</div>
+  <div class="row" style="margin-top:12px"><button class="ghost" onclick="resetQuiz()">Quiz neu starten</button></div>
+ </div>
+</section>
+
+<section class="panel" id="p7">
+ <div class="card">
+  <h2>Teil 7 &middot; Zahlen, Hausaufgabe und Links</h2>
+  <h3>Die Zahlen dieser Stunde</h3>
+  <div class="tw">
+  <table>
+   <tr><th>Angabe</th><th>Wert</th><th>gilt f&uuml;r</th></tr>
+   <tr><td>Jahresf&ouml;rderung</td><td class="num">15,8 Mio. t (2020)</td><td>Welzow-S&uuml;d</td></tr>
+   <tr><td>Deckgebirge</td><td class="num">90&ndash;130 m</td><td>Welzow-S&uuml;d</td></tr>
+   <tr><td>Fl&ouml;zm&auml;chtigkeit</td><td class="num">10&ndash;16 m</td><td>Welzow-S&uuml;d, 2. Lausitzer Fl&ouml;z</td></tr>
+   <tr><td>Abraum je Tonne Kohle</td><td class="num">rund 7 Kubikmeter</td><td>Kennwert Lausitz (Nochten)</td></tr>
+   <tr><td>Abraum-Kohle-Verh&auml;ltnis</td><td class="num">9,3 : 1</td><td>J&auml;nschwalde</td></tr>
+   <tr><td>F60: L&auml;nge / Breite / H&ouml;he / Masse</td><td class="num">502 m / 204 m / knapp 80 m / rund 11 000 t</td><td>Besucherbergwerk Lichterfeld</td></tr>
+   <tr><td>F60: Leistung</td><td class="num">29 000 Kubikmeter je Stunde</td><td>beide Eimerkettenbagger zusammen</td></tr>
+   <tr><td>Energie je Kubikmeter Abraum</td><td class="num">1,2 kWh</td><td>F60, Hub 75 m</td></tr>
+   <tr><td>Heizwert Rohbraunkohle</td><td class="num">rund 9 000 kJ/kg</td><td>Welzow-S&uuml;d</td></tr>
+   <tr><td>Tagebau J&auml;nschwalde: Fl&auml;che</td><td class="num">60,15 km&sup2;</td><td>F&ouml;rderende 22.12.2023</td></tr>
+   <tr><td>Tagebau Cottbus-Nord: Kohle insgesamt</td><td class="num">220 Mio. t (1981&ndash;2015)</td><td>heute Cottbuser Ostsee</td></tr>
+   <tr><td>Cottbus-Nord: Umgesiedelte</td><td class="num">906 Menschen, 4 Orte</td><td>Gro&szlig; Lieskow, Klein Lieskow, Lakoma, Tranitz</td></tr>
+  </table>
+  </div>
+
+  <h3>Hausaufgabe</h3>
+  <div class="task"><b>Pflicht:</b> Zeichne in eine Skizze den Weg der Kohle vom Tagebau Welzow-S&uuml;d bis zum Kraftwerk Schwarze Pumpe. Erkl&auml;re in f&uuml;nf S&auml;tzen, warum Kraftwerke in der Lausitz direkt neben den Tagebauen stehen und nicht etwa in Berlin.<br><br><b>Wahl (freiwillig, z&auml;hlt als eigenst&auml;ndige Leistung):</b> Suche ein Luftbild oder Satellitenbild des Cottbuser Ostsees von vor 2015 und von heute. Stelle beide nebeneinander und schreibe drei S&auml;tze dazu, was sich ver&auml;ndert hat.</div>
+
+  <h3>Weiterschauen und nachlesen</h3>
+  <div class="links">
+   <a href="https://www.f60.de/" target="_blank" rel="noopener">Besucherbergwerk F60 in Lichterfeld<small>f60.de &ndash; technische Daten der Br&uuml;cke, Bilder, Besuch der Aussichtsplattform in 74 m H&ouml;he</small></a>
+   <a href="https://www.leag.de/de/technologien/bergbau/tagebau-welzow-sued/" target="_blank" rel="noopener">LEAG: Tagebau Welzow-S&uuml;d<small>leag.de &ndash; Betreiberseite mit Ger&auml;ten und Rekultivierung</small></a>
+   <a href="https://cottbuser-ostsee.de/" target="_blank" rel="noopener">Cottbuser Ostsee &ndash; aus dem Tagebau wird ein See<small>cottbuser-ostsee.de &ndash; Flutung, Zeitplan, Nutzungspl&auml;ne</small></a>
+   <a href="https://www2.bergbautourismus.de/Tour/" target="_blank" rel="noopener">excursio Welzow: Tourenbuchung<small>bergbautourismus.de &ndash; Fahrten in den aktiven Tagebau, auch f&uuml;r Schulklassen</small></a>
+   <a href="https://www.youtube.com/watch?v=KMn43jIw_xg" target="_blank" rel="noopener">&#9654; Video zum Wiederholen: Funktionsweise eines Braunkohletagebaus<small>Kanal &bdquo;Lausitzer Braunkohle&ldquo; auf YouTube &ndash; schau es dir zu Hause an und pr&uuml;fe: Kommen die vier Arbeitsschritte aus Teil 2 darin vor?</small></a>
+   <a href="https://www.youtube.com/watch?v=xFvYftDoGAc" target="_blank" rel="noopener">&#9654; Video aus der Stunde: Die F60 im Tagebau J&auml;nschwalde, 360 Grad<small>WELT Nachrichtensender auf YouTube &ndash; auf dem iPad drehbar, gibt ein Gef&uuml;hl f&uuml;r die Gr&ouml;&szlig;e</small></a>
+   <a href="https://www.lmbv.de/" target="_blank" rel="noopener">LMBV &ndash; Sanierung der alten Tagebaue<small>lmbv.de &ndash; wer aufr&auml;umt, was der Bergbau hinterlassen hat</small></a>
+  </div>
+  <div class="note">Alle Links am 28.09.2026 gepr&uuml;ft. Die Werkstatt selbst braucht kein Internet &ndash; nur die Links und die beiden Videos f&uuml;hren nach drau&szlig;en.</div>
+ </div>
+</section>
+<footer>Geografie 9 &middot; Humboldt-Gymnasium Cottbus &middot; Stunde 8 &ndash; Der Tagebau vor der Haust&uuml;r &middot; Stand 28.09.2026</footer>
+</div>
+<script>
+function show(n){
+ for(var i=1;i<=7;i++){
+  document.getElementById('p'+i).classList.toggle('active', i===n);
+  document.getElementById('t'+i).setAttribute('aria-selected', i===n?'true':'false');
+ }
+ window.scrollTo(0,0);
+}
+
+/* ---------- Teil 1 ---------- */
+var HOT={
+1:["1 &middot; Entw&auml;sserung mit Filterbrunnen","Bevor der erste Bagger kommt, wird jahrelang gepumpt. Filterbrunnen senken den Grundwasserspiegel unter die Fl&ouml;zsohle. Ohne das w&uuml;rde die Grube volllaufen und die B&ouml;schungen w&uuml;rden abrutschen. Die Absenkung reicht weit &uuml;ber den Tagebau hinaus &ndash; das ist einer der gr&ouml;&szlig;ten Eingriffe &uuml;berhaupt."],
+2:["2 &middot; Deckgebirge (Abraum)","Sand, Kies und Ton &uuml;ber der Kohle: bei Welzow-S&uuml;d 90 bis 130 Meter. Dieses Material ist wertlos, muss aber vollst&auml;ndig weg. Genau daraus folgt die Gr&ouml;&szlig;e des Tagebaus: F&uuml;r eine Tonne Kohle bewegt man in der Lausitz rund sieben Kubikmeter Abraum."],
+3:["3 &middot; Abraumf&ouml;rderbr&uuml;cke F60","Die Br&uuml;cke &uuml;berspannt die ganze Grube. Rechts graben zwei Eimerkettenbagger das Deckgebirge ab, B&auml;nder tragen es &uuml;ber die Grube hinweg, links f&auml;llt es direkt wieder in das ausgekohlte Feld. Der Abraum wird also nicht abtransportiert, sondern nur verschoben &ndash; das spart sehr viel Energie."],
+4:["4 &middot; Das Braunkohlefl&ouml;z","Das 2. Lausitzer Fl&ouml;z aus Stunde 7: 10 bis 16 Meter dick, entstanden vor 15 bis 20 Millionen Jahren. Nur diese schmale schwarze Schicht ist der Grund f&uuml;r den ganzen Aufwand dar&uuml;ber."],
+5:["5 &middot; Schaufelradbagger und Bandanlage","Erst wenn das Fl&ouml;z frei liegt, kommt der Kohlebagger. Der SRs 6300 wiegt rund 9 000 Tonnen und schneidet bis 50 Meter hoch. B&auml;nder und die Werkbahn bringen die Kohle zum Kraftwerk &ndash; bei Welzow-S&uuml;d nach Schwarze Pumpe."],
+6:["6 &middot; Absetzer auf der Innenkippe","Was die F60 herantr&auml;gt, schichtet der Absetzer wieder auf. So entsteht hinter dem Tagebau neues Gel&auml;nde. Es liegt aber lockerer als vorher und die Schichten sind durchmischt &ndash; der alte Boden ist nicht wiederherzustellen."],
+7:["7 &middot; Rekultivierung","Auf die Kippe kommt Kulturboden, dann Wald oder Acker. Die LEAG gibt an, seit Mitte der 1990er Jahre &uuml;ber zehn Millionen B&auml;ume gepflanzt zu haben; mehr als 40 Prozent der Fl&auml;chen werden wieder landwirtschaftlich genutzt. Bis ein Wald wieder tr&auml;gt, vergehen Jahrzehnte."],
+8:["8 &middot; Restloch und See","Ganz am Ende bleibt ein Loch, das nicht mehr verf&uuml;llt wird. Es l&auml;uft mit Grundwasser und Flusswasser voll. Aus dem Tagebau Cottbus-Nord wurde so der Cottbuser Ostsee: Flutung ab 12. April 2019, Zielwasserstand von 62,5 Metern &uuml;ber Normalh&ouml;hennull erstmals im Dezember 2024."]
+};
+(function(){
+ var c=document.getElementById('chips1'),h='';
+ for(var i=1;i<=8;i++){h+='<button class="chip" onclick="pick('+i+')">'+i+'</button>';}
+ c.innerHTML=h;
+})();
+function pick(n){
+ var d=HOT[n];
+ document.getElementById('info1').innerHTML='<b>'+d[0]+'</b><br>'+d[1];
+ var cs=document.querySelectorAll('#chips1 .chip');
+ for(var i=0;i<cs.length;i++){cs[i].classList.toggle('sel', i===n-1);}
+}
+
+/* ---------- Teil 2 ---------- */
+var STEPS=[
+ {t:"Entw&auml;sserung",s:"Filterbrunnen senken den Grundwasserspiegel &ndash; Jahre vor dem ersten Bagger."},
+ {t:"Abraum abtragen",s:"Das Deckgebirge wird abger&auml;umt und &uuml;ber die Grube hinweg nach hinten gebracht."},
+ {t:"Kohle gewinnen",s:"Das freigelegte Fl&ouml;z wird abgebaut und zum Kraftwerk gefahren."},
+ {t:"Verkippen und rekultivieren",s:"Der Abraum wird hinter dem Tagebau wieder aufgeschichtet, dann bepflanzt."}
+];
+var order=[0,1,2,3], sel=-1;
+function renderSteps(){
+ var h='';
+ for(var i=0;i<order.length;i++){
+  var s=STEPS[order[i]];
+  h+='<div class="step'+(sel===i?' sel':'')+'" onclick="tapStep('+i+')"><div class="badge">'+(i+1)+'</div>'
+   +'<div class="txt"><b>'+s.t+'</b><small>'+s.s+'</small></div></div>';
+ }
+ document.getElementById('steplist').innerHTML=h;
+}
+function tapStep(i){
+ if(sel<0){sel=i;}
+ else if(sel===i){sel=-1;}
+ else{var t=order[sel];order[sel]=order[i];order[i]=t;sel=-1;}
+ renderSteps();
+}
+function shuffleSteps(){
+ do{for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t;}}
+ while(order[0]===0&&order[1]===1&&order[2]===2&&order[3]===3);
+ sel=-1;renderSteps();document.getElementById('infoSteps').innerHTML='Neu gemischt. Jetzt ordnen.';
+}
+function checkSteps(){
+ var ok=order.every(function(v,i){return v===i;});
+ var el=document.getElementById('infoSteps');
+ var ds=document.querySelectorAll('#steplist .step');
+ for(var i=0;i<ds.length;i++){ds[i].classList.toggle('ok', order[i]===i);}
+ el.innerHTML= ok
+  ? '<b>Richtig.</b> Entscheidend ist der erste Schritt: Die Entw&auml;sserung l&auml;uft schon Jahre, bevor &uuml;berhaupt ein Bagger kommt &ndash; und sie l&auml;uft weiter, solange der Tagebau offen ist.'
+  : '<b>Noch nicht.</b> Frage dich: Was muss weg, bevor man an die Kohle kommt? Und was passiert mit dem Material, das man weggeschafft hat?';
+}
+var GER=[
+ {n:"Filterbrunnen",k:0},{n:"Abraumf&ouml;rderbr&uuml;cke F60",k:1},
+ {n:"Schaufelradbagger SRs 6300",k:2},{n:"Absetzer",k:3}
+];
+var zuord=[null,null,null,null], gsel=-1;
+function renderGer(){
+ var h='';
+ for(var i=0;i<GER.length;i++){
+  var used=zuord.indexOf(i)>=0;
+  h+='<button class="chip'+(used?' used':'')+(gsel===i?' sel':'')+'" onclick="tapGer('+i+')">'+GER[i].n+'</button>';
+ }
+ document.getElementById('geraete').innerHTML=h;
+ var t='<tr><th>Arbeitsschritt</th><th>Ger&auml;t</th></tr>';
+ for(var k=0;k<4;k++){
+  t+='<tr><td>'+(k+1)+'. '+STEPS[k].t+'</td><td onclick="dropGer('+k+')" style="cursor:pointer">'
+   +(zuord[k]===null?'<span style="color:#5E7180">hier ablegen</span>':GER[zuord[k]].n)+'</td></tr>';
+ }
+ document.getElementById('zuordnung').innerHTML=t;
+}
+function tapGer(i){gsel=(gsel===i?-1:i);renderGer();}
+function dropGer(k){
+ if(gsel<0){zuord[k]=null;renderGer();return;}
+ for(var j=0;j<4;j++){if(zuord[j]===gsel)zuord[j]=null;}
+ zuord[k]=gsel;gsel=-1;renderGer();
+}
+function resetGer(){zuord=[null,null,null,null];gsel=-1;renderGer();document.getElementById('infoGer').innerHTML='Zur&uuml;ckgesetzt.';}
+function checkGer(){
+ var n=0;for(var k=0;k<4;k++){if(zuord[k]!==null&&GER[zuord[k]].k===k)n++;}
+ document.getElementById('infoGer').innerHTML= n===4
+  ? '<b>Alle vier richtig.</b> Merke dir das Paar Abraumf&ouml;rderbr&uuml;cke und Absetzer: Die eine r&auml;umt vorn ab, der andere sch&uuml;ttet hinten wieder auf. Zusammen lassen sie den Tagebau wandern.'
+  : '<b>'+n+' von 4 richtig.</b> Tipp: Der Schaufelradbagger f&auml;hrt erst, wenn das Fl&ouml;z schon frei liegt.';
+}
+
+/* ---------- Teil 3 ---------- */
+function de(x,d){return x.toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function calc(){
+ var kohle=parseFloat(document.getElementById('s_kohle').value);
+ var deck=parseFloat(document.getElementById('s_deck').value);
+ document.getElementById('v_kohle').textContent=de(kohle,1);
+ document.getElementById('v_deck').textContent=de(deck,0);
+ var abraum=kohle*7;                 // Mio. m3
+ var flm2=abraum*1e6/deck;           // m2
+ var flkm2=flm2/1e6;
+ var felder=flm2/7140;
+ var takt=365/felder;
+ var tage=abraum*1e6/29000/24;
+ var gwh=abraum*1e6*1.2/1e6;
+ var haus=abraum*1e6*1.2/3000;
+ var kohGwh=kohle*1e9*9000/3600/1e6;
+ var anteil=gwh/kohGwh*100;
+ document.getElementById('r_abraum').textContent=de(abraum,0);
+ document.getElementById('r_flaeche').textContent=de(flkm2,2);
+ document.getElementById('r_felder').textContent=de(Math.round(felder),0);
+ document.getElementById('r_takt').textContent=de(takt,1);
+ document.getElementById('r_zeit').textContent=de(Math.round(tage),0);
+ document.getElementById('r_kwh').textContent=de(Math.round(gwh),0);
+ document.getElementById('r_haus').textContent=de(Math.round(haus/100)*100,0);
+ document.getElementById('r_koh').textContent=de(Math.round(kohGwh/100)*100,0);
+ document.getElementById('r_anteil').textContent=de(anteil,2);
+ var side=Math.sqrt(flm2), sc=260/side;
+ var fw=105*sc, fh=68*sc;
+ var f=document.getElementById('q_field');
+ f.setAttribute('width',fw.toFixed(1)); f.setAttribute('height',fh.toFixed(1));
+ f.setAttribute('x','48'); f.setAttribute('y',(292-fh).toFixed(1));
+ document.getElementById('q_side').textContent='Seitenlänge: '+de(Math.round(side),0)+' m';
+ document.getElementById('q_cnt').textContent='Es passen '+de(Math.round(felder),0)+' Felder hinein.';
+}
+
+/* ---------- Teil 4 ---------- */
+var upright=false;
+function toggleUpright(){
+ upright=!upright;
+ document.getElementById('laybox').style.display= upright?'none':'block';
+ document.getElementById('upbox').style.display= upright?'block':'none';
+ document.getElementById('btnUp').textContent= upright?'F60 wieder hinlegen':'F60 aufrichten';
+}
+
+/* ---------- Teil 5 ---------- */
+var TB=[
+ ["Tagebau Cottbus-Nord &ndash; heute Cottbuser Ostsee",
+  "Kohlef&ouml;rderung 1981 bis 23. Dezember 2015, insgesamt rund 220 Millionen Tonnen. Belieferte das Kraftwerk J&auml;nschwalde, als letzter deutscher Tagebau mit direkter Zugverladung. Vier D&ouml;rfer wurden abgebaggert &ndash; Gro&szlig; Lieskow, Klein Lieskow, Lakoma und Tranitz; insgesamt 906 Menschen mussten umziehen. Seit dem 12. April 2019 wird das Restloch mit Spreewasser geflutet; im Dezember 2024 wurde der Zielwasserstand von 62,5 Metern &uuml;ber Normalh&ouml;hennull erstmals erreicht. Baden ist noch verboten."],
+ ["Tagebau J&auml;nschwalde &ndash; gerade zu Ende",
+  "Aufgeschlossen 1974 bis 1976, regul&auml;re F&ouml;rderung beendet am 22. Dezember 2023. Fl&auml;che 60,15 Quadratkilometer. Das Fl&ouml;z war 8 bis 12 Meter dick, das Verh&auml;ltnis von Abraum zu Kohle lag bei 9,3 zu 1 &ndash; noch ung&uuml;nstiger als in Welzow. Umgesiedelt wurden unter anderem Klinge 1981, Wei&szlig;agk 1985, Klein Bohrau 1986, Klein Briesnig 1987 und Horno 2004. Auf den Kippen entstehen Solar- und Windanlagen mit zusammen rund 440 Megawatt."],
+ ["Tagebau Welzow-S&uuml;d &ndash; noch in Betrieb",
+  "Aufschluss 1962, erste Kohle 1966. Seit dem Ende von J&auml;nschwalde der einzige aktive Braunkohletagebau Brandenburgs. Jahresf&ouml;rderung 2020: 15,8 Millionen Tonnen. Fl&ouml;z 10 bis 16 Meter, Deckgebirge 90 bis 130 Meter. Im Januar 2021 verzichtete die LEAG auf das Teilfeld II &ndash; das Dorf Proschim blieb dadurch erhalten. Im Januar 2026 hat die LEAG das F&ouml;rderende auf 2030 vorgezogen; vorher war 2033 geplant. Die Kohle geht nach Schwarze Pumpe."]
+];
+(function(){
+ var h='';for(var i=0;i<3;i++){h+='<button class="chip" onclick="pickTB('+i+')">'+['Cottbus-Nord','J&auml;nschwalde','Welzow-S&uuml;d'][i]+'</button>';}
+ document.getElementById('chipsTB').innerHTML=h;
+})();
+function pickTB(i){
+ document.getElementById('infoTB').innerHTML='<b>'+TB[i][0]+'</b><br>'+TB[i][1];
+ var cs=document.querySelectorAll('#chipsTB .chip');
+ for(var k=0;k<cs.length;k++){cs[k].classList.toggle('sel',k===i);}
+}
+
+/* ---------- Teil 6 ---------- */
+var QZ=[
+ {q:"Warum muss die Entw&auml;sserung Jahre vor dem Abbau beginnen?",
+  o:["Weil die Bagger sonst im Grundwasser stehen und die B&ouml;schungen abrutschen w&uuml;rden.","Weil das Grundwasser die Kohle sonst zu warm macht.","Weil nasse Kohle nicht brennt und deshalb wertlos ist."],
+  r:0,f:"Das Fl&ouml;z liegt tief unter dem Grundwasserspiegel. Erst wenn das Wasser abgesenkt ist, ist die Grube standsicher und befahrbar."},
+ {q:"Wie viel Abraum muss in der Lausitz im Schnitt f&uuml;r eine Tonne Braunkohle bewegt werden?",
+  o:["rund 0,7 Kubikmeter","rund 7 Kubikmeter","rund 70 Kubikmeter"],
+  r:1,f:"Sieben Kubikmeter je Tonne &ndash; dieser Kennwert stammt vom Tagebau Nochten und passt auch f&uuml;r Welzow-S&uuml;d."},
+ {q:"Welzow-S&uuml;d f&ouml;rderte 2020 rund 15,8 Millionen Tonnen. Wie gro&szlig; ist die Fl&auml;che, die daf&uuml;r jedes Jahr neu aufgerissen wird?",
+  o:["rund 0,1 Quadratkilometer","rund 1 Quadratkilometer","rund 10 Quadratkilometer"],
+  r:1,f:"15,8 mal 7 ergibt rund 111 Millionen Kubikmeter Abraum. Geteilt durch 110 Meter Deckgebirge sind das etwa eine Million Quadratmeter &ndash; rund 141 Fu&szlig;ballfelder im Jahr."},
+ {q:"Wof&uuml;r steht die Zahl 60 im Namen der F60?",
+  o:["f&uuml;r 60 Meter Abtragsh&ouml;he","f&uuml;r 60 Meter L&auml;nge","f&uuml;r das Baujahr 1960"],
+  r:0,f:"Die Br&uuml;cke schafft ein 60 Meter hohes Deckgebirge in einem Zug. Lang ist sie 502 Meter."},
+ {q:"Was macht ein Absetzer?",
+  o:["Er verl&auml;dt die Kohle auf die Z&uuml;ge.","Er sch&uuml;ttet den Abraum auf der Kippe wieder auf.","Er setzt die Filterbrunnen f&uuml;r die Entw&auml;sserung."],
+  r:1,f:"Absetzer und F&ouml;rderbr&uuml;cke sind ein Paar: vorn abr&auml;umen, hinten wieder aufsch&uuml;tten. So wandert der Tagebau."},
+ {q:"Welcher der drei Tagebaue um Cottbus arbeitet 2026 noch?",
+  o:["Cottbus-Nord","J&auml;nschwalde","Welzow-S&uuml;d"],
+  r:2,f:"Cottbus-Nord endete 2015, J&auml;nschwalde am 22. Dezember 2023. Welzow-S&uuml;d soll nach der Entscheidung der LEAG vom Januar 2026 bis 2030 laufen."},
+ {q:"Was ist aus dem Restloch des Tagebaus Cottbus-Nord geworden?",
+  o:["ein gro&szlig;er Solarpark","der Cottbuser Ostsee","ein trockenes Naturschutzgebiet"],
+  r:1,f:"Geflutet seit dem 12. April 2019. Solarparks entstehen dagegen auf den Kippen von J&auml;nschwalde."},
+ {q:"Der Strom f&uuml;r das Wegr&auml;umen des Abraums entspricht nur rund 0,3 Prozent der Energie, die in der gef&ouml;rderten Kohle steckt. Was folgt daraus?",
+  o:["Das Wegr&auml;umen selbst ist energetisch g&uuml;nstig &ndash; die Probleme der Braunkohle liegen woanders.","Braunkohle ist damit eine klimafreundliche Energiequelle.","Der Abraum ist so teuer, dass sich Braunkohle nie gerechnet hat."],
+  r:0,f:"Energetisch lohnt sich der Aufwand. Die eigentlichen Kosten sind Treibhausgase, Fl&auml;che, Grundwasser und die Orte, die verschwinden. Darum geht es in Stunde 9."}
+];
+var ans=[];
+function renderQuiz(){
+ var h='';
+ for(var i=0;i<QZ.length;i++){
+  h+='<div class="q"><p class="qt">'+(i+1)+'. '+QZ[i].q+'</p><div class="opts">';
+  for(var j=0;j<QZ[i].o.length;j++){
+   var cls='opt';
+   if(ans[i]!==undefined){
+    if(j===QZ[i].r)cls+=' right';
+    else if(ans[i]===j)cls+=' wrong';
+   }
+   h+='<button class="'+cls+'" onclick="answer('+i+','+j+')"><span class="k">'+'ABC'[j]+'</span><span>'+QZ[i].o[j]+'</span></button>';
+  }
+  h+='</div>';
+  if(ans[i]!==undefined)h+='<p class="fb">'+QZ[i].f+'</p>';
+  h+='</div>';
+ }
+ document.getElementById('quiz').innerHTML=h;
+ var done=0,ok=0;
+ for(var k=0;k<QZ.length;k++){if(ans[k]!==undefined){done++;if(ans[k]===QZ[k].r)ok++;}}
+ document.getElementById('score').textContent= done===0
+  ? 'Noch keine Frage beantwortet.'
+  : ok+' von '+done+' richtig'+(done===QZ.length?' – alle acht Fragen bearbeitet.':' (noch '+(QZ.length-done)+' offen).');
+}
+function answer(i,j){ if(ans[i]!==undefined)return; ans[i]=j; renderQuiz(); }
+function resetQuiz(){ans=[];renderQuiz();window.scrollTo(0,0);}
+
+renderSteps();renderGer();calc();renderQuiz();pick(1);pickTB(2);
+</script>
+</body>
+</html>
